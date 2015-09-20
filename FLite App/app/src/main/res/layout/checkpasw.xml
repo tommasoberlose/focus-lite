@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_password"
+                android:textAllCaps="true"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:id="@+id/pasw"
+                android:inputType="textPassword"
+                android:gravity="center_vertical"
+                android:layout_margin="8dp"
+                android:textColor="@android:color/white"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/cancel"
+                    android:textAppearance="?android:attr/buttonStyle"
+                    android:textAllCaps="true"
+                    android:textSize="14sp"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:background="@drawable/button_ripple_dialog_dark"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/white_back"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/action_ok"
+                    android:layout_toStartOf="@+id/action_ok"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:id="@+id/action_cancel" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/ok"
+                    android:textAppearance="?android:attr/buttonStyle"
+                    android:textAllCaps="true"
+                    android:textSize="14sp"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:background="@drawable/button_ripple_dialog_dark"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/accent_material_light"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:id="@+id/action_ok" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

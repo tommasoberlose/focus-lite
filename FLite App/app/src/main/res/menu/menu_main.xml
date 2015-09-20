@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Main">
+    <item
+        android:id="@+id/active_switch"
+        app:actionViewClass="android.support.v7.widget.SwitchCompat"
+        app:showAsAction="always"
+        android:title="" />
+</menu>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:enterFadeDuration="@android:integer/config_shortAnimTime">
+    <item>
+        <ripple android:color="@color/ripple_material_light">
+            <item>
+                <shape android:shape="oval">
+
+                    <solid
+                        android:color="@color/background_material_light"/>
+                </shape>
+            </item>
+        </ripple>
+    </item>
+</selector>
