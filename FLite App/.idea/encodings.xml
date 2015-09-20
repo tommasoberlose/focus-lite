@@ -1,60 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nego/flite/Billing/util/Base64.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nego/flite/Billing/util/Base64DecoderException.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nego/flite/Billing/util/IabException.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nego/flite/Billing/util/IabHelper.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nego/flite/Billing/util/IabResult.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nego/flite/Billing/util/Inventory.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nego/flite/Billing/util/Purchase.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nego/flite/Billing/util/Security.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nego/flite/Billing/util/SkuDetails.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nego/flite/Functions/AlarmF.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nego/flite/Receiver/AlarmReceiver.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-mdpi" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-nodpi" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-v21/button_ripple.xml" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-v21/button_ripple_overlay.xml" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-v21/item_background.xml" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-v21/list_item_background.xml" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_account_circle.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_alarm_add.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_alarm_off.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_alarm_on.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_cafe.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_camera.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_communication_call.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_communication_email.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_communication_messenger.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_edit.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_explore.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_feedback.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_gallery.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_hide_all.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_image_camera.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_lock.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_lock_big.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_lock_open.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_open_in_browser.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_repeat.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_time.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_time_small.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_today.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_toggle_star.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_view_all.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_widget.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_app_flite.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_not_bookmark_check.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_not_flite.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/intro1.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/intro2.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/intro3.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/web_hi_res.png" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
