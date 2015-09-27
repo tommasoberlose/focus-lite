@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import android.transition.Explode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -242,7 +244,7 @@ public class MyDialog extends AppCompatActivity {
                         if (!action_to_do.equals("")) {
                             action = action_to_do;
                             if (action_info.equals(""))
-                                action_contact.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_account_circle));
+                                action_contact.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_contacts));
                             action_contact.setVisibility(View.VISIBLE);
                         } else {
                             action = "";

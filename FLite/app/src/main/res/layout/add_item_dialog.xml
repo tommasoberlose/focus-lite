@@ -93,25 +93,7 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
                             android:layout_marginEnd="16dp"
-                            android:layout_marginRight="16dp"
-                            android:layout_toLeftOf="@+id/action_contact"
-                            android:layout_toStartOf="@+id/action_contact"/>
-
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:padding="2dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:background="@drawable/button_ripple"
-                            android:src="@drawable/ic_action_account_circle"
-                            android:alpha="0.6"
-                            android:id="@+id/action_contact"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:visibility="gone" />
-
+                            android:layout_marginRight="16dp"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -157,6 +139,20 @@
                             android:layout_toEndOf="@+id/action_reminder"
                             android:layout_centerVertical="true"
                             android:visibility="gone"/>
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:padding="2dp"
+                            android:background="@drawable/button_ripple"
+                            android:src="@drawable/ic_action_contacts"
+                            android:alpha="0.6"
+                            android:id="@+id/action_contact"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginRight="8dp"
+                            android:visibility="gone" />
                     </RelativeLayout>
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
