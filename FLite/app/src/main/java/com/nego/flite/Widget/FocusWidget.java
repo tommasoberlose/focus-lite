@@ -3,6 +3,7 @@ package com.nego.flite.Widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -65,7 +66,10 @@ public class FocusWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction() != null && intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
-            onUpdate(context, AppWidgetManager.getInstance(context), intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS));
+            ComponentName thisWidget = new ComponentName(context, FocusWidget.class);
+            int[] appWidgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(thisWidget);
+            if (appWidgetIds.length > 0)
+                onUpdate(context, AppWidgetManager.getInstance(context), appWidgetIds);
         }
     }
 
