@@ -160,6 +160,88 @@
                             android:layout_marginStart="16dp"/>
                     </RelativeLayout>
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:background="@drawable/list_item_background_card"
+                        android:clickable="true"
+                        android:id="@+id/action_switch_share">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/title_preferences_share"
+                            android:id="@+id/share_title"
+                            android:layout_toLeftOf="@+id/share_check"
+                            android:layout_toStartOf="@+id/share_check" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white_dark"
+                            android:id="@+id/share_subtitle"
+                            android:text="@string/subtitle_preferences_share"
+                            android:layout_below="@+id/share_title"
+                            android:layout_toLeftOf="@+id/share_check"
+                            android:layout_toStartOf="@+id/share_check" />
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/share_check"
+                            android:checked="true"
+                            android:theme="@style/mDialog"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:background="@drawable/list_item_background_card"
+                        android:clickable="true"
+                        android:id="@+id/action_swicth_ongoing">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/title_preferences_ongoing"
+                            android:id="@+id/ongoing_title"
+                            android:layout_toLeftOf="@+id/ongoing_check"
+                            android:layout_toStartOf="@+id/ongoing_check" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white_dark"
+                            android:id="@+id/ongoing_subtitle"
+                            android:text="@string/subtitle_preferences_ongoing"
+                            android:layout_below="@+id/ongoing_title"
+                            android:layout_toLeftOf="@+id/ongoing_check"
+                            android:layout_toStartOf="@+id/ongoing_check" />
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/ongoing_check"
+                            android:checked="true"
+                            android:theme="@style/mDialog"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"/>
+                    </RelativeLayout>
+
                 </LinearLayout>
             </LinearLayout>
 

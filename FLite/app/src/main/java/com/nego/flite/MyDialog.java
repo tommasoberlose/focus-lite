@@ -387,7 +387,7 @@ public class MyDialog extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if ((r == null && Utils.isEmpty(title) && img.equals("")) || (r != null && r.getTitle().equals(title.getText().toString()) && r.getImg().equals(img))) {
+        if (from_notifications || (r == null && Utils.isEmpty(title) && img.equals("")) || (r != null && r.getTitle().equals(title.getText().toString()) && r.getImg().equals(img))) {
             finish();
         } else {
             new AlertDialog.Builder(MyDialog.this)

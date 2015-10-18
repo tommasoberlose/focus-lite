@@ -85,7 +85,7 @@ public class Main extends AppCompatActivity {
         findViewById(R.id.action_feedback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/communities/100614116200820350356")));
+                startActivity(new Intent(Main.this, MyDialog.class));
             }
         });
 

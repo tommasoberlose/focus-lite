@@ -129,4 +129,6 @@
     <string name="text_reminded_at">Ricordato alle</string>
     <string name="text_snoozed_to">Rimandato al</string>
     <string name="text_snoozed_to_hour">Rimandato alle</string>
+    <string name="action_community">Focus Notify Community</string>
+    <string name="action_community_subtitle">Aiuti, feedback e suggerimenti</string>
 </resources>

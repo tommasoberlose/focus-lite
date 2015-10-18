@@ -54,7 +54,7 @@ public class PageFragment extends Fragment {
             public void onClick(View v) {
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=nego.reminders")));
-                } catch(ActivityNotFoundException e) {
+                } catch (ActivityNotFoundException e) {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=nego.reminders")));
                 }
             }
@@ -68,6 +68,13 @@ public class PageFragment extends Fragment {
                 } catch (ActivityNotFoundException e) {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.nego.flite")));
                 }
+            }
+        });
+
+        view.findViewById(R.id.action_community).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/communities/100614116200820350356/stream/31109315-898b-4924-8a7f-3ed5e49c511e")));
             }
         });
 
