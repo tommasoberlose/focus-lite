@@ -66,13 +66,13 @@ public class AlarmF {
                 if (Build.VERSION.SDK_INT >= 19)
                     alarmMgr.setExact(AlarmManager.RTC_WAKEUP, time, alarmIntent);
                 else if (Build.VERSION.SDK_INT >= 15)
-                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time, 0, alarmIntent);
+                    alarmMgr.set(AlarmManager.RTC_WAKEUP, time, alarmIntent);
                 break;
             default:
                 if (Build.VERSION.SDK_INT >= 19)
                     alarmMgr.setExact(AlarmManager.RTC_WAKEUP, time, alarmIntent);
                 else if (Build.VERSION.SDK_INT >= 15)
-                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time, 0, alarmIntent);
+                    alarmMgr.set(AlarmManager.RTC_WAKEUP, time, alarmIntent);
         }
     }
 
@@ -80,10 +80,8 @@ public class AlarmF {
         AlarmManager manager = (AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent=new Intent(context.getApplicationContext(), AlarmReceiver.class);
         intent.setAction(Costants.ALARM_ACTION);
-        intent.putExtra(Costants.EXTRA_REMINDER_ID, "" + id);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context.getApplicationContext(), id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context.getApplicationContext(), id, intent, PendingIntent.FLAG_NO_CREATE);
         manager.cancel(alarmIntent);
-        alarmIntent.cancel();
     }
 
     public static void updateAlarm(Context context, int id, long time, String repeat) {
