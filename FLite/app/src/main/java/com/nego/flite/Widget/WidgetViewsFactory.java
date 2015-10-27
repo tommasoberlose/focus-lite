@@ -80,7 +80,6 @@ public class WidgetViewsFactory implements
     public RemoteViews getViewAt(int position) {
         if (position < mWidgetItems.size()) {
             SharedPreferences SP = mContext.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-            System.out.println("OOK" + SP.getString(Costants.PREFERENCE_STYLE_WIDGET, Costants.PREFERENCE_STYLE_WIDGET_MD));
             RemoteViews rv;
             if (SP.getString(Costants.PREFERENCE_STYLE_WIDGET, Costants.PREFERENCE_STYLE_WIDGET_MD).equals(Costants.PREFERENCE_STYLE_WIDGET_ML)) {
                 rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_row_ml);

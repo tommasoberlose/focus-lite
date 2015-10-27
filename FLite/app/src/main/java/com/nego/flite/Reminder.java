@@ -110,8 +110,9 @@ public class Reminder implements Parcelable {
     }
 
     public boolean create_reminder(Context context, DbAdapter dbHelper) {
-        AlarmF.addAlarm(context, this.getId(), this.getAlarm(), this.getAlarm_repeat());
-        if (dbHelper.createReminder(this) > 0) {
+        this.id = (int) dbHelper.createReminder(this);
+        if (id > 0) {
+            AlarmF.addAlarm(context, this.getId(), this.getAlarm(), this.getAlarm_repeat());
             return true;
         }
         return false;
@@ -119,14 +120,15 @@ public class Reminder implements Parcelable {
 
     public boolean update_reminder(Context context, DbAdapter dbHelper) {
         if (dbHelper.updateReminder(this)) {
+            AlarmF.updateAlarm(context, this.getId(), this.getAlarm(), this.getAlarm_repeat());
             return true;
         }
         return false;
     }
 
     public boolean delete_reminder(Context context, DbAdapter dbHelper) {
-        AlarmF.deleteAlarm(context, this.getId());
         if (dbHelper.deleteReminder("" + this.getId())) {
+            AlarmF.deleteAlarm(context, this.getId());
             return true;
         }
         return false;

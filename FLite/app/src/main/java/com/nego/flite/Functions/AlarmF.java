@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.SystemClock;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.nego.flite.Costants;
@@ -74,9 +75,12 @@ public class AlarmF {
                 else if (Build.VERSION.SDK_INT >= 15)
                     alarmMgr.set(AlarmManager.RTC_WAKEUP, time, alarmIntent);
         }
+        Log.i("ID", "" + id);
+        Log.i("INTENT ID", "" + alarmIntent.getCreatorUid());
     }
 
     public static void deleteAlarm(Context context, int id) {
+        Log.i("ID", "" + id);
         AlarmManager manager = (AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent=new Intent(context.getApplicationContext(), AlarmReceiver.class);
         intent.setAction(Costants.ALARM_ACTION);
