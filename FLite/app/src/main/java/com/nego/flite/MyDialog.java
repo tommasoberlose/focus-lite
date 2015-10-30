@@ -71,10 +71,16 @@ public class MyDialog extends AppCompatActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, (Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER));
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
                                 finish();
                             }
                         })
-                        .setNegativeButton(android.R.string.cancel, null).show();
+                        .show();
             } else if (intent.getAction().equals(Costants.ACTION_SNOOZE)) {
                 from_notifications = true;
                 r_snooze = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
