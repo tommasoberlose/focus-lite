@@ -76,8 +76,6 @@ public class AlarmF {
                     else if (Build.VERSION.SDK_INT >= 15)
                         alarmMgr.set(AlarmManager.RTC_WAKEUP, time, alarmIntent);
             }
-            Log.i("ID", "" + id);
-            Log.i("INTENT ID", "" + alarmIntent.getCreatorUid());
         }
     }
 
