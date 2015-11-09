@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.Explode;
@@ -50,6 +51,7 @@ public class MyDialog extends AppCompatActivity {
     private ImageView cancel_img;
     public ImageView action_contact;
     private ImageView action_reminder;
+    private CardView img_card;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,12 @@ public class MyDialog extends AppCompatActivity {
                 from_notifications = true;
                 r_snooze = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
                 ReminderDialog r_dialog = new ReminderDialog(this, r_snooze.getAlarm(), r_snooze.getAlarm_repeat());
+                r_dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        finish();
+                    }
+                });
                 r_dialog.show();
             } else if (intent.getAction().equals(Costants.ACTION_UPDATE_LIST)) {
                 from_notifications = true;
@@ -119,6 +127,7 @@ public class MyDialog extends AppCompatActivity {
                 cancel_img = (ImageView) findViewById(R.id.action_cancel_image);
                 action_contact = (ImageView) findViewById(R.id.action_contact);
                 action_reminder = (ImageView) findViewById(R.id.action_reminder);
+                img_card = (CardView) findViewById(R.id.card_img);
 
 
                 if (intent.getAction() != null && Costants.ACTION_EDIT_ITEM.equals(intent.getAction())) {
@@ -142,7 +151,7 @@ public class MyDialog extends AppCompatActivity {
 
                     if (!r.getAction_type().equals("")) {
                         action = r.getAction_type();
-                        action_info = r.getAction_info();
+                        action_info = r.getAction_info();/*
                         action_contact.setVisibility(View.VISIBLE);
                         action_contact.setAlpha(1f);
                         switch (action) {
@@ -155,7 +164,7 @@ public class MyDialog extends AppCompatActivity {
                             case Costants.ACTION_MAIL:
                                 action_contact.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_communication_email));
                                 break;
-                        }
+                        }*/
                     }
 
                     if (r.getAlarm() != 0) {
@@ -181,7 +190,7 @@ public class MyDialog extends AppCompatActivity {
                     title.setText(savedInstanceState.getString(Costants.KEY_DIALOG_TITLE));
                     img = savedInstanceState.getString(Costants.KEY_DIALOG_IMG);
                     action = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION);
-                    action_info = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION_INFO);
+                    action_info = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION_INFO);/*
                     if (!action.equals("")) {
                         action_contact.setVisibility(View.VISIBLE);
                         if (!action_info.equals(""))
@@ -197,7 +206,7 @@ public class MyDialog extends AppCompatActivity {
                                 action_contact.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_communication_email));
                                 break;
                         }
-                    }
+                    }*/
 
                     setAlarm(Long.parseLong(savedInstanceState.getString(Costants.KEY_DIALOG_ALARM)), savedInstanceState.getString(Costants.KEY_DIALOG_ALARM_REPEAT));
 
@@ -248,15 +257,15 @@ public class MyDialog extends AppCompatActivity {
 
                         String action_to_do = Utils.checkAction(MyDialog.this, s.toString());
                         if (!action_to_do.equals("")) {
-                            action = action_to_do;
+                            action = action_to_do;/*
                             if (action_info.equals(""))
                                 action_contact.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_contacts));
-                            action_contact.setVisibility(View.VISIBLE);
+                            action_contact.setVisibility(View.VISIBLE);*/
                         } else {
                             action = "";
-                            action_info = "";
+                            action_info = "";/*
                             action_contact.setVisibility(View.GONE);
-                            action_contact.setAlpha(0.6f);
+                            action_contact.setAlpha(0.6f);*/
                         }
                     }
                 });
@@ -356,9 +365,9 @@ public class MyDialog extends AppCompatActivity {
                         case Costants.ACTION_CALL:
                             if (!phone.equals("")) {
                                 action_info = phone;
-                                action_contact.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_communication_call));
+                                //action_contact.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_communication_call));
+                                //action_contact.setAlpha(1f);
                                 title.setText(title.getText() + " " + name);
-                                action_contact.setAlpha(1f);
                             } else {
                                 Toast.makeText(this, R.string.error_contact_not_found, Toast.LENGTH_SHORT).show();
                             }
@@ -366,9 +375,9 @@ public class MyDialog extends AppCompatActivity {
                         case Costants.ACTION_SMS:
                             if (!phone.equals("")) {
                                 action_info = phone;
-                                action_contact.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_communication_messenger));
+                                //action_contact.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_communication_messenger));
+                                //action_contact.setAlpha(1f);
                                 title.setText(title.getText() + " " + name);
-                                action_contact.setAlpha(1f);
                             } else {
                                 Toast.makeText(this, R.string.error_contact_not_found, Toast.LENGTH_SHORT).show();
                             }
@@ -376,9 +385,9 @@ public class MyDialog extends AppCompatActivity {
                         case Costants.ACTION_MAIL:
                             if (!phone.equals("")) {
                                 action_info = email;
-                                action_contact.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_communication_email));
+                                //action_contact.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_communication_email));
+                                //action_contact.setAlpha(1f);
                                 title.setText(title.getText() + " " + name);
-                                action_contact.setAlpha(1f);
                             } else {
                                 Toast.makeText(this, R.string.error_contact_not_found, Toast.LENGTH_SHORT).show();
                             }
@@ -456,8 +465,7 @@ public class MyDialog extends AppCompatActivity {
     public void checkImg() {
         if (!img.equals("")) {
             selected_img.setImageURI(Uri.parse(img));
-            selected_img.setVisibility(View.VISIBLE);
-            cancel_img.setVisibility(View.VISIBLE);
+            img_card.setVisibility(View.VISIBLE);
             selected_img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -481,8 +489,7 @@ public class MyDialog extends AppCompatActivity {
                 }
             });
         } else {
-            selected_img.setVisibility(View.GONE);
-            cancel_img.setVisibility(View.GONE);
+            img_card.setVisibility(View.GONE);
         }
     }
 

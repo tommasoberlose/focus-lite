@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Focus Notify</string>
     <string name="title_activity_add_item">Add Note</string>
-    <string name="reminder_text">What do u want to remember?</string>
+    <string name="reminder_text">What do you want to remember?</string>
     <string name="help_feedback">Help &amp; FeedBack</string>
     <string name="action_archive">Done</string>
     <string name="action_save">Save</string>
