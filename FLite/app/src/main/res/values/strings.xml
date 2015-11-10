@@ -131,4 +131,5 @@
     <string name="text_snoozed_to_hour">Snoozed to</string>
     <string name="action_community">Focus Lite Community</string>
     <string name="action_community_subtitle">Help, feedback and suggestions</string>
+    <string name="text_big_notification">Full Content</string>
 </resources>

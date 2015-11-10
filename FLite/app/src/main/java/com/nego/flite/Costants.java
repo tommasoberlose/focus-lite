@@ -61,4 +61,6 @@ public class Costants {
     public static final String ALARM_REPEAT_WEEK = "ALARM_REPEAT_WEEK";
     public static final String ALARM_REPEAT_MONTH = "ALARM_REPEAT_MONTH";
     public static final String ALARM_REPEAT_YEAR = "ALARM_REPEAT_YEAR";
+
+    public static final String FROM_WEAR = "FROM_WEAR";
 }

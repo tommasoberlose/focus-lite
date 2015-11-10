@@ -51,6 +51,8 @@ public class NotificationF {
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
+        NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender();
+
         if (r.getAlarm() == 0) {
             n.setContentText(Utils.getDate(context, r.getDate_create()));
         } else {
@@ -88,16 +90,19 @@ public class NotificationF {
                     Intent call_intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+r.getAction_info()));
                     PendingIntent call_pi = PendingIntent.getActivity(context, r.getId(), call_intent, 0);
                     n.addAction(R.drawable.ic_action_communication_call, context.getString(R.string.action_call), call_pi);
+                    wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_communication_call, context.getString(R.string.action_call), call_pi).build());
                     break;
                 case Costants.ACTION_SMS:
                     Intent sms_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+r.getAction_info()));
                     PendingIntent sms_pi = PendingIntent.getActivity(context, r.getId(), sms_intent, 0);
                     n.addAction(R.drawable.ic_action_communication_messenger, context.getString(R.string.action_sms), sms_pi);
+                    wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_communication_messenger, context.getString(R.string.action_sms), sms_pi).build());
                     break;
                 case Costants.ACTION_MAIL:
                     Intent mail_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:"+r.getAction_info()));
                     PendingIntent mail_pi = PendingIntent.getActivity(context, r.getId(), mail_intent, 0);
                     n.addAction(R.drawable.ic_action_communication_email, context.getString(R.string.action_mail), mail_pi);
+                    wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_communication_email, context.getString(R.string.action_mail), mail_pi).build());
                     break;
             }
         }
@@ -107,6 +112,7 @@ public class NotificationF {
             Intent url_intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             PendingIntent url_pi = PendingIntent.getActivity(context, r.getId(), url_intent, 0);
             n.addAction(R.drawable.ic_action_open_in_browser, context.getString(R.string.open_in_browser), url_pi);
+            wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_open_in_browser, context.getString(R.string.open_in_browser), url_pi).build());
         }
 
 
@@ -120,6 +126,9 @@ public class NotificationF {
 
         if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
             n.addAction(R.drawable.ic_action_delete, context.getString(R.string.action_delete), pi_delete);
+            delete_i.putExtra(Costants.FROM_WEAR, true);
+            PendingIntent pi_delete_wear = PendingIntent.getActivity(context, r.getId(), delete_i, PendingIntent.FLAG_UPDATE_CURRENT);
+            wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_delete, context.getString(R.string.action_delete), pi_delete_wear).build());
         }
 
         Intent snooze_i = new Intent(context, MyDialog.class);
@@ -127,6 +136,27 @@ public class NotificationF {
         snooze_i.putExtra(Costants.EXTRA_REMINDER, r);
         PendingIntent pi_snooze = PendingIntent.getActivity(context, r.getId(), snooze_i, PendingIntent.FLAG_UPDATE_CURRENT);
         n.addAction(R.drawable.ic_action_time_small, context.getString(R.string.action_snooze), pi_snooze);
+        snooze_i.putExtra(Costants.FROM_WEAR, true);
+        PendingIntent pi_snooze_wear = PendingIntent.getActivity(context, r.getId(), snooze_i, PendingIntent.FLAG_UPDATE_CURRENT);
+        wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_time_small, context.getString(R.string.action_snooze), pi_snooze_wear).build());
+
+
+        if (r.getTitle().length() >= 40) {
+            // Create a big text style for the second page
+            NotificationCompat.BigTextStyle secondPageStyle = new NotificationCompat.BigTextStyle();
+            secondPageStyle.setBigContentTitle(context.getString(R.string.text_big_notification))
+                    .bigText(r.getTitle());
+
+            // Create second page notification
+            Notification secondPageNotification =
+                    new NotificationCompat.Builder(context)
+                            .setStyle(secondPageStyle)
+                            .build();
+
+            wearableExtender.addPage(secondPageNotification);
+        }
+
+        n.extend(wearableExtender);
 
         notificationManager.notify(r.getId(), n.build());
     }
