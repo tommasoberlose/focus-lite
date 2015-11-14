@@ -59,6 +59,17 @@ public class Main extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.action_feedback).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*Intent new_note = new Intent(Main.this, MyDialog.class);
+                new_note.setAction(Costants.ACTION_ADD_ITEM);
+                startActivity(new_note);*/
+
+                startActivity(new Intent(Main.this, About.class));
+            }
+        });
+
     }
 
     @Override
@@ -79,15 +90,6 @@ public class Main extends AppCompatActivity {
                 if (!isChecked)
                     text = getString(R.string.app_disabled);
                 Utils.SnackbarC(Main.this, text, findViewById(R.id.action_feedback));
-            }
-        });
-
-        findViewById(R.id.action_feedback).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent new_note = new Intent(Main.this, MyDialog.class);
-                new_note.setAction(Costants.ACTION_ADD_ITEM);
-                startActivity(new_note);
             }
         });
 

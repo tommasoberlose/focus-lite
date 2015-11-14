@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:src="@drawable/ic_add"
         android:id="@+id/action_feedback"
-        android:elevation="@dimen/fab_elevation"
+        app:elevation="8dp"
         android:clickable="true"
         android:animateLayoutChanges="true"
         android:layout_gravity="end|bottom"

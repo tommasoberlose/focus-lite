@@ -14,7 +14,7 @@
         android:paddingBottom="12dp"
         android:id="@+id/row"
         android:clickable="true"
-        android:background="@drawable/item_background_md">
+        android:background="?attr/selectableItemBackground">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="4dp"
-                android:background="@drawable/button_ripple_md"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_action_gallery"
                 android:alpha="0.6"
                 android:id="@+id/action_open_img"
@@ -58,7 +58,7 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/button_ripple_md"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_action_open_in_browser"
                 android:alpha="0.6"
                 android:id="@+id/action_open_browser"
@@ -67,7 +67,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="4dp"
-                android:background="@drawable/button_ripple_md"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_action_communication_messenger"
                 android:alpha="0.6"
                 android:id="@+id/action_contact"

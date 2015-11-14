@@ -15,7 +15,7 @@
             android:layout_centerHorizontal="true"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/web_hi_res"
+            android:src="@mipmap/ic_launcher"
             android:id="@+id/logo" />
 
         <TextView
