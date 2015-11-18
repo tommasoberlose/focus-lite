@@ -14,26 +14,7 @@
             android:layout_width="match_parent"
             android:theme="@style/style_actionBar"
             android:background="@color/primary"
-            android:elevation="2dp"
-            android:paddingRight="16dp"
             app:layout_scrollFlags="scroll|enterAlways" />
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabview"
-            android:layout_below="@id/my_awesome_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="2dp"
-            android:background="@color/primary"
-            app:tabTextColor="@color/white_back"
-            app:tabSelectedTextColor="@android:color/white"
-            app:tabIndicatorColor="@color/primary"/>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_below="@id/tabview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </RelativeLayout>
 
 
@@ -42,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:src="@drawable/ic_add"
-        android:id="@+id/action_feedback"
+        android:id="@+id/action_new"
         app:elevation="8dp"
         android:clickable="true"
         android:animateLayoutChanges="true"

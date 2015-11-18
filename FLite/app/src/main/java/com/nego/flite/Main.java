@@ -25,8 +25,6 @@ import com.nego.flite.Pages.SettingsFragment;
 public class Main extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private SwitchCompat switchCompat;
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,35 +36,12 @@ public class Main extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
 
-
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        setupViewPager(mViewPager);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabview);
-        tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
-
-        findViewById(R.id.action_feedback).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.action_new).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent new_note = new Intent(Main.this, MyDialog.class);
+                Intent new_note = new Intent(Main.this, MyDialog.class);
                 new_note.setAction(Costants.ACTION_ADD_ITEM);
-                startActivity(new_note);*/
-
-                startActivity(new Intent(Main.this, About.class));
+                startActivity(new_note);
             }
         });
 
@@ -77,22 +52,6 @@ public class Main extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        switchCompat = (SwitchCompat) MenuItemCompat.getActionView(menu.findItem(R.id.active_switch));
-
-        SharedPreferences SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-        switchCompat.setChecked(SP.getBoolean("enable_not_add", false));
-        Utils.notification_add_update(this);
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Utils.notification_add_update(Main.this, isChecked);
-                String text = getString(R.string.app_enabled);
-                if (!isChecked)
-                    text = getString(R.string.app_disabled);
-                Utils.SnackbarC(Main.this, text, findViewById(R.id.action_feedback));
-            }
-        });
-
         return true;
     }
 
@@ -100,15 +59,15 @@ public class Main extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        return super.onOptionsItemSelected(item);
-    }
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(Main.this, Settings.class));
+        }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new FeaturesFragment(), getResources().getString(R.string.title_tab_features));
-        adapter.addFrag(new SettingsFragment(), getResources().getString(R.string.title_tab_settings));
-        adapter.addFrag(new PageFragment(), getResources().getString(R.string.title_tab_developer));
-        viewPager.setAdapter(adapter);
+        if (id == R.id.action_about) {
+            startActivity(new Intent(Main.this, About.class));
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

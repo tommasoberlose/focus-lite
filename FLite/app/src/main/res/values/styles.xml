@@ -14,8 +14,6 @@
     <style name="style_actionBar" parent="@style/Widget.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
-        <item name="textAppearanceLargePopupMenu">@style/popup_iteml</item>
-        <item name="textAppearanceSmallPopupMenu">@style/popup_items</item>
     </style>
 
 
@@ -55,5 +53,7 @@
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/abc_slide_in_top</item>
     </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

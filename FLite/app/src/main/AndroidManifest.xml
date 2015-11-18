@@ -98,10 +98,20 @@
             android:label="@string/title_activity_password_check"
             android:theme="@style/mDialog" >
         </activity>
-        <activity android:name=".About"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        <activity
+            android:name=".About"
+            android:label="@string/title_tab_developer"
             android:parentActivityName=".Main"
-            android:label="@string/title_tab_developer">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".Settings"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".Main"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nego.flite.Main" />
         </activity>
     </application>
 

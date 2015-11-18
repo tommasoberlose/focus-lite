@@ -24,19 +24,6 @@
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:actionModeBackground">@color/primary</item>
         <item name="android:popupTheme">@style/ThemeOverlay.AppCompat</item>
-        <item name="textAppearanceLargePopupMenu">@style/popup_iteml</item>
-        <item name="textAppearanceSmallPopupMenu">@style/popup_items</item>
-    </style>
-
-    <!-- POPUP MAIN ACTIONBAR -->
-    <style name="popup_iteml" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large">
-        <item name="android:color">@android:color/white</item>
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="popup_items" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Small">
-        <item name="android:color">@android:color/white</item>
-        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="MyDialog_theme" parent="Theme.AppCompat.NoActionBar">

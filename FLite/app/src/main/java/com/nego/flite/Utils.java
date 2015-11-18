@@ -81,24 +81,14 @@ public class Utils {
         NotificationF.CancelAllNotification(context);
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-        if (SP.contains("enable_not_add") && SP.getBoolean("enable_not_add", false)) {
-            if (SP.getBoolean(Costants.PREFERENCE_ORDER_NOTIFICATIONS, true)) {
-                NotificationF.NotificationAdd(context);
-                oldReminder(context);
-            } else {
-                oldReminder(context);
-                NotificationF.NotificationAdd(context);
-            }
+        if (SP.getBoolean(Costants.PREFERENCE_ORDER_NOTIFICATIONS, true)) {
+            NotificationF.NotificationAdd(context);
+            oldReminder(context);
+        } else {
+            oldReminder(context);
+            NotificationF.NotificationAdd(context);
         }
         updateWidget(context);
-    }
-
-    public static void notification_add_update(Context context, boolean b) {
-        SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = SP.edit();
-        editor.putBoolean("enable_not_add", b);
-        editor.apply();
-        notification_add_update(context);
     }
 
     public static String getDate(Context context, long date) {
