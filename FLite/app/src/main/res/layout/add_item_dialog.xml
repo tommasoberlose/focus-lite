@@ -116,7 +116,7 @@
                                 android:alpha="0.5"
                                 android:id="@+id/add_img"
                                 android:padding="8dp"
-                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:background="?attr/selectableItemBackground"
                                 android:layout_gravity="center_vertical"/>
 
                             <ImageView
@@ -127,7 +127,7 @@
                                 android:alpha="0.5"
                                 android:id="@+id/action_reminder"
                                 android:padding="8dp"
-                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:background="?attr/selectableItemBackground"
                                 android:clickable="true"
                                 android:layout_gravity="center_vertical"/>
 
@@ -135,7 +135,7 @@
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
                                 android:padding="10dp"
-                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:background="?attr/selectableItemBackground"
                                 android:src="@drawable/ic_action_contacts"
                                 android:id="@+id/action_contact"
                                 android:layout_gravity="center_vertical"
@@ -150,7 +150,7 @@
                                 android:alpha="0.5"
                                 android:id="@+id/action_delete"
                                 android:padding="8dp"
-                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:background="?attr/selectableItemBackground"
                                 android:clickable="true"
                                 android:layout_gravity="center_vertical"
                                 android:visibility="gone"/>
@@ -159,7 +159,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/action_save"
-                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:background="?attr/selectableItemBackground"
                             android:padding="8dp"
                             android:textColor="@color/white_back"
                             android:layout_gravity="center_vertical"

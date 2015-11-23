@@ -117,7 +117,7 @@
     <string name="text_pasw_reset">Note cancellate e password resettata</string>
     <string name="ask_reset_pasw">Sei sicuro di voler cancellare tutte le tue note e resettare la password?</string>
     <string name="action_reset">Resetta</string>
-    <string name="text_first_use">Benvenuto e grazie per aver scaricato Focus Notify.\n\nPer iniziare ad aggiungere note attiva l\'applicazione e abbassa la barra delle notifiche.</string>
+    <string name="text_first_use">Benvenuto e grazie per aver scaricato Focus Notify.\n\nPer iniziare ad aggiungere note abbassa la barra delle notifiche.</string>
     <string name="title_order">Ordine Notifiche</string>
     <string name="subtitle_order">Metti le notifiche con le note per prime e successivamente la notifica per aggiungerle</string>
     <string name="subtitle_preferences_share">Aggiungi un\'opzione ad ogni nota per condividerle più velocemente </string>
@@ -132,4 +132,5 @@
     <string name="action_community">Focus Notify Community</string>
     <string name="action_community_subtitle">Aiuti, feedback e suggerimenti</string>
     <string name="text_big_notification">Contenuto Nota</string>
+    <string name="title_activity_settings">Impostazioni</string>
 </resources>

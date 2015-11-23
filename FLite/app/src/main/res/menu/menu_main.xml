@@ -11,5 +11,5 @@
         android:id="@+id/action_about"
         android:orderInCategory="105"
         app:showAsAction="never"
-        android:title="@string/help_feedback" />
+        android:title="@string/title_tab_developer" />
 </menu>

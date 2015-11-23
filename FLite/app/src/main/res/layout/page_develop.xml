@@ -59,17 +59,13 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/primary_text"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/title_version"
-                    android:layout_toEndOf="@+id/imageView4"
-                    android:layout_toRightOf="@+id/imageView4" />
+                    android:id="@+id/title_version" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/secondary_text"
                     android:text="@string/action_rate_subtitle"
-                    android:layout_below="@+id/title_version"
-                    android:layout_toEndOf="@+id/imageView4"
-                    android:layout_toRightOf="@+id/imageView4" />
+                    android:layout_below="@+id/title_version" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -86,17 +82,13 @@
                     android:textColor="@color/primary_text"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/focus_app"
-                    android:id="@+id/textView"
-                    android:layout_toEndOf="@+id/imageView"
-                    android:layout_toRightOf="@+id/imageView" />
+                    android:id="@+id/textView"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/secondary_text"
                     android:text="@string/action_download_focus_app"
-                    android:layout_below="@+id/textView"
-                    android:layout_toEndOf="@+id/imageView"
-                    android:layout_toRightOf="@+id/imageView"/>
+                    android:layout_below="@+id/textView"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -112,17 +104,13 @@
                     android:textColor="@color/primary_text"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/actiong_gift_coffee"
-                    android:id="@+id/textView2"
-                    android:layout_toEndOf="@+id/img_cafe"
-                    android:layout_toRightOf="@+id/img_cafe" />
+                    android:id="@+id/textView2" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/secondary_text"
                     android:text="@string/action_gift_coffee_subtitle"
-                    android:layout_below="@+id/textView2"
-                    android:layout_toEndOf="@+id/img_cafe"
-                    android:layout_toRightOf="@+id/img_cafe"/>
+                    android:layout_below="@+id/textView2"/>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -137,17 +125,13 @@
                     android:textColor="@color/primary_text"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/action_community"
-                    android:id="@+id/textView18"
-                    android:layout_toEndOf="@+id/img_community"
-                    android:layout_toRightOf="@+id/img_community" />
+                    android:id="@+id/textView18" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/secondary_text"
                     android:text="@string/action_community_subtitle"
-                    android:layout_below="@+id/textView18"
-                    android:layout_toEndOf="@+id/img_community"
-                    android:layout_toRightOf="@+id/img_community"/>
+                    android:layout_below="@+id/textView18"/>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

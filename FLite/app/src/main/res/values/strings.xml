@@ -117,7 +117,7 @@
     <string name="text_pasw_reset">All notes deleted and password reset</string>
     <string name="ask_reset_pasw">Are you sure you want to delete all of your notes and reset the password?</string>
     <string name="action_reset">Reset</string>
-    <string name="text_first_use">Welcome and thank you for downloading Focus Notify.\n\nTo start adding notes active application and pull down the notification bar.</string>
+    <string name="text_first_use">Welcome and thank you for downloading Focus Notify.\n\nTo start adding notes pull down the notification bar.</string>
     <string name="title_order">Order Notifications</string>
     <string name="subtitle_order">Put notifications with the notes before and after the "add" notification</string>
     <string name="title_preferences_share">Share Button</string>

@@ -4,12 +4,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.nego.flite.Pages.CardFragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> mFragmentList = new ArrayList<>();
-    private final List<String> mFragmentTitleList = new ArrayList<>();
     public ViewPagerAdapter(FragmentManager manager) {
         super(manager);
     }
@@ -21,12 +22,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return mFragmentList.size();
     }
-    public void addFrag(Fragment fragment, String title) {
-        mFragmentList.add(fragment);
-        mFragmentTitleList.add(title);
-    }
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return mFragmentTitleList.get(position);
+    public void addFrag(String title, String subtitle, int img) {
+        mFragmentList.add(CardFragment.newInstance(title, subtitle, img));
     }
 }
