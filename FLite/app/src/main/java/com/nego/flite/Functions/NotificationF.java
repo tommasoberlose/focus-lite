@@ -275,20 +275,12 @@ public class NotificationF {
                 PendingIntent pi_hide = PendingIntent.getBroadcast(context, -2, new Intent(Costants.ACTION_HIDE_ALL), PendingIntent.FLAG_UPDATE_CURRENT);
 
                 n.setColor(context.getResources().getColor(R.color.primary));
-                if (SP.getString(Costants.PREFERENCE_PASSWORD, "").equals("")) {
-                    n.addAction(R.drawable.ic_action_hide_all, context.getString(R.string.action_hide_all), pi_hide);
-                } else {
-                    n.addAction(R.drawable.ic_action_lock, context.getString(R.string.action_lock), pi_hide);
-                }
+                n.addAction(R.drawable.ic_action_hide_all, context.getString(R.string.action_hide_all), pi_hide);
             } else {
                 PendingIntent pi_view = PendingIntent.getBroadcast(context, -2, new Intent(Costants.ACTION_VIEW_ALL), PendingIntent.FLAG_UPDATE_CURRENT);
 
                 n.setColor(context.getResources().getColor(R.color.accent));
-                if (SP.getString(Costants.PREFERENCE_PASSWORD, "").equals("")) {
-                    n.addAction(R.drawable.ic_action_view_all, context.getString(R.string.action_view_all), pi_view);
-                } else {
-                    n.addAction(R.drawable.ic_action_lock_open, context.getString(R.string.action_unlock), pi_view);
-                }
+                n.addAction(R.drawable.ic_action_view_all, context.getString(R.string.action_view_all), pi_view);
             }
         }
 

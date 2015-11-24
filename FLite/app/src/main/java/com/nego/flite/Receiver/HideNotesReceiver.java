@@ -20,17 +20,10 @@ public class HideNotesReceiver extends BroadcastReceiver {
             Utils.notification_add_update(context);
         } else if (intent.getAction().equals(Costants.ACTION_VIEW_ALL)) {
             final SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-            if (SP.getString(Costants.PREFERENCE_PASSWORD, "").equals("")) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(Costants.PREFERENCES_VIEW_ALL, true);
-                editor.apply();
-                Utils.notification_add_update(context);
-            } else {
-                Intent i = new Intent(context, PasswordCheck.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.setAction(Costants.ACTION_VIEW_ALL);
-                context.startActivity(i);
-            }
+            SharedPreferences.Editor editor = SP.edit();
+            editor.putBoolean(Costants.PREFERENCES_VIEW_ALL, true);
+            editor.apply();
+            Utils.notification_add_update(context);
         }
     }
 }

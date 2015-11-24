@@ -11,29 +11,35 @@ import com.nego.flite.database.DbAdapter;
 public class Reminder implements Parcelable {
     private int id;
     private String title;
+    private String content;
     private String action_type;
     private String action_info;
     private String img;
+    private String pasw;
     private long date_create;
     private long alarm;
     private String alarm_repeat;
 
-    public Reminder(String title, String action_type, String action_info, String img, long date_create, long alarm, String alarm_repeat){
+    public Reminder(String title, String content, String action_type, String action_info, String img, String pasw, long date_create, long alarm, String alarm_repeat){
         this.title = title;
+        this.content = content;
         this.action_type = action_type;
         this.action_info = action_info;
         this.img = img;
+        this.pasw = pasw;
         this.date_create = date_create;
         this.alarm = alarm;
         this.alarm_repeat = alarm_repeat;
     }
 
-    public Reminder(int id, String title, String action_type, String action_info, String img, long date_create, long alarm, String alarm_repeat){
+    public Reminder(int id, String title, String content, String action_type, String action_info, String img, String pasw, long date_create, long alarm, String alarm_repeat){
         this.id = id;
         this.title = title;
+        this.content = content;
         this.action_type = action_type;
         this.action_info = action_info;
         this.img = img;
+        this.pasw = pasw;
         this.date_create = date_create;
         this.alarm = alarm;
         this.alarm_repeat = alarm_repeat;
@@ -42,9 +48,11 @@ public class Reminder implements Parcelable {
     public Reminder(Cursor cursor){
         this.id = cursor.getInt(cursor.getColumnIndex(DbAdapter.KEY_ID));
         this.title = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_TITLE));
+        this.content = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_CONTENT));
         this.action_type = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_ACTION_TYPE));
         this.action_info = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_ACTION_INFO));
         this.img = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_IMG));
+        this.pasw = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_PASW));
         this.date_create = cursor.getLong(cursor.getColumnIndex(DbAdapter.KEY_DATE_CREATE));
         this.alarm = cursor.getLong( cursor.getColumnIndex(DbAdapter.KEY_ALARM) );
         this.alarm_repeat = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_ALARM_REPEAT));
@@ -59,6 +67,14 @@ public class Reminder implements Parcelable {
     }
     public String getTitle() {
         return title;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public void setAction_type(String action_type) {
@@ -83,6 +99,17 @@ public class Reminder implements Parcelable {
 
     public String getImg() {
         return img;
+    }
+
+    public void setPasw(String pasw) {
+        this.pasw = pasw;
+    }
+
+    public String getPasw() {
+        return pasw;
+    }
+    public boolean checkPasw(String p) {
+        return p.equals(pasw);
     }
 
     public void setDate_create(long date_create) {
@@ -139,7 +166,7 @@ public class Reminder implements Parcelable {
 
     public static final Parcelable.Creator<Reminder> CREATOR = new Creator<Reminder>() {
         public Reminder createFromParcel(Parcel source) {
-            return new Reminder(source.readInt(), source.readString(), source.readString(), source.readString(), source.readString(), source.readLong(), source.readLong(), source.readString());
+            return new Reminder(source.readInt(), source.readString(), source.readString(), source.readString(), source.readString(), source.readString(), source.readString(), source.readLong(), source.readLong(), source.readString());
         }
         public Reminder[] newArray(int size) {
             return new Reminder[size];
@@ -155,9 +182,11 @@ public class Reminder implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(title);
+        dest.writeString(content);
         dest.writeString(action_type);
         dest.writeString(action_info);
         dest.writeString(img);
+        dest.writeString(pasw);
         dest.writeLong(date_create);
         dest.writeLong(alarm);
         dest.writeString(alarm_repeat);

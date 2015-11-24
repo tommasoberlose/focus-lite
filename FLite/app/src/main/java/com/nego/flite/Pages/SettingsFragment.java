@@ -274,10 +274,6 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        //  LOCK NOTES
-
-        checkPasw();
-
         // VIEW INTRO
         view.findViewById(R.id.action_view_intro).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -340,94 +336,4 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
-    public void checkPasw() {
-        if (SP.getString(Costants.PREFERENCE_PASSWORD, "").equals("")) {
-            ((TextView) view.findViewById(R.id.lock_subtitle)).setText(R.string.subtitle_lock_inactive);
-            view.findViewById(R.id.action_lock).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setPasw();
-                }
-            });
-            view.findViewById(R.id.action_reset).setVisibility(View.GONE);
-            view.findViewById(R.id.action_reset).setOnClickListener(null);
-        } else {
-            ((TextView) view.findViewById(R.id.lock_subtitle)).setText(R.string.subtitle_lock_active);
-            view.findViewById(R.id.action_lock).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivityForResult(new Intent(getActivity(), PasswordCheck.class), 5);
-                }
-            });
-            view.findViewById(R.id.action_reset).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.action_reset).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new AlertDialog.Builder(getActivity(), R.style.mDialog)
-                        .setTitle(R.string.title_reset)
-                        .setMessage(R.string.ask_reset_pasw)
-                        .setPositiveButton(R.string.action_reset, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (Utils.resetPasw(getActivity())) {
-                                    checkPasw();
-                                    Utils.notification_add_update(getActivity());
-                                    Utils.SnackbarC(getActivity(), getString(R.string.text_pasw_reset), view);
-                                } else {
-                                    Utils.SnackbarC(getActivity(), getString(R.string.error), view);
-                                }
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .show();
-
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 5 && resultCode == Activity.RESULT_OK)
-            setPasw();
-    }
-
-    public void setPasw() {
-        final View paswView = LayoutInflater.from(getActivity()).inflate(R.layout.pin_dialog, null);
-        final EditText pasw_text = (EditText) paswView.findViewById(R.id.pasw);
-        pasw_text.setText(SP.getString(Costants.PREFERENCE_PASSWORD, ""));
-        new AlertDialog.Builder(getActivity(), R.style.mDialog)
-                .setView(paswView)
-                .setPositiveButton(R.string.action_lock, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SP.edit()
-                                .putString(Costants.PREFERENCE_PASSWORD, pasw_text.getText().toString())
-                                .putBoolean(Costants.PREFERENCES_VIEW_ALL, false)
-                                .apply();
-                        dialog.dismiss();
-                        Utils.SnackbarC(getActivity(), getString(R.string.subtitle_lock_active), view);
-                        Utils.notification_add_update(getActivity());
-                        checkPasw();
-                    }
-                })
-                .setNegativeButton(R.string.action_unlock, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SP.edit()
-                                .putString(Costants.PREFERENCE_PASSWORD, "")
-                                .putBoolean(Costants.PREFERENCES_VIEW_ALL, true)
-                                .apply();
-                        dialog.dismiss();
-                        Utils.SnackbarC(getActivity(), getString(R.string.subtitle_lock_inactive), view);
-                        Utils.notification_add_update(getActivity());
-                        checkPasw();
-                    }
-                })
-                .show();
-    }
 }

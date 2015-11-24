@@ -49,7 +49,7 @@
 
     </style>
 
-    <style name="mDialog" parent="Theme.AppCompat.Dialog">
+    <style name="mDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
 
         <item name="android:colorPrimary">@color/primary</item>

@@ -34,7 +34,7 @@
 
     </style>
 
-    <style name="mDialog" parent="Theme.AppCompat.Dialog">
+    <style name="mDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
         <item name="colorControlActivated">@color/accent_material_light</item>
         <item name="colorSwitchThumbNormal">@color/back_selected_item</item>

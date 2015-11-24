@@ -1,5 +1,7 @@
 package com.nego.flite;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -8,22 +10,34 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.Explode;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +45,10 @@ import com.nego.flite.Functions.AlarmF;
 import com.nego.flite.Functions.NotificationF;
 import com.nego.flite.Functions.ReminderService;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MyDialog extends AppCompatActivity {
     private boolean from_notifications = false;
@@ -40,20 +57,26 @@ public class MyDialog extends AppCompatActivity {
     private Reminder r;
     private boolean edit = false;
     public String img = "";
+    public String pasw = "";
     public String action = "";
     public String action_info = "";
     public long alarm = 0;
     public String alarm_repeat = "";
 
     public EditText title;
-    private ImageView action_delete;
+    public EditText content;
     private TextView save_button;
-    private ImageView add_img_button;
+    private ImageView action_attach;
+    private LinearLayout action_camera;
+    private LinearLayout action_gallery;
     private ImageView selected_img;
     private ImageView cancel_img;
-    public ImageView action_contact;
+    public LinearLayout action_contact;
     private ImageView action_reminder;
     private CardView img_card;
+    private ImageView action_menu;
+    private PopupMenu control_menu;
+    private CardView card_attach;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +88,7 @@ public class MyDialog extends AppCompatActivity {
         if (intent != null && intent.getAction() != null && !intent.getAction().equals("")) {
             if (intent.getAction().equals(Intent.ACTION_VIEW) || intent.getAction().equals(Intent.ACTION_DIAL)) {
                 from_notifications = true;
+                // TODO check if file is image
                 startActivity(new Intent(intent.getAction(), Uri.parse(intent.getStringExtra(Costants.EXTRA_ACTION_TYPE))));
                 finish();
             } else if (intent.getAction().equals(Costants.ACTION_DELETE)) {
@@ -134,23 +158,30 @@ public class MyDialog extends AppCompatActivity {
                 });
 
                 title = (EditText) findViewById(R.id.editText);
-                action_delete = (ImageView) findViewById(R.id.action_delete);
+                content = (EditText) findViewById(R.id.content);
                 save_button = (TextView) findViewById(R.id.action_save);
-                add_img_button = (ImageView) findViewById(R.id.add_img);
+                action_attach = (ImageView) findViewById(R.id.action_attach);
+                action_camera = (LinearLayout) findViewById(R.id.action_camera);
+                action_gallery = (LinearLayout) findViewById(R.id.action_gallery);
                 selected_img = (ImageView) findViewById(R.id.selected_img);
                 cancel_img = (ImageView) findViewById(R.id.action_cancel_image);
-                action_contact = (ImageView) findViewById(R.id.action_contact);
+                action_contact = (LinearLayout) findViewById(R.id.action_contact);
                 action_reminder = (ImageView) findViewById(R.id.action_reminder);
                 img_card = (CardView) findViewById(R.id.card_img);
+                action_menu = (ImageView) findViewById(R.id.control_menu);
+                card_attach = (CardView) findViewById(R.id.card_attach);
 
 
                 if (intent.getAction() != null && Costants.ACTION_EDIT_ITEM.equals(intent.getAction())) {
-                    action_delete.setVisibility(View.VISIBLE);
-
                     r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
-                    title.setText(r.getTitle());
 
+                    pasw = r.getPasw();
+                    controlPasw();
+
+                    title.setText(r.getTitle());
+                    content.setText(r.getContent());
                     img = r.getImg();
+
 
                     if (!img.equals("")) {
                         selected_img.setImageURI(Uri.parse(img));
@@ -166,6 +197,7 @@ public class MyDialog extends AppCompatActivity {
                     if (!r.getAction_type().equals("")) {
                         action = r.getAction_type();
                         action_info = r.getAction_info();/*
+                        TODO visualizzare contatto selezionato
                         action_contact.setVisibility(View.VISIBLE);
                         action_contact.setAlpha(1f);
                         switch (action) {
@@ -202,7 +234,9 @@ public class MyDialog extends AppCompatActivity {
 
                 if (savedInstanceState != null) {
                     title.setText(savedInstanceState.getString(Costants.KEY_DIALOG_TITLE));
+                    content.setText(savedInstanceState.getString(Costants.KEY_DIALOG_CONTENT));
                     img = savedInstanceState.getString(Costants.KEY_DIALOG_IMG);
+                    pasw = savedInstanceState.getString(Costants.KEY_DIALOG_PASW);
                     action = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION);
                     action_info = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION_INFO);/*
                     if (!action.equals("")) {
@@ -231,22 +265,6 @@ public class MyDialog extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         saveAll();
-                    }
-                });
-
-                action_delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        new AlertDialog.Builder(MyDialog.this)
-                                .setTitle(getResources().getString(R.string.attention))
-                                .setMessage(getResources().getString(R.string.ask_delete_reminder) + "?")
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r);
-                                        finish();
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.cancel, null).show();
                     }
                 });
 
@@ -290,11 +308,47 @@ public class MyDialog extends AppCompatActivity {
                         Intent contact_intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
                         contact_intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
                         startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-
+                        setVisibilityAttachCard(false);
                     }
                 });
 
-                add_img_button.setOnClickListener(new View.OnClickListener() {
+                action_attach.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setVisibilityAttachCard(true);
+                    }
+                });
+
+                action_camera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                            try {
+                                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                                String imageFileName = "JPEG_" + timeStamp;
+                                File storageDir = Environment.getExternalStoragePublicDirectory(
+                                        Environment.DIRECTORY_PICTURES);
+                                File image = File.createTempFile(
+                                        imageFileName,  /* prefix */
+                                        ".jpg",         /* suffix */
+                                        storageDir      /* directory */
+                                );
+                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                        Uri.fromFile(image));
+                                startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
+                                img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
+                                Log.i("IMG_PATH", img);
+                                setVisibilityAttachCard(false);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+
+                action_gallery.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent getIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -302,6 +356,7 @@ public class MyDialog extends AppCompatActivity {
                         Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
 
                         startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+                        setVisibilityAttachCard(false);
                     }
                 });
 
@@ -310,6 +365,18 @@ public class MyDialog extends AppCompatActivity {
                     public void onClick(View v) {
                         ReminderDialog r_dialog = new ReminderDialog(MyDialog.this, alarm, alarm_repeat);
                         r_dialog.show();
+                    }
+                });
+
+                ContextThemeWrapper mContextPicker = new ContextThemeWrapper(this, R.style.Theme_AppCompat_Light);
+                control_menu = new PopupMenu(mContextPicker, action_menu, GravityCompat.END);
+                control_menu.inflate(R.menu.control_menu);
+                control_menu.getMenu().getItem(1).setVisible(r != null);
+                checkPasw();
+                action_menu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        control_menu.show();
                     }
                 });
 
@@ -411,12 +478,21 @@ public class MyDialog extends AppCompatActivity {
                 }
             }
             cursor.close();
+        } else if (requestCode == Costants.CODE_REQUEST_PASW) {
+            if (resultCode == RESULT_OK)
+                findViewById(R.id.back_to_dismiss).setVisibility(View.VISIBLE);
+            else
+                finish();
+        } else if (requestCode == Costants.CODE_REQUEST_CAMERA && resultCode == RESULT_OK) {
+            if (data != null) {
+                checkImg();
+            }
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (from_notifications || (r == null && Utils.isEmpty(title) && img.equals("")) || (r != null && r.getTitle().equals(title.getText().toString()) && r.getImg().equals(img))) {
+        if (from_notifications || (r == null && Utils.isEmpty(title) && img.equals("") && Utils.isEmpty(content)) || (r != null && r.getTitle().equals(title.getText().toString()) && r.getContent().equals(content.getText().toString()) && r.getImg().equals(img))) {
             finish();
         } else {
             new AlertDialog.Builder(MyDialog.this)
@@ -436,7 +512,9 @@ public class MyDialog extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         if (!from_notifications) {
             outState.putString(Costants.KEY_DIALOG_TITLE, title.toString());
+            outState.putString(Costants.KEY_DIALOG_CONTENT, content.toString());
             outState.putString(Costants.KEY_DIALOG_IMG, img);
+            outState.putString(Costants.KEY_DIALOG_PASW, pasw);
             outState.putString(Costants.KEY_DIALOG_ACTION, action);
             outState.putString(Costants.KEY_DIALOG_ACTION_INFO, action_info);
             outState.putString(Costants.KEY_DIALOG_ALARM, "" + alarm);
@@ -458,17 +536,20 @@ public class MyDialog extends AppCompatActivity {
     }
 
     public void generateReminder() {
+        String titleN = title.getText().toString();
+        titleN = titleN.trim();
+        String contentT = content.getText().toString();
+        contentT.trim();
         if (!edit) {
             Calendar c = Calendar.getInstance();
             long dateC = c.getTimeInMillis();
-            String titleN = title.getText().toString();
-            titleN = titleN.trim();
-            r = new Reminder(titleN, action, action_info, img, dateC, alarm, alarm_repeat);
+            // TODO fare i controlli su content
+            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, alarm, alarm_repeat);
         } else {
-            String titleN = title.getText().toString();
-            titleN = titleN.trim();
             r.setTitle(titleN);
+            r.setContent(contentT);
             r.setImg(img);
+            r.setPasw(pasw);
             r.setAction_type(action);
             r.setAction_info(action_info);
             r.setAlarm(alarm);
@@ -483,7 +564,10 @@ public class MyDialog extends AppCompatActivity {
             selected_img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(img)));
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.parse(img), "image/*");
+                    startActivity(intent);
                 }
             });
 
@@ -517,9 +601,9 @@ public class MyDialog extends AppCompatActivity {
             this.alarm = alarm;
             this.alarm_repeat = alarm_repeat;
             if (alarm != 0) {
-                action_reminder.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_alarm_on));
+                action_reminder.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_notifications_on));
             } else {
-                action_reminder.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_alarm_add));
+                action_reminder.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_social_notifications));
             }
         }
     }
@@ -528,5 +612,115 @@ public class MyDialog extends AppCompatActivity {
      public void finish() {
         super.finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    public void checkPasw() {
+        if (pasw.equals("")) {
+            control_menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.action_pasw:
+                            setPasw();
+                            return true;
+                        case R.id.action_delete:
+                            new AlertDialog.Builder(MyDialog.this)
+                                    .setTitle(getResources().getString(R.string.attention))
+                                    .setMessage(getResources().getString(R.string.ask_delete_reminder) + "?")
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r);
+                                            finish();
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.cancel, null).show();
+                            return true;
+                    }
+                    return false;
+                }
+            });
+            control_menu.getMenu().getItem(0).setTitle(getString(R.string.action_lock));
+        } else {
+            control_menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.action_pasw:
+                            pasw = "";
+                            checkPasw();
+                            return true;
+                        case R.id.action_delete:
+                            new AlertDialog.Builder(MyDialog.this)
+                                    .setTitle(getResources().getString(R.string.attention))
+                                    .setMessage(getResources().getString(R.string.ask_delete_reminder) + "?")
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r);
+                                            finish();
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.cancel, null).show();
+                            return true;
+                    }
+                    return false;
+                }
+            });
+            control_menu.getMenu().getItem(0).setTitle(getString(R.string.action_unlock));
+
+        }
+    }
+
+    public void setPasw() {
+        final View paswView = LayoutInflater.from(this).inflate(R.layout.pin_dialog, null);
+        final EditText pasw_text = (EditText) paswView.findViewById(R.id.pasw);
+        pasw_text.setText(pasw);
+        new android.support.v7.app.AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog)
+                .setView(paswView)
+                .setPositiveButton(R.string.action_lock, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        pasw = pasw_text.getText().toString();
+                        checkPasw();
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    public void controlPasw() {
+        if (!pasw.equals("")) {
+            findViewById(R.id.back_to_dismiss).setVisibility(View.INVISIBLE);
+            Intent requestPasw = new Intent(MyDialog.this, PasswordCheck.class);
+            requestPasw.putExtra(Costants.EXTRA_REMINDER, r);
+            startActivityForResult(requestPasw, Costants.CODE_REQUEST_PASW);
+        }
+    }
+
+    public void setVisibilityAttachCard(boolean b) {
+        if (b && card_attach.getVisibility() != View.VISIBLE) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                Animator anim =
+                        ViewAnimationUtils.createCircularReveal(card_attach, (int) getResources().getDimension(R.dimen.activity_horizontal_margin), 0, 0, card_attach.getWidth());
+                card_attach.setVisibility(View.VISIBLE);
+                anim.start();
+            } else {
+                card_attach.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                Animator anim =
+                        ViewAnimationUtils.createCircularReveal(card_attach, (int) getResources().getDimension(R.dimen.activity_horizontal_margin), 0, card_attach.getWidth(), 0);
+                anim.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        card_attach.setVisibility(View.GONE);
+                    }
+                });
+                anim.start();
+            } else {
+                card_attach.setVisibility(View.GONE);
+            }
+        }
     }
 }

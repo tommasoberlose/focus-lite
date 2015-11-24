@@ -102,9 +102,9 @@
     <string name="subtitle_lock_inactive">Password lock disabled</string>
     <string name="text_password">Password</string>
     <string name="title_add_pasw">Insert Password</string>
-    <string name="subtitle_add_pasw">Add a word to be used as a password to protect your notes</string>
-    <string name="action_lock">Lock</string>
-    <string name="action_unlock">Unlock</string>
+    <string name="subtitle_add_pasw">Add a word to be used as a password to protect this note</string>
+    <string name="action_lock">Lock Note</string>
+    <string name="action_unlock">Unlock Note</string>
     <string name="error_password">Error: wrong password</string>
     <string name="title_activity_password_check">Insert Password</string>
     <string name="action_settings">Settings</string>
@@ -113,7 +113,7 @@
     <string name="subtitle_view_intro">View app intro again</string>
     <string name="warning_pasw">Attention: If you enter a password will be blocked ALL the notes and in case you do not remember you will need to reset them all</string>
     <string name="title_reset">Reset Password</string>
-    <string name="subtitle_reset">Attention: ALL your notes will be deleted if it is confirmed this procedure</string>
+    <string name="subtitle_reset">Attention: ALL your notes with password will be deleted if it is confirmed this procedure</string>
     <string name="text_pasw_reset">All notes deleted and password reset</string>
     <string name="ask_reset_pasw">Are you sure you want to delete all of your notes and reset the password?</string>
     <string name="action_reset">Reset</string>
@@ -133,4 +133,6 @@
     <string name="action_community_subtitle">Help, feedback and suggestions</string>
     <string name="text_big_notification">Full Content</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="action_list_show">Show checkboxes</string>
+    <string name="action_list_hide">Hide checkboxes</string>
 </resources>

@@ -81,31 +81,6 @@
                     android:paddingBottom="8dp"
                     android:background="@drawable/list_item_background_card"
                     android:clickable="true"
-                    android:id="@+id/action_lock">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/title_lock"
-                        android:id="@+id/lock_title" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white_dark"
-                        android:id="@+id/lock_subtitle"
-                        android:layout_below="@+id/lock_title"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:background="@drawable/list_item_background_card"
-                    android:clickable="true"
                     android:id="@+id/action_reset">
                     <TextView
                         android:layout_width="match_parent"

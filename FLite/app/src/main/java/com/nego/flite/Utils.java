@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.nego.flite.Functions.AlarmF;
 import com.nego.flite.Functions.NotificationF;
+import com.nego.flite.Functions.ReminderService;
 import com.nego.flite.Widget.FocusWidget;
 import com.nego.flite.database.DbAdapter;
 
@@ -298,20 +299,18 @@ public class Utils {
         }
     }
 
-    public static boolean resetPasw(Context context) {
+    public static void resetPasw(Context context) {
 
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
 
-        boolean ok = false;
-
-        if (dbHelper.getRemindersN() == 0 || dbHelper.deleteAllReminders()) {
-            SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-            SP.edit().putString(Costants.PREFERENCE_PASSWORD, "").apply();
-            ok = true;
+        Cursor c = dbHelper.fetchAllReminders();
+        while (c.moveToNext()) {
+            Reminder r = new Reminder(c);
+            if (!r.getPasw().equals(""))
+                ReminderService.startAction(context, Costants.ACTION_DELETE, r);
         }
 
         dbHelper.close();
-        return ok;
     }
 }

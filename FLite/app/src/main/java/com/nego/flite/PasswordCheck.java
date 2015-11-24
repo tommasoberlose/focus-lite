@@ -23,22 +23,13 @@ public class PasswordCheck extends AppCompatActivity {
         setContentView(R.layout.checkpasw);
 
         final Intent intent = getIntent();
-
-        final SharedPreferences SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-
         final EditText pasw_text = (EditText) findViewById(R.id.pasw);
+        final Reminder r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
         findViewById(R.id.action_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (pasw_text.getEditableText().toString().equals(SP.getString(Costants.PREFERENCE_PASSWORD, ""))) {
-                    if (intent != null && intent.getAction() != null && intent.getAction().equals(Costants.ACTION_VIEW_ALL)) {
-                        SharedPreferences.Editor editor = SP.edit();
-                        editor.putBoolean(Costants.PREFERENCES_VIEW_ALL, true);
-                        editor.apply();
-                        Utils.notification_add_update(PasswordCheck.this);
-                    } else {
-                        setResult(Activity.RESULT_OK);
-                    }
+                if (pasw_text.getEditableText().toString().equals(r.getPasw())) {
+                    setResult(Activity.RESULT_OK);
                     finish();
                 } else {
                     Toast.makeText(PasswordCheck.this, R.string.error_password, Toast.LENGTH_SHORT).show();

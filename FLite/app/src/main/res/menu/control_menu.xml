@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Main">
+    <item
+        android:id="@+id/action_pasw"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/action_lock" />
+    <item
+        android:id="@+id/action_delete"
+        android:orderInCategory="105"
+        app:showAsAction="never"
+        android:title="@string/action_delete" />
+</menu>
