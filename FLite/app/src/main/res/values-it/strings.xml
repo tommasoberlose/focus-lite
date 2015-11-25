@@ -144,4 +144,8 @@
     <string name="text_last_changed">Ultima Modifica</string>
     <string name="subtitle_info_note">Lista delle informazioni tecniche principali di questa nota, se trovi qualche discrepanza valuta l\'utilizzo di una password.</string>
     <string name="text_never">Mai</string>
+    <string name="ask_replace_img">Sei sicuro di voler cambiare l\'immagine scelta</string>
+    <string name="action_replace">Cambia</string>
+    <string name="action_click_contact">Apri le informazioni sul contatto</string>
+    <string name="ask_replace_contact">Sei sicuro di voler cambiare il contatto scelto</string>
 </resources>

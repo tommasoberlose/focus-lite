@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -247,6 +248,13 @@ public class NotificationF {
                     Intent mail_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:"+r.getAction_info()));
                     PendingIntent mail_pi = PendingIntent.getActivity(context, r.getId(), mail_intent, 0);
                     n.addAction(R.drawable.ic_action_communication_email, context.getString(R.string.action_mail), mail_pi);
+                    break;
+                case Costants.ACTION_CONTACT:
+                    Intent contact_intent = new Intent(Intent.ACTION_VIEW);
+                    Uri contact_uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(r.getAction_info()));
+                    contact_intent.setData(contact_uri);
+                    PendingIntent contact_pi = PendingIntent.getActivity(context, r.getId(), contact_intent, 0);
+                    n.addAction(R.drawable.ic_action_account_circle_small, context.getString(R.string.text_contact), contact_pi);
                     break;
             }
         }

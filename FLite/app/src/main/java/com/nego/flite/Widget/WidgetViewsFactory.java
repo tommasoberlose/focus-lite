@@ -10,7 +10,9 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -110,6 +112,7 @@ public class WidgetViewsFactory implements
             if (!mWidgetItems.get(position).getImg().equals("")) {
                 rv.setViewVisibility(R.id.action_open_img, View.VISIBLE);
                 Intent img_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, mWidgetItems.get(position).getImg());
+                img_intent.putExtra(Costants.EXTRA_IS_PHOTO, true);
                 rv.setOnClickFillInIntent(R.id.action_open_img, img_intent);
             } else {
                 rv.setViewVisibility(R.id.action_open_img, View.GONE);
@@ -143,6 +146,13 @@ public class WidgetViewsFactory implements
                         rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
                         rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_email);
                         rv.setOnClickFillInIntent(R.id.action_contact, mail_intent);
+                        break;
+                    case Costants.ACTION_CONTACT:
+                        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(mWidgetItems.get(position).getAction_info()));
+                        Intent contact_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, uri.toString());
+                        rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
+                        rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_account_circle);
+                        rv.setOnClickFillInIntent(R.id.action_contact, contact_intent);
                         break;
                 }
             } else {

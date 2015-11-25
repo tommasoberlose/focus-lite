@@ -9,6 +9,7 @@ public class Costants {
     public static final String EXTRA_ACTION_TYPE = "android.intent.extra.ACTION_TYPE";
     public static final String EXTRA_REMINDER = "android.intent.extra.REMINDER";
     public static final String EXTRA_REMINDER_ID = "android.intent.extra.REMINDER_ID";
+    public static final String EXTRA_IS_PHOTO = "android.intent.extra.IS_PHOTO";
     public static final String ACTION_UPDATE_LIST = "android.intent.action.flite.UPDATE_LIST";
 
     public static final String PREFERENCES_COSTANT = "preferences_costant";
@@ -18,6 +19,7 @@ public class Costants {
     public static final String ACTION_CALL = "android.intent.action.ACTION_CALL";
     public static final String ACTION_SMS = "android.intent.action.ACTION_SMS";
     public static final String ACTION_MAIL = "android.intent.action.ACTION_MAIL";
+    public static final String ACTION_CONTACT = "android.intent.action.ACTION_CONTACT";
     public static final int CODE_REQUEST_IMG = 1;
     public static final int CODE_REQUEST_CONTACT = 2;
     public static final int CODE_REQUEST_PASW = 5;

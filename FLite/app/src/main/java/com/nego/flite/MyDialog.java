@@ -77,6 +77,7 @@ public class MyDialog extends AppCompatActivity {
     private ImageView action_menu;
     private PopupMenu control_menu;
     private CardView card_attach;
+    private CardView contact_card;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +89,10 @@ public class MyDialog extends AppCompatActivity {
         if (intent != null && intent.getAction() != null && !intent.getAction().equals("")) {
             if (intent.getAction().equals(Intent.ACTION_VIEW) || intent.getAction().equals(Intent.ACTION_DIAL)) {
                 from_notifications = true;
-                // TODO check if file is image
-                startActivity(new Intent(intent.getAction(), Uri.parse(intent.getStringExtra(Costants.EXTRA_ACTION_TYPE))));
+                Intent i = new Intent(intent.getAction(), Uri.parse(intent.getStringExtra(Costants.EXTRA_ACTION_TYPE)));
+                if (intent.getBooleanExtra(Costants.EXTRA_IS_PHOTO, false))
+                    i.setDataAndType(Uri.parse(intent.getStringExtra(Costants.EXTRA_ACTION_TYPE)), "image/*");
+                startActivity(i);
                 finish();
             } else if (intent.getAction().equals(Costants.ACTION_DELETE)) {
                 from_notifications = true;
@@ -171,6 +174,7 @@ public class MyDialog extends AppCompatActivity {
                 img_card = (CardView) findViewById(R.id.card_img);
                 action_menu = (ImageView) findViewById(R.id.control_menu);
                 card_attach = (CardView) findViewById(R.id.card_attach);
+                contact_card = (CardView) findViewById(R.id.card_contact);
 
                 if (intent.getAction() != null && Costants.ACTION_EDIT_ITEM.equals(intent.getAction())) {
                     r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
@@ -196,21 +200,8 @@ public class MyDialog extends AppCompatActivity {
 
                     if (!r.getAction_type().equals("")) {
                         action = r.getAction_type();
-                        action_info = r.getAction_info();/*
-                        TODO visualizzare contatto selezionato
-                        action_contact.setVisibility(View.VISIBLE);
-                        action_contact.setAlpha(1f);
-                        switch (action) {
-                            case Costants.ACTION_CALL:
-                                action_contact.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_communication_call));
-                                break;
-                            case Costants.ACTION_SMS:
-                                action_contact.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_communication_messenger));
-                                break;
-                            case Costants.ACTION_MAIL:
-                                action_contact.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_communication_email));
-                                break;
-                        }*/
+                        action_info = r.getAction_info();
+                        setContact();
                     }
 
                     if (r.getAlarm() != 0) {
@@ -238,23 +229,8 @@ public class MyDialog extends AppCompatActivity {
                     img = savedInstanceState.getString(Costants.KEY_DIALOG_IMG);
                     pasw = savedInstanceState.getString(Costants.KEY_DIALOG_PASW);
                     action = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION);
-                    action_info = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION_INFO);/*
-                    if (!action.equals("")) {
-                        action_contact.setVisibility(View.VISIBLE);
-                        if (!action_info.equals(""))
-                            action_contact.setAlpha(1f);
-                        switch (action) {
-                            case Costants.ACTION_CALL:
-                                action_contact.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_communication_call));
-                                break;
-                            case Costants.ACTION_SMS:
-                                action_contact.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_communication_messenger));
-                                break;
-                            case Costants.ACTION_MAIL:
-                                action_contact.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_communication_email));
-                                break;
-                        }
-                    }*/
+                    action_info = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION_INFO);
+                    setContact();
 
                     setAlarm(Long.parseLong(savedInstanceState.getString(Costants.KEY_DIALOG_ALARM)), savedInstanceState.getString(Costants.KEY_DIALOG_ALARM_REPEAT));
 
@@ -286,28 +262,33 @@ public class MyDialog extends AppCompatActivity {
                         } else {
                             save_button.setTextColor(getResources().getColor(R.color.white_back));
                         }
-
+                        /* TODO rendere dinamico l'inserimento di un contatto
                         String action_to_do = Utils.checkAction(MyDialog.this, s.toString());
                         if (!action_to_do.equals("")) {
-                            action = action_to_do;/*
-                            if (action_info.equals(""))
-                                action_contact.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_contacts));
-                            action_contact.setVisibility(View.VISIBLE);*/
-                        } else {
-                            action = "";
-                            action_info = "";/*
-                            action_contact.setVisibility(View.GONE);
-                            action_contact.setAlpha(0.6f);*/
-                        }
+                            action = action_to_do;
+                        }*/
                     }
                 });
 
                 action_contact.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent contact_intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
+                        final Intent contact_intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
                         contact_intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-                        startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
+
+                        if (!action.equals("")) {
+                            new AlertDialog.Builder(MyDialog.this)
+                                    .setTitle(getResources().getString(R.string.attention))
+                                    .setMessage(getResources().getString(R.string.ask_replace_contact) + "?")
+                                    .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, null).show();
+                        } else {
+                            startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
+                        }
                         setVisibilityAttachCard(false);
                     }
                 });
@@ -322,29 +303,44 @@ public class MyDialog extends AppCompatActivity {
                 action_camera.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                             try {
                                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                                 String imageFileName = "JPEG_" + timeStamp;
                                 File storageDir = Environment.getExternalStoragePublicDirectory(
                                         Environment.DIRECTORY_PICTURES);
-                                File image = File.createTempFile(
-                                        imageFileName,  /* prefix */
-                                        ".jpg",         /* suffix */
-                                        storageDir      /* directory */
+                                final File image = File.createTempFile(
+                                        imageFileName,
+                                        ".jpg",
+                                        storageDir
                                 );
                                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                                         Uri.fromFile(image));
-                                startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
-                                img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
-                                Log.i("IMG_PATH", img);
-                                setVisibilityAttachCard(false);
+
+                                if (!img.equals("")) {
+                                    new AlertDialog.Builder(MyDialog.this)
+                                            .setTitle(getResources().getString(R.string.attention))
+                                            .setMessage(getResources().getString(R.string.ask_replace_img) + "?")
+                                            .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int whichButton) {
+                                                    startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
+                                                    img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
+                                                    Log.i("IMG_PATH", img);
+                                                }
+                                            })
+                                            .setNegativeButton(android.R.string.no, null).show();
+                                } else {
+                                    startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
+                                    img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
+                                    Log.i("IMG_PATH", img);
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
+
+                        setVisibilityAttachCard(false);
                     }
                 });
 
@@ -353,9 +349,21 @@ public class MyDialog extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent getIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         getIntent.setType("image/*");
-                        Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
+                        final Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
 
-                        startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+                        if (!img.equals("")) {
+                            new AlertDialog.Builder(MyDialog.this)
+                                    .setTitle(getResources().getString(R.string.attention))
+                                    .setMessage(getResources().getString(R.string.ask_replace_img) + "?")
+                                    .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, null).show();
+                        } else {
+                            startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+                        }
                         setVisibilityAttachCard(false);
                     }
                 });
@@ -373,6 +381,7 @@ public class MyDialog extends AppCompatActivity {
                 control_menu.inflate(R.menu.control_menu);
                 control_menu.getMenu().getItem(1).setVisible(r != null);
                 control_menu.getMenu().getItem(2).setVisible(r != null);
+                control_menu.getMenu().getItem(3).setVisible(r != null);
                 checkPasw();
                 action_menu.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -398,8 +407,7 @@ public class MyDialog extends AppCompatActivity {
             Uri contactData = data.getData();
 
             String name = "";
-            String email = "";
-            String phone = "";
+            String id = "";
 
             // Get the name
             Cursor cursor = getContentResolver().query(contactData,
@@ -409,72 +417,13 @@ public class MyDialog extends AppCompatActivity {
                 name = cursor.getString(cursor.getColumnIndex(
                         ContactsContract.Contacts.DISPLAY_NAME));
 
-                // Set up the projection
-                String[] projection = {
-                        ContactsContract.Data.DISPLAY_NAME,
-                        ContactsContract.Contacts.Data.DATA1,
-                        ContactsContract.Contacts.Data.MIMETYPE };
-
-                // Query ContactsContract.Data
-                cursor = getContentResolver().query(
-                        ContactsContract.Data.CONTENT_URI, projection,
-                        ContactsContract.Data.DISPLAY_NAME + " = ?",
-                        new String[] { name },
-                        null);
-
-                if (cursor.moveToFirst()) {
-                    // Get the indexes of the MIME type and data
-                    int mimeIdx = cursor.getColumnIndex(
-                            ContactsContract.Contacts.Data.MIMETYPE);
-                    int dataIdx = cursor.getColumnIndex(
-                            ContactsContract.Contacts.Data.DATA1);
-
-                    // Match the data to the MIME type, store in variables
-                    do {
-                        String mime = cursor.getString(mimeIdx);
-                        if (ContactsContract.CommonDataKinds.Email
-                                .CONTENT_ITEM_TYPE.equalsIgnoreCase(mime)) {
-                            email = cursor.getString(dataIdx);
-                        }
-                        if (ContactsContract.CommonDataKinds.Phone
-                                .CONTENT_ITEM_TYPE.equalsIgnoreCase(mime)) {
-                            phone = cursor.getString(dataIdx);
-                        }
-                    } while (cursor.moveToNext());
-
-                    switch (action) {
-                        case Costants.ACTION_CALL:
-                            if (!phone.equals("")) {
-                                action_info = phone;
-                                //action_contact.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_communication_call));
-                                //action_contact.setAlpha(1f);
-                                title.setText(title.getText() + " " + name);
-                            } else {
-                                Toast.makeText(this, R.string.error_contact_not_found, Toast.LENGTH_SHORT).show();
-                            }
-                            break;
-                        case Costants.ACTION_SMS:
-                            if (!phone.equals("")) {
-                                action_info = phone;
-                                //action_contact.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_communication_messenger));
-                                //action_contact.setAlpha(1f);
-                                title.setText(title.getText() + " " + name);
-                            } else {
-                                Toast.makeText(this, R.string.error_contact_not_found, Toast.LENGTH_SHORT).show();
-                            }
-                            break;
-                        case Costants.ACTION_MAIL:
-                            if (!phone.equals("")) {
-                                action_info = email;
-                                //action_contact.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_communication_email));
-                                //action_contact.setAlpha(1f);
-                                title.setText(title.getText() + " " + name);
-                            } else {
-                                Toast.makeText(this, R.string.error_contact_not_found, Toast.LENGTH_SHORT).show();
-                            }
-                            break;
-                    }
-
+                final String[] contact = Utils.fetchContacts(MyDialog.this, name);
+                if (contact != null) {
+                    action = Costants.ACTION_CONTACT;
+                    action_info = contact[0];
+                    setContact();
+                } else {
+                    Toast.makeText(this, R.string.error_contact_not_found, Toast.LENGTH_SHORT).show();
                 }
             }
             cursor.close();
@@ -627,6 +576,12 @@ public class MyDialog extends AppCompatActivity {
                         case R.id.action_info:
                             showInfo();
                             return true;
+                        case R.id.action_share:
+                            Intent share_intent = new Intent(Intent.ACTION_SEND);
+                            share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle());
+                            share_intent.setType("text/plain");
+                            startActivity(share_intent);
+                            return true;
                         case R.id.action_delete:
                             new AlertDialog.Builder(MyDialog.this)
                                     .setTitle(getResources().getString(R.string.attention))
@@ -655,6 +610,12 @@ public class MyDialog extends AppCompatActivity {
                             return true;
                         case R.id.action_info:
                             showInfo();
+                            return true;
+                        case R.id.action_share:
+                            Intent share_intent = new Intent(Intent.ACTION_SEND);
+                            share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle());
+                            share_intent.setType("text/plain");
+                            startActivity(share_intent);
                             return true;
                         case R.id.action_delete:
                             new AlertDialog.Builder(MyDialog.this)
@@ -744,5 +705,77 @@ public class MyDialog extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    public void setContact() {
+        if (action.equals("")) {
+            contact_card.setVisibility(View.GONE);
+        } else {
+            switch (action) {
+                case Costants.ACTION_CALL:
+                    ((TextView) findViewById(R.id.contact_name)).setText(getString(R.string.action_call) + " " + action_info);
+                    ((ImageView) findViewById(R.id.contact_img_replace)).setImageResource(R.drawable.ic_action_communication_call);
+                    contact_card.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent call_intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+action_info));
+                            startActivity(call_intent);
+                        }
+                    });
+                    break;
+                case Costants.ACTION_SMS:
+                    ((TextView) findViewById(R.id.contact_name)).setText(getString(R.string.action_sms) + " " + action_info);
+                    ((ImageView) findViewById(R.id.contact_img_replace)).setImageResource(R.drawable.ic_action_communication_messenger);
+                    contact_card.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent sms_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+action_info));
+                            startActivity(sms_intent);
+                        }
+                    });
+                    break;
+                case Costants.ACTION_MAIL:
+                    ((TextView) findViewById(R.id.contact_name)).setText(getString(R.string.action_mail) + " " + action_info);
+                    ((ImageView) findViewById(R.id.contact_img_replace)).setImageResource(R.drawable.ic_action_communication_email);
+                    contact_card.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent mail_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:"+action_info));
+                            startActivity(mail_intent);
+                        }
+                    });
+                    break;
+                case Costants.ACTION_CONTACT:
+                    ((TextView) findViewById(R.id.contact_name)).setText(getString(R.string.text_contact));
+                    final String[] contact = Utils.fetchContacts(MyDialog.this, action_info);
+                    try {
+                        if (contact[1] != null) {
+                            ((TextView) findViewById(R.id.contact_name)).setText(contact[1]);
+                        }
+                        if (contact[2] != null) {
+                            ((ImageView) findViewById(R.id.contact_img)).setImageURI(Uri.parse(contact[2]));
+                        }
+                    } catch (Exception e) {e.printStackTrace();}
+                    contact_card.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(action_info));
+                            intent.setData(uri);
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+            }
+            contact_card.findViewById(R.id.remove_contact).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    action = "";
+                    action_info = "";
+                    setContact();
+                }
+            });
+            contact_card.setVisibility(View.VISIBLE);
+        }
     }
 }

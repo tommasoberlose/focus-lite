@@ -144,4 +144,8 @@
     <string name="text_last_changed">Last Changed</string>
     <string name="subtitle_info_note">List of main technical information of this note, if you notice any discrepancy consider using a password.</string>
     <string name="text_never">Never</string>
+    <string name="ask_replace_img">Are you sure you want to replace this image</string>
+    <string name="action_replace">Replace</string>
+    <string name="action_click_contact">Open contact information</string>
+    <string name="ask_replace_contact">Are you sure you want to replace the contact selected</string>
 </resources>

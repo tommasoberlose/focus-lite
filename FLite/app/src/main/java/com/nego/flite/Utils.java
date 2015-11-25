@@ -2,13 +2,16 @@ package com.nego.flite;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -93,10 +96,16 @@ public class Utils {
     }
 
     public static void notification_update(Context context, String action, Reminder r) {
+        SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         NotificationF.CancelNotification(context, "" + r.getId());
-        if (!action.equals(Costants.ACTION_DELETE))
-            NotificationF.NotificationFixed(context, r);
+        AlarmF.updateAlarm(context, r.getId(), r.getAlarm(), r.getAlarm_repeat());
         updateWidget(context);
+
+        if (!action.equals(Costants.ACTION_DELETE)) {
+            if (SP.getBoolean(Costants.PREFERENCES_VIEW_ALL, true)) {
+                NotificationF.NotificationFixed(context, r);
+            }
+        }
     }
 
     public static String getDate(Context context, long date) {
@@ -321,5 +330,44 @@ public class Utils {
         }
 
         dbHelper.close();
+    }
+
+    public static String[] fetchContacts(Context context, String query) {
+
+        String contact_id = null;
+        String name = null;
+        String photo = null;
+        boolean found = false;
+
+        Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
+        String _ID = ContactsContract.Contacts._ID;
+        String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
+        String PHOTO_URI = ContactsContract.Contacts.PHOTO_URI;
+
+        ContentResolver contentResolver = context.getContentResolver();
+
+        Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null);
+
+        // Loop for every contact in the phone
+        if (cursor.getCount() > 0) {
+
+            while (cursor.moveToNext()) {
+                name = cursor.getString(cursor.getColumnIndex( DISPLAY_NAME ));
+                contact_id = cursor.getString(cursor.getColumnIndex( _ID ));
+                photo = cursor.getString(cursor.getColumnIndex( PHOTO_URI ));
+
+                if (name.toLowerCase().equals(query.toLowerCase()) || contact_id.equals(query)) {
+                    found = true;
+                    break;
+                }
+
+            }
+        }
+
+        cursor.close();
+        if (found)
+            return new String[]{contact_id, name, photo};
+        else
+            return null;
     }
 }
