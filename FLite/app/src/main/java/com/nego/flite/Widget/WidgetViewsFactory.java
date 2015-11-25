@@ -87,10 +87,17 @@ public class WidgetViewsFactory implements
                 rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_row);
             }
             rv.setTextViewText(R.id.title, mWidgetItems.get(position).getTitle());
-            if (mWidgetItems.get(position).getAlarm() == 0) {
-                rv.setTextViewText(R.id.subtitle, Utils.getDate(mContext, mWidgetItems.get(position).getDate_create()));
+            if (mWidgetItems.get(position).getContent().equals("")) {
+                if (mWidgetItems.get(position).getAlarm() == 0) {rv.setTextViewText(R.id.subtitle, Utils.getDate(mContext, mWidgetItems.get(position).getDate_create()));
+                } else {
+                    rv.setTextViewText(R.id.subtitle, Utils.getDateAlarm(mContext, mWidgetItems.get(position).getAlarm()));
+                }
             } else {
-                rv.setTextViewText(R.id.subtitle, Utils.getDateAlarm(mContext, mWidgetItems.get(position).getAlarm()));
+                if (mWidgetItems.get(position).getPasw().equals("")) {
+                    rv.setTextViewText(R.id.subtitle, mWidgetItems.get(position).getContent());
+                } else {
+                    rv.setTextViewText(R.id.subtitle, mContext.getString(R.string.text_locked_note));
+                }
             }
 
             Intent i = new Intent();

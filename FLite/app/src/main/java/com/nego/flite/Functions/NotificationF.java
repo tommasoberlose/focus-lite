@@ -53,10 +53,20 @@ public class NotificationF {
 
         NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender();
 
-        if (r.getAlarm() == 0) {
-            n.setContentText(Utils.getDate(context, r.getDate_create()));
+        if (r.getContent().equals("")) {
+            if (r.getAlarm() == 0) {
+                n.setContentText(Utils.getDate(context, r.getDate_create()));
+            } else {
+                n.setContentText(Utils.getDateAlarm(context, r.getAlarm()));
+            }
         } else {
-            n.setContentText(Utils.getDateAlarm(context, r.getAlarm()));
+            if (r.getPasw().equals("")) {
+                n.setContentText(r.getContent());
+                n.setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(r.getContent()));
+            } else {
+                n.setContentText(context.getString(R.string.text_locked_note));
+            }
         }
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
@@ -177,7 +187,6 @@ public class NotificationF {
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder n  = new NotificationCompat.Builder(context)
                 .setContentTitle(r.getTitle())
-                .setSmallIcon(R.drawable.ic_notification_note)
                 .setContentIntent(pi)
                 .setPriority(-1)
                 .setColor(context.getResources().getColor(R.color.primary))
@@ -185,9 +194,25 @@ public class NotificationF {
                 .setAutoCancel(false);
 
         if (r.getAlarm() == 0) {
-            n.setContentText(Utils.getDate(context, r.getDate_create()));
+            n.setSmallIcon(R.drawable.ic_notification_note);
         } else {
-            n.setContentText(Utils.getDateAlarm(context, r.getAlarm()));
+            n.setSmallIcon(R.drawable.ic_action_note_reminded);
+        }
+
+        if (r.getContent().equals("")) {
+            if (r.getAlarm() == 0) {
+                n.setContentText(Utils.getDate(context, r.getDate_create()));
+            } else {
+                n.setContentText(Utils.getDateAlarm(context, r.getAlarm()));
+            }
+        } else {
+            if (r.getPasw().equals("")) {
+                n.setContentText(r.getContent());
+                n.setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(r.getContent()));
+            } else {
+                n.setContentText(context.getString(R.string.text_locked_note));
+            }
         }
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);

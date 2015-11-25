@@ -94,8 +94,9 @@ public class MyDialog extends AppCompatActivity {
             } else if (intent.getAction().equals(Costants.ACTION_DELETE)) {
                 from_notifications = true;
                 if (intent.getBooleanExtra(Costants.FROM_WEAR, false)) {
-                    ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, (Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER));
-                    NotificationF.CancelNotification(MyDialog.this, "" + r_snooze.getId());
+                    Reminder r_delete = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
+                    ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r_delete);
+                    NotificationF.CancelNotification(MyDialog.this, "" + r_delete.getId());
                     finish();
                 } else {
                     new AlertDialog.Builder(this)
@@ -170,7 +171,6 @@ public class MyDialog extends AppCompatActivity {
                 img_card = (CardView) findViewById(R.id.card_img);
                 action_menu = (ImageView) findViewById(R.id.control_menu);
                 card_attach = (CardView) findViewById(R.id.card_attach);
-
 
                 if (intent.getAction() != null && Costants.ACTION_EDIT_ITEM.equals(intent.getAction())) {
                     r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
@@ -372,6 +372,7 @@ public class MyDialog extends AppCompatActivity {
                 control_menu = new PopupMenu(mContextPicker, action_menu, GravityCompat.END);
                 control_menu.inflate(R.menu.control_menu);
                 control_menu.getMenu().getItem(1).setVisible(r != null);
+                control_menu.getMenu().getItem(2).setVisible(r != null);
                 checkPasw();
                 action_menu.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -382,7 +383,6 @@ public class MyDialog extends AppCompatActivity {
 
             }
         }
-
     }
 
     @Override
@@ -544,7 +544,7 @@ public class MyDialog extends AppCompatActivity {
             Calendar c = Calendar.getInstance();
             long dateC = c.getTimeInMillis();
             // TODO fare i controlli su content
-            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, alarm, alarm_repeat);
+            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, 0, alarm, alarm_repeat);
         } else {
             r.setTitle(titleN);
             r.setContent(contentT);
@@ -552,6 +552,7 @@ public class MyDialog extends AppCompatActivity {
             r.setPasw(pasw);
             r.setAction_type(action);
             r.setAction_info(action_info);
+            r.setLast_changed(Calendar.getInstance().getTimeInMillis());
             r.setAlarm(alarm);
             r.setAlarm_repeat(alarm_repeat);
         }
@@ -623,6 +624,9 @@ public class MyDialog extends AppCompatActivity {
                         case R.id.action_pasw:
                             setPasw();
                             return true;
+                        case R.id.action_info:
+                            showInfo();
+                            return true;
                         case R.id.action_delete:
                             new AlertDialog.Builder(MyDialog.this)
                                     .setTitle(getResources().getString(R.string.attention))
@@ -648,6 +652,9 @@ public class MyDialog extends AppCompatActivity {
                         case R.id.action_pasw:
                             pasw = "";
                             checkPasw();
+                            return true;
+                        case R.id.action_info:
+                            showInfo();
                             return true;
                         case R.id.action_delete:
                             new AlertDialog.Builder(MyDialog.this)
@@ -700,7 +707,7 @@ public class MyDialog extends AppCompatActivity {
         if (b && card_attach.getVisibility() != View.VISIBLE) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 Animator anim =
-                        ViewAnimationUtils.createCircularReveal(card_attach, (int) getResources().getDimension(R.dimen.activity_horizontal_margin), 0, 0, card_attach.getWidth());
+                        ViewAnimationUtils.createCircularReveal(card_attach, (int) getResources().getDimension(R.dimen.activity_horizontal_margin)*8, 0, 0, card_attach.getWidth());
                 card_attach.setVisibility(View.VISIBLE);
                 anim.start();
             } else {
@@ -709,18 +716,33 @@ public class MyDialog extends AppCompatActivity {
         } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 Animator anim =
-                        ViewAnimationUtils.createCircularReveal(card_attach, (int) getResources().getDimension(R.dimen.activity_horizontal_margin), 0, card_attach.getWidth(), 0);
+                        ViewAnimationUtils.createCircularReveal(card_attach, (int) getResources().getDimension(R.dimen.activity_horizontal_margin)*8, 0, card_attach.getWidth(), 0);
                 anim.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        card_attach.setVisibility(View.GONE);
+                        card_attach.setVisibility(View.INVISIBLE);
                     }
                 });
                 anim.start();
             } else {
-                card_attach.setVisibility(View.GONE);
+                card_attach.setVisibility(View.INVISIBLE);
             }
         }
+    }
+
+    public void showInfo() {
+        final View infoView = LayoutInflater.from(this).inflate(R.layout.info_dialog, null);
+        ((TextView) infoView.findViewById(R.id.creation_date)).setText(Utils.getDay(this, r.getDate_create()));
+        ((TextView) infoView.findViewById(R.id.last_changed)).setText(Utils.getDay(this, r.getLast_changed()));
+        new android.support.v7.app.AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog)
+                .setView(infoView)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 }

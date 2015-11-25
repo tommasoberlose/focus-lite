@@ -92,6 +92,13 @@ public class Utils {
         updateWidget(context);
     }
 
+    public static void notification_update(Context context, String action, Reminder r) {
+        NotificationF.CancelNotification(context, "" + r.getId());
+        if (!action.equals(Costants.ACTION_DELETE))
+            NotificationF.NotificationFixed(context, r);
+        updateWidget(context);
+    }
+
     public static String getDate(Context context, long date) {
         Calendar today = Calendar.getInstance();
         Calendar byR = Calendar.getInstance();
@@ -143,7 +150,9 @@ public class Utils {
     public static String getDay(Context context, long date) {
         Calendar byR = Calendar.getInstance();
         byR.setTimeInMillis(date);
-        if (isToday(date))
+        if (date == 0)
+            return context.getString(R.string.text_never);
+        else if (isToday(date))
             return context.getString(R.string.text_today);
         else if (isTomorrow(date))
             return context.getString(R.string.text_tomorrow);

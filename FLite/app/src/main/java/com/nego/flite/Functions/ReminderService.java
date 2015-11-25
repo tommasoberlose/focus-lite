@@ -21,7 +21,7 @@ public class ReminderService extends IntentService {
     }
 
     private void sendResponse(String s, Reminder r) {
-        Utils.notification_add_update(this);
+        Utils.notification_update(this, s, r);
     }
 
     public ReminderService() {
@@ -49,7 +49,6 @@ public class ReminderService extends IntentService {
         DbAdapter dbHelper = new DbAdapter(this);
         dbHelper.open();
         if (r.create_reminder(this, dbHelper)) {
-            //Toast.makeText(this, getString(R.string.reminder_added), Toast.LENGTH_SHORT).show();
             sendResponse(Costants.ACTION_CREATE, r);
         }
         dbHelper.close();
@@ -59,7 +58,6 @@ public class ReminderService extends IntentService {
         DbAdapter dbHelper = new DbAdapter(this);
         dbHelper.open();
         if (r.update_reminder(this, dbHelper)) {
-            //Toast.makeText(this, getString(R.string.reminder_modified), Toast.LENGTH_SHORT).show();
             sendResponse(Costants.ACTION_UPDATE, r);
         }
         dbHelper.close();
@@ -69,7 +67,6 @@ public class ReminderService extends IntentService {
         DbAdapter dbHelper = new DbAdapter(this);
         dbHelper.open();
         if (r.delete_reminder(this, dbHelper)) {
-            //Toast.makeText(this, getString(R.string.reminder_deleted), Toast.LENGTH_SHORT).show();
             sendResponse(Costants.ACTION_DELETE, r);
         }
         dbHelper.close();

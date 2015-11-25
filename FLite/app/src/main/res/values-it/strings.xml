@@ -102,7 +102,7 @@
     <string name="subtitle_lock_inactive">Blocco con password disattivato</string>
     <string name="text_password">Password</string>
     <string name="title_add_pasw">Inserisci Password</string>
-    <string name="subtitle_add_pasw">Inserisci una parola da utilizzare come password per proteggere questa nota</string>
+    <string name="subtitle_add_pasw">Inserisci una parola da utilizzare come password per proteggere il contenuto di questa nota, il titolo rimarrà visibile</string>
     <string name="action_lock">Blocca la Nota</string>
     <string name="action_unlock">Sblocca la Nota</string>
     <string name="error_password">Errore: password sbagliata</string>
@@ -135,4 +135,13 @@
     <string name="title_activity_settings">Impostazioni</string>
     <string name="action_list_hide">Nascondi Elenco</string>
     <string name="action_list_show">Mostra Elenco</string>
+    <string name="text_locked_note">Contenuto Protetto</string>
+    <string name="text_camera">Camera</string>
+    <string name="text_gallery">Galleria</string>
+    <string name="text_contact">Contatto</string>
+    <string name="text_note_info">Dettagli Nota</string>
+    <string name="text_creation_date">Data di Creazione</string>
+    <string name="text_last_changed">Ultima Modifica</string>
+    <string name="subtitle_info_note">Lista delle informazioni tecniche principali di questa nota, se trovi qualche discrepanza valuta l\'utilizzo di una password.</string>
+    <string name="text_never">Mai</string>
 </resources>

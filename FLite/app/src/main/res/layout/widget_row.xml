@@ -37,6 +37,7 @@
             android:layout_alignParentLeft="true"
             android:layout_toLeftOf="@+id/linearLayout"
             android:layout_toStartOf="@+id/linearLayout"
+            android:singleLine="true"
             android:layout_alignParentStart="true" />
         <LinearLayout
             android:layout_width="wrap_content"

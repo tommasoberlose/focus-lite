@@ -135,12 +135,13 @@
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
-                                android:src="@drawable/ic_action_editor_attach_file"
+                                android:src="@drawable/ic_action_ic_playlist_add_check_white_24dp"
                                 android:tint="@android:color/black"
                                 android:alpha="0.5"
-                                android:id="@+id/action_attach"
-                                android:padding="8dp"
+                                android:id="@+id/action_list"
+                                android:padding="4dp"
                                 android:background="?attr/selectableItemBackground"
+                                android:clickable="true"
                                 android:layout_gravity="center_vertical"/>
 
                             <ImageView
@@ -158,15 +159,13 @@
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
-                                android:src="@drawable/ic_action_ic_playlist_add_check_white_24dp"
+                                android:src="@drawable/ic_action_editor_attach_file"
                                 android:tint="@android:color/black"
                                 android:alpha="0.5"
-                                android:id="@+id/action_list"
-                                android:padding="4dp"
+                                android:id="@+id/action_attach"
+                                android:padding="8dp"
                                 android:background="?attr/selectableItemBackground"
-                                android:clickable="true"
                                 android:layout_gravity="center_vertical"/>
-
 
                             <ImageView
                                 android:layout_width="40dp"
@@ -215,7 +214,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="16dp"
-                android:visibility="gone">
+                android:visibility="invisible">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -228,9 +227,9 @@
                         android:orientation="vertical"
                         android:id="@+id/action_camera"
                         android:background="?attr/selectableItemBackground"
-                        android:paddingBottom="16dp"
+                        android:paddingBottom="12dp"
                         android:paddingRight="8dp"
-                        android:paddingTop="8dp"
+                        android:paddingTop="4dp"
                         android:paddingLeft="8dp">
                         <ImageView
                             android:layout_width="48dp"
@@ -239,13 +238,13 @@
                             android:src="@drawable/ic_add_a_photo_white_24dp"
                             android:layout_gravity="center_horizontal"
                             android:tint="@android:color/black"
-                            android:alpha="0.5" />
+                            android:alpha="0.5"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:textAppearance="?android:attr/textAppearanceButton"
-                            android:text="Camera"
+                            android:text="@string/text_camera"
                             android:textAllCaps="true"
                             android:textColor="@android:color/black"
                             android:alpha="0.5"/>
@@ -257,9 +256,9 @@
                         android:orientation="vertical"
                         android:id="@+id/action_gallery"
                         android:background="?attr/selectableItemBackground"
-                        android:paddingBottom="16dp"
+                        android:paddingBottom="12dp"
                         android:paddingRight="8dp"
-                        android:paddingTop="8dp"
+                        android:paddingTop="4dp"
                         android:paddingLeft="8dp">
                         <ImageView
                             android:layout_width="48dp"
@@ -274,7 +273,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:textAppearance="?android:attr/textAppearanceButton"
-                            android:text="Gallery"
+                            android:text="@string/text_gallery"
                             android:textAllCaps="true"
                             android:textColor="@android:color/black"
                             android:alpha="0.5"/>
@@ -285,15 +284,15 @@
                         android:layout_weight="0.3"
                         android:orientation="vertical"
                         android:id="@+id/action_contact"
-                        android:paddingBottom="16dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:paddingBottom="12dp"
                         android:paddingRight="8dp"
-                        android:paddingTop="8dp"
+                        android:paddingTop="4dp"
                         android:paddingLeft="8dp">
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:padding="10dp"
-                            android:background="?attr/selectableItemBackground"
                             android:src="@drawable/ic_action_contacts"
                             android:layout_gravity="center_horizontal"
                             android:tint="@android:color/black"
@@ -303,7 +302,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:textAppearance="?android:attr/textAppearanceButton"
-                            android:text="Contacts"
+                            android:text="@string/text_contact"
                             android:textAllCaps="true"
                             android:textColor="@android:color/black"
                             android:alpha="0.5"/>
