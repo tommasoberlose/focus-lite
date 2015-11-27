@@ -62,9 +62,9 @@ public class NotificationF {
             }
         } else {
             if (r.getPasw().equals("")) {
-                n.setContentText(r.getContent());
+                n.setContentText(Utils.getContentList(context, r.getContent()));
                 n.setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(r.getContent()));
+                        .bigText(Utils.getBigContentList(context, r.getContent())));
             } else {
                 n.setContentText(context.getString(R.string.text_locked_note));
             }
@@ -129,7 +129,7 @@ public class NotificationF {
 
         if (SP.getBoolean(Costants.PREFERENCE_BUTTON_SHARE, true)) {
             Intent share_intent = new Intent(Intent.ACTION_SEND);
-            share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle());
+            share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle() + Utils.getBigContentList(context, r.getContent()));
             share_intent.setType("text/plain");
             PendingIntent share_pi = PendingIntent.getActivity(context, r.getId(), share_intent, 0);
             n.addAction(R.drawable.abc_ic_menu_share_mtrl_alpha, context.getString(R.string.action_share), share_pi);
@@ -208,9 +208,9 @@ public class NotificationF {
             }
         } else {
             if (r.getPasw().equals("")) {
-                n.setContentText(r.getContent());
+                n.setContentText(Utils.getContentList(context, r.getContent()));
                 n.setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(r.getContent()));
+                        .bigText(Utils.getBigContentList(context, r.getContent())));
             } else {
                 n.setContentText(context.getString(R.string.text_locked_note));
             }
@@ -268,7 +268,7 @@ public class NotificationF {
 
         if (SP.getBoolean(Costants.PREFERENCE_BUTTON_SHARE, true)) {
             Intent share_intent = new Intent(Intent.ACTION_SEND);
-            share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle());
+            share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle() + Utils.getBigContentList(context, r.getContent()));
             share_intent.setType("text/plain");
             PendingIntent share_pi = PendingIntent.getActivity(context, r.getId(), share_intent, 0);
             n.addAction(R.drawable.abc_ic_menu_share_mtrl_alpha, context.getString(R.string.action_share), share_pi);

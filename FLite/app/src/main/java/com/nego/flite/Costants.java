@@ -68,4 +68,7 @@ public class Costants {
     public static final String ALARM_REPEAT_YEAR = "ALARM_REPEAT_YEAR";
 
     public static final String FROM_WEAR = "FROM_WEAR";
+    public static final String LIST_COSTANT = "LIST@@@";
+    public static final String LIST_ORDER_SEPARATOR = "ORDER@@@";
+    public static final String LIST_ITEM_SEPARATOR = "ITEM@@@";
 }

@@ -96,7 +96,7 @@ public class WidgetViewsFactory implements
                 }
             } else {
                 if (mWidgetItems.get(position).getPasw().equals("")) {
-                    rv.setTextViewText(R.id.subtitle, mWidgetItems.get(position).getContent());
+                    rv.setTextViewText(R.id.subtitle, Utils.getContentList(mContext, mWidgetItems.get(position).getContent()));
                 } else {
                     rv.setTextViewText(R.id.subtitle, mContext.getString(R.string.text_locked_note));
                 }

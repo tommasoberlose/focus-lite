@@ -106,6 +106,8 @@ public class Utils {
                 NotificationF.NotificationFixed(context, r);
             }
         }
+
+        NotificationF.NotificationAdd(context);
     }
 
     public static String getDate(Context context, long date) {
@@ -369,5 +371,39 @@ public class Utils {
             return new String[]{contact_id, name, photo};
         else
             return null;
+    }
+
+    public static boolean checkList(String c) {
+        return  (c.contains(Costants.LIST_COSTANT));
+    }
+
+    public static String getContentList(Context context, String c) {
+        if (!Utils.checkList(c)) {
+            return c;
+        } else {
+            int n = 0;
+            c = c.replace(Costants.LIST_COSTANT, "");
+            String[] content_split = c.split(Costants.LIST_ITEM_SEPARATOR);
+            for (String i : content_split) {
+                if (i.split(Costants.LIST_ORDER_SEPARATOR)[0].equals("0"))
+                    n++;
+            }
+            return context.getString(R.string.num_items_todo, n);
+        }
+    }
+
+    public static String getBigContentList(Context context, String c) {
+        if (!Utils.checkList(c)) {
+            return c;
+        } else {
+            String text = "";
+            c = c.replace(Costants.LIST_COSTANT, "");
+            String[] content_split = c.split(Costants.LIST_ITEM_SEPARATOR);
+            for (String i : content_split) {
+                if (i.split(Costants.LIST_ORDER_SEPARATOR)[0].equals("1"))
+                    text += i.split(Costants.LIST_ORDER_SEPARATOR)[1];
+            }
+            return text.trim();
+        }
     }
 }

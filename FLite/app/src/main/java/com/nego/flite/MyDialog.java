@@ -22,7 +22,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.Explode;
@@ -31,6 +33,7 @@ import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.Window;
@@ -41,6 +44,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nego.flite.Adapter.MyAdapter;
 import com.nego.flite.Functions.AlarmF;
 import com.nego.flite.Functions.NotificationF;
 import com.nego.flite.Functions.ReminderService;
@@ -78,6 +82,10 @@ public class MyDialog extends AppCompatActivity {
     private PopupMenu control_menu;
     private CardView card_attach;
     private CardView contact_card;
+    private ImageView action_list;
+    private RecyclerView content_list;
+
+    private MyAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +183,13 @@ public class MyDialog extends AppCompatActivity {
                 action_menu = (ImageView) findViewById(R.id.control_menu);
                 card_attach = (CardView) findViewById(R.id.card_attach);
                 contact_card = (CardView) findViewById(R.id.card_contact);
+                action_list = (ImageView) findViewById(R.id.action_list);
+                content_list = (RecyclerView) findViewById(R.id.content_list);
+
+                content_list.setHasFixedSize(true);
+                LinearLayoutManager llm = new LinearLayoutManager(this);
+                llm.setOrientation(LinearLayoutManager.VERTICAL);
+                content_list.setLayoutManager(llm);
 
                 if (intent.getAction() != null && Costants.ACTION_EDIT_ITEM.equals(intent.getAction())) {
                     r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
@@ -183,7 +198,7 @@ public class MyDialog extends AppCompatActivity {
                     controlPasw();
 
                     title.setText(r.getTitle());
-                    content.setText(r.getContent());
+                    setContent(r.getContent());
                     img = r.getImg();
 
 
@@ -225,7 +240,7 @@ public class MyDialog extends AppCompatActivity {
 
                 if (savedInstanceState != null) {
                     title.setText(savedInstanceState.getString(Costants.KEY_DIALOG_TITLE));
-                    content.setText(savedInstanceState.getString(Costants.KEY_DIALOG_CONTENT));
+                    setContent(savedInstanceState.getString(Costants.KEY_DIALOG_CONTENT));
                     img = savedInstanceState.getString(Costants.KEY_DIALOG_IMG);
                     pasw = savedInstanceState.getString(Costants.KEY_DIALOG_PASW);
                     action = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION);
@@ -258,15 +273,16 @@ public class MyDialog extends AppCompatActivity {
 
                         SharedPreferences SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
                         if (s.length() > 0) {
-                            save_button.setTextColor(getResources().getColor(android.R.color.white));
+                            save_button.setTextColor(ContextCompat.getColor(MyDialog.this, android.R.color.white));
                         } else {
-                            save_button.setTextColor(getResources().getColor(R.color.white_back));
+                            save_button.setTextColor(ContextCompat.getColor(MyDialog.this, R.color.white_back));
                         }
                         /* TODO rendere dinamico l'inserimento di un contatto
                         String action_to_do = Utils.checkAction(MyDialog.this, s.toString());
                         if (!action_to_do.equals("")) {
                             action = action_to_do;
                         }*/
+                        content.setText(s.toString().replace(Costants.LIST_COSTANT, "").replace(Costants.LIST_ORDER_SEPARATOR, "").replace(Costants.LIST_ITEM_SEPARATOR, ""));
                     }
                 });
 
@@ -390,6 +406,13 @@ public class MyDialog extends AppCompatActivity {
                     }
                 });
 
+                action_list.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switchContent();
+                    }
+                });
+
             }
         }
     }
@@ -441,7 +464,7 @@ public class MyDialog extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (from_notifications || (r == null && Utils.isEmpty(title) && img.equals("") && Utils.isEmpty(content)) || (r != null && r.getTitle().equals(title.getText().toString()) && r.getContent().equals(content.getText().toString()) && r.getImg().equals(img))) {
+        if (from_notifications || (r == null && Utils.isEmpty(title) && img.equals("") && getContent().equals("")) || (r != null && r.getTitle().equals(title.getText().toString()) && r.getContent().equals(getContent()) && r.getImg().equals(img))) {
             finish();
         } else {
             new AlertDialog.Builder(MyDialog.this)
@@ -461,7 +484,7 @@ public class MyDialog extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         if (!from_notifications) {
             outState.putString(Costants.KEY_DIALOG_TITLE, title.toString());
-            outState.putString(Costants.KEY_DIALOG_CONTENT, content.toString());
+            outState.putString(Costants.KEY_DIALOG_CONTENT, getContent());
             outState.putString(Costants.KEY_DIALOG_IMG, img);
             outState.putString(Costants.KEY_DIALOG_PASW, pasw);
             outState.putString(Costants.KEY_DIALOG_ACTION, action);
@@ -487,12 +510,10 @@ public class MyDialog extends AppCompatActivity {
     public void generateReminder() {
         String titleN = title.getText().toString();
         titleN = titleN.trim();
-        String contentT = content.getText().toString();
-        contentT.trim();
+        String contentT = getContent();
         if (!edit) {
             Calendar c = Calendar.getInstance();
             long dateC = c.getTimeInMillis();
-            // TODO fare i controlli su content
             r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, 0, alarm, alarm_repeat);
         } else {
             r.setTitle(titleN);
@@ -534,6 +555,15 @@ public class MyDialog extends AppCompatActivity {
                                 }
                             })
                             .setNegativeButton(android.R.string.no, null).show();
+                }
+            });
+            findViewById(R.id.action_share_image).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent share_intent = new Intent(Intent.ACTION_SEND);
+                    share_intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(img));
+                    share_intent.setType("image/*");
+                    startActivity(Intent.createChooser(share_intent, getString(R.string.action_share)));
                 }
             });
         } else {
@@ -578,7 +608,7 @@ public class MyDialog extends AppCompatActivity {
                             return true;
                         case R.id.action_share:
                             Intent share_intent = new Intent(Intent.ACTION_SEND);
-                            share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle());
+                            share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle() + "\n" + Utils.getBigContentList(MyDialog.this, r.getContent()));
                             share_intent.setType("text/plain");
                             startActivity(share_intent);
                             return true;
@@ -613,7 +643,7 @@ public class MyDialog extends AppCompatActivity {
                             return true;
                         case R.id.action_share:
                             Intent share_intent = new Intent(Intent.ACTION_SEND);
-                            share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle());
+                            share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle() + "\n" + Utils.getBigContentList(MyDialog.this, r.getContent()));
                             share_intent.setType("text/plain");
                             startActivity(share_intent);
                             return true;
@@ -666,6 +696,7 @@ public class MyDialog extends AppCompatActivity {
 
     public void setVisibilityAttachCard(boolean b) {
         if (b && card_attach.getVisibility() != View.VISIBLE) {
+            card_attach.setVisibility(View.INVISIBLE);
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 Animator anim =
                         ViewAnimationUtils.createCircularReveal(card_attach, (int) getResources().getDimension(R.dimen.activity_horizontal_margin)*8, 0, 0, card_attach.getWidth());
@@ -682,12 +713,12 @@ public class MyDialog extends AppCompatActivity {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        card_attach.setVisibility(View.INVISIBLE);
+                        card_attach.setVisibility(View.GONE);
                     }
                 });
                 anim.start();
             } else {
-                card_attach.setVisibility(View.INVISIBLE);
+                card_attach.setVisibility(View.GONE);
             }
         }
     }
@@ -776,6 +807,85 @@ public class MyDialog extends AppCompatActivity {
                 }
             });
             contact_card.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setContent(final String c) {
+        boolean list = Utils.checkList(c);
+        if (!list) {
+            content.setText(c);
+        } else {
+            final Handler mHandler = new Handler();
+            new Thread(new Runnable() {
+                public void run() {
+
+                    mAdapter = new MyAdapter(MyDialog.this, c);
+
+                    mHandler.post(new Runnable() {
+                        public void run() {
+                            content_list.setAdapter(mAdapter);
+                        }
+                    });
+                }
+            }).start();
+        }
+
+        content.setVisibility(!list ? View.VISIBLE : View.GONE);
+        content_list.setVisibility(list ? View.VISIBLE : View.GONE);
+        action_list.setImageResource(!list ? R.drawable.ic_action_ic_playlist_add_check_white_24dp : R.drawable.ic_action_ic_playlist_remove_white_48dp);
+
+    }
+
+    public String getContent() {
+        if (content.getVisibility() == View.VISIBLE)
+            return content.getText().toString();
+        else {
+            if (mAdapter != null)
+                return mAdapter.getData();
+            else
+                return content.getText().toString();
+        }
+    }
+
+    private String text = "";
+    public void switchContent() {
+        String actual_content = getContent();
+        actual_content = actual_content.trim();
+        if (Utils.checkList(actual_content)) {
+            text = "";
+            actual_content = actual_content.replace(Costants.LIST_COSTANT, "");
+            final String[] content_split = actual_content.split(Costants.LIST_ITEM_SEPARATOR, -1);
+            new AlertDialog.Builder(MyDialog.this)
+                    .setTitle(getResources().getString(R.string.attention))
+                    .setMessage(getResources().getString(R.string.ask_keep_checked_item) + "?")
+                    .setPositiveButton(R.string.action_keep, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            for (String i : content_split) {
+                                text += i.split(Costants.LIST_ORDER_SEPARATOR)[1] + "\n";
+                            }
+                            text = text.trim();
+                            setContent(text);
+                        }
+                    })
+                    .setNegativeButton(R.string.action_delete, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            for (String i : content_split) {
+                                if (i.split(Costants.LIST_ORDER_SEPARATOR)[0].equals("0"))
+                                    text += i.split(Costants.LIST_ORDER_SEPARATOR)[1] + "\n";
+                            }
+                            text = text.trim();
+                            setContent(text);
+                        }
+                    }).show();
+        } else {
+            String text = Costants.LIST_COSTANT;
+            String[] content_split = actual_content.split("\n");
+            for (String s : content_split) {
+                text += "0" + Costants.LIST_ORDER_SEPARATOR + s + Costants.LIST_ITEM_SEPARATOR;
+            }
+            text = text.substring(0, text.length() - Costants.LIST_ITEM_SEPARATOR.length());
+            setContent(text);
         }
     }
 }

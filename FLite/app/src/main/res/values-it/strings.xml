@@ -148,4 +148,6 @@
     <string name="action_replace">Cambia</string>
     <string name="action_click_contact">Apri le informazioni sul contatto</string>
     <string name="ask_replace_contact">Sei sicuro di voler cambiare il contatto scelto</string>
+    <string name="action_keep">Mantieni</string>
+    <string name="ask_keep_checked_item">Vuoi mantenere gli elementi già conclusi</string>
 </resources>
