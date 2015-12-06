@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
@@ -94,6 +95,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
             holder.checkBox.setChecked(mDataset.get(position)[0].equals("1"));
             holder.text.setText(mDataset.get(position)[1]);
+            if (mDataset.get(position)[0].equals("1"))
+                holder.text.setTextColor(ContextCompat.getColor(mContext, R.color.primary_dark));
+            else
+                holder.text.setTextColor(ContextCompat.getColor(mContext, android.R.color.white));
+
             holder.text.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -123,8 +129,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             holder.checkBox.setVisibility(View.VISIBLE);
         } else {
             holder.action_remove.setVisibility(View.GONE);
-            holder.img.setVisibility(View.GONE);
-            holder.checkBox.setVisibility(View.GONE);
+            holder.img.setVisibility(View.INVISIBLE);
+            holder.checkBox.setVisibility(View.INVISIBLE);
             holder.text.setHint(mContext.getString(R.string.title_activity_add_item));
             holder.text.addTextChangedListener(new TextWatcher() {
                 @Override

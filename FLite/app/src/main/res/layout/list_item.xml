@@ -13,7 +13,8 @@
         android:id="@+id/action_drag"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_action_navigation_more_vert"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp"/>
     <android.support.v7.widget.AppCompatCheckBox
         android:layout_width="wrap_content"
         android:layout_height="48dp"
@@ -32,6 +33,7 @@
         android:background="@android:color/transparent"
         android:layout_margin="8dp"
         android:singleLine="false"
+        android:inputType="textCapSentences"
         android:layout_toEndOf="@+id/checkbox"
         android:layout_toStartOf="@+id/action_remove"/>
     <ImageView
@@ -44,5 +46,6 @@
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_action_navigation_close"
         android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="12dp"/>
 </RelativeLayout>
