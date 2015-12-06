@@ -164,7 +164,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     // GENERATE LIST
     public void generate_list(String list) {
         mDataset.clear();
-        mDataset.add(new String[]{""});
         list = list.replace(Costants.LIST_COSTANT, "");
         String[] content_split = list.split(Costants.LIST_ITEM_SEPARATOR, -1);
         for (String i : content_split) {
@@ -172,6 +171,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             mDataset.add(new String[] {i.split(Costants.LIST_ORDER_SEPARATOR, -1)[0], i.split(Costants.LIST_ORDER_SEPARATOR, -1)[1]});
 
         }
+        mDataset.add(new String[]{""});
     }
 
     public String getData() {

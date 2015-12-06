@@ -94,7 +94,7 @@ public class MyDialog extends AppCompatActivity {
 
         final Intent intent = getIntent();
 
-        if (intent.getAction() != null && !intent.getAction().equals("") && !intent.getAction().equals(Costants.ACTION_ADD_ITEM)) {
+        if (intent.getAction() != null) {
             if (intent.getAction().equals(Intent.ACTION_VIEW) || intent.getAction().equals(Intent.ACTION_DIAL)) {
                 from_notifications = true;
                 Intent i = new Intent(intent.getAction(), Uri.parse(intent.getStringExtra(Costants.EXTRA_ACTION_TYPE)));
@@ -148,270 +148,270 @@ public class MyDialog extends AppCompatActivity {
                 from_notifications = true;
                 Utils.notification_add_update(this);
                 finish();
-            }
-        } else {
-            SharedPreferences SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-            switch (SP.getString(Costants.PREFERENCE_STYLE_POPUP, Costants.PREFERENCE_STYLE_POPUP_DEFAULT)) {
-                case Costants.PREFERENCE_STYLE_POPUP_MD:
-                    setContentView(R.layout.add_item_dialog_md);
-                    break;
-                case Costants.PREFERENCE_STYLE_POPUP_ML:
-                    setContentView(R.layout.add_item_dialog_ml);
-                    break;
-                default:
-                    setContentView(R.layout.add_item_dialog);
-                    break;
-            }
-
-            findViewById(R.id.back_to_dismiss).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
+            } else {
+                SharedPreferences SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
+                switch (SP.getString(Costants.PREFERENCE_STYLE_POPUP, Costants.PREFERENCE_STYLE_POPUP_DEFAULT)) {
+                    case Costants.PREFERENCE_STYLE_POPUP_MD:
+                        setContentView(R.layout.add_item_dialog_md);
+                        break;
+                    case Costants.PREFERENCE_STYLE_POPUP_ML:
+                        setContentView(R.layout.add_item_dialog_ml);
+                        break;
+                    default:
+                        setContentView(R.layout.add_item_dialog);
+                        break;
                 }
-            });
 
-            title = (EditText) findViewById(R.id.editText);
-            content = (EditText) findViewById(R.id.content);
-            save_button = (TextView) findViewById(R.id.action_save);
-            action_attach = (ImageView) findViewById(R.id.action_attach);
-            action_camera = (LinearLayout) findViewById(R.id.action_camera);
-            action_gallery = (LinearLayout) findViewById(R.id.action_gallery);
-            selected_img = (ImageView) findViewById(R.id.selected_img);
-            cancel_img = (ImageView) findViewById(R.id.action_cancel_image);
-            action_contact = (LinearLayout) findViewById(R.id.action_contact);
-            action_reminder = (ImageView) findViewById(R.id.action_reminder);
-            img_card = (CardView) findViewById(R.id.card_img);
-            action_menu = (ImageView) findViewById(R.id.control_menu);
-            card_attach = (CardView) findViewById(R.id.card_attach);
-            contact_card = (CardView) findViewById(R.id.card_contact);
-            action_list = (ImageView) findViewById(R.id.action_list);
-            content_list = (RecyclerView) findViewById(R.id.content_list);
-
-            content_list.setHasFixedSize(true);
-            LinearLayoutManager llm = new LinearLayoutManager(this);
-            llm.setOrientation(LinearLayoutManager.VERTICAL);
-            content_list.setLayoutManager(llm);
-
-            if (intent.getAction() != null && Costants.ACTION_EDIT_ITEM.equals(intent.getAction())) {
-                r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
-
-                pasw = r.getPasw();
-                controlPasw();
-
-                title.setText(r.getTitle());
-                setContent(r.getContent());
-                img = r.getImg();
-
-
-                if (!img.equals("")) {
-                    selected_img.setImageURI(Uri.parse(img));
-                    if (selected_img.getDrawable() != null) {
-                        checkImg();
+                findViewById(R.id.back_to_dismiss).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onBackPressed();
                     }
-                }
+                });
 
-                save_button.setTextColor(getResources().getColor(android.R.color.white));
+                title = (EditText) findViewById(R.id.editText);
+                content = (EditText) findViewById(R.id.content);
+                save_button = (TextView) findViewById(R.id.action_save);
+                action_attach = (ImageView) findViewById(R.id.action_attach);
+                action_camera = (LinearLayout) findViewById(R.id.action_camera);
+                action_gallery = (LinearLayout) findViewById(R.id.action_gallery);
+                selected_img = (ImageView) findViewById(R.id.selected_img);
+                cancel_img = (ImageView) findViewById(R.id.action_cancel_image);
+                action_contact = (LinearLayout) findViewById(R.id.action_contact);
+                action_reminder = (ImageView) findViewById(R.id.action_reminder);
+                img_card = (CardView) findViewById(R.id.card_img);
+                action_menu = (ImageView) findViewById(R.id.control_menu);
+                card_attach = (CardView) findViewById(R.id.card_attach);
+                contact_card = (CardView) findViewById(R.id.card_contact);
+                action_list = (ImageView) findViewById(R.id.action_list);
+                content_list = (RecyclerView) findViewById(R.id.content_list);
 
-                edit = true;
+                content_list.setHasFixedSize(true);
+                LinearLayoutManager llm = new LinearLayoutManager(this);
+                llm.setOrientation(LinearLayoutManager.VERTICAL);
+                content_list.setLayoutManager(llm);
 
-                if (!r.getAction_type().equals("")) {
-                    action = r.getAction_type();
-                    action_info = r.getAction_info();
-                    setContact();
-                }
+                if (intent.getAction() != null && Costants.ACTION_EDIT_ITEM.equals(intent.getAction())) {
+                    r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
 
-                if (r.getAlarm() != 0) {
-                    setAlarm(r.getAlarm(), r.getAlarm_repeat());
-                }
-            } else if (intent.getAction() != null && Intent.ACTION_SEND.equals(intent.getAction())) {
-                if ("text/plain".equals(intent.getType())) {
-                    String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-                    if (sharedText != null) {
-                        title.setText(sharedText);
-                        save_button.setTextColor(getResources().getColor(android.R.color.white));
-                    }
-                } else if (intent.getType().startsWith("image/")) {
-                    final Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-                    if (imageUri != null) {
-                        img = imageUri.toString();
-                        checkImg();
-                    }
-                }
-            }
+                    pasw = r.getPasw();
+                    controlPasw();
 
-            if (savedInstanceState != null) {
-                title.setText(savedInstanceState.getString(Costants.KEY_DIALOG_TITLE));
-                setContent(savedInstanceState.getString(Costants.KEY_DIALOG_CONTENT));
-                img = savedInstanceState.getString(Costants.KEY_DIALOG_IMG);
-                pasw = savedInstanceState.getString(Costants.KEY_DIALOG_PASW);
-                action = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION);
-                action_info = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION_INFO);
-                setContact();
+                    title.setText(r.getTitle());
+                    setContent(r.getContent());
+                    img = r.getImg();
 
-                setAlarm(Long.parseLong(savedInstanceState.getString(Costants.KEY_DIALOG_ALARM)), savedInstanceState.getString(Costants.KEY_DIALOG_ALARM_REPEAT));
 
-                checkImg();
-            }
-
-            save_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    saveAll();
-                }
-            });
-
-            title.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                    SharedPreferences SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-                    if (s.length() > 0) {
-                        save_button.setTextColor(ContextCompat.getColor(MyDialog.this, android.R.color.white));
-                    } else {
-                        save_button.setTextColor(ContextCompat.getColor(MyDialog.this, R.color.white_back));
-                    }
-                    /* TODO rendere dinamico l'inserimento di un contatto
-                    String action_to_do = Utils.checkAction(MyDialog.this, s.toString());
-                    if (!action_to_do.equals("")) {
-                        action = action_to_do;
-                    }*/
-                }
-            });
-
-            action_contact.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final Intent contact_intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
-                    contact_intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-
-                    if (!action.equals("")) {
-                        new AlertDialog.Builder(MyDialog.this)
-                                .setTitle(getResources().getString(R.string.attention))
-                                .setMessage(getResources().getString(R.string.ask_replace_contact) + "?")
-                                .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, null).show();
-                    } else {
-                        startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-                    }
-                    setVisibilityAttachCard(false);
-                }
-            });
-
-            action_attach.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setVisibilityAttachCard(true);
-                }
-            });
-
-            action_camera.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                        try {
-                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                            String imageFileName = "JPEG_" + timeStamp;
-                            File storageDir = Environment.getExternalStoragePublicDirectory(
-                                    Environment.DIRECTORY_PICTURES);
-                            final File image = File.createTempFile(
-                                    imageFileName,
-                                    ".jpg",
-                                    storageDir
-                            );
-                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                    Uri.fromFile(image));
-
-                            if (!img.equals("")) {
-                                new AlertDialog.Builder(MyDialog.this)
-                                        .setTitle(getResources().getString(R.string.attention))
-                                        .setMessage(getResources().getString(R.string.ask_replace_img) + "?")
-                                        .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int whichButton) {
-                                                startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
-                                                img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
-                                                Log.i("IMG_PATH", img);
-                                            }
-                                        })
-                                        .setNegativeButton(android.R.string.no, null).show();
-                            } else {
-                                startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
-                                img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
-                                Log.i("IMG_PATH", img);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    if (!img.equals("")) {
+                        selected_img.setImageURI(Uri.parse(img));
+                        if (selected_img.getDrawable() != null) {
+                            checkImg();
                         }
                     }
 
-                    setVisibilityAttachCard(false);
-                }
-            });
+                    save_button.setTextColor(getResources().getColor(android.R.color.white));
 
-            action_gallery.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent getIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    getIntent.setType("image/*");
-                    final Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
+                    edit = true;
 
-                    if (!img.equals("")) {
-                        new AlertDialog.Builder(MyDialog.this)
-                                .setTitle(getResources().getString(R.string.attention))
-                                .setMessage(getResources().getString(R.string.ask_replace_img) + "?")
-                                .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, null).show();
-                    } else {
-                        startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+                    if (!r.getAction_type().equals("")) {
+                        action = r.getAction_type();
+                        action_info = r.getAction_info();
+                        setContact();
                     }
-                    setVisibilityAttachCard(false);
-                }
-            });
 
-            action_reminder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ReminderDialog r_dialog = new ReminderDialog(MyDialog.this, alarm, alarm_repeat);
-                    r_dialog.show();
+                    if (r.getAlarm() != 0) {
+                        setAlarm(r.getAlarm(), r.getAlarm_repeat());
+                    }
+                } else if (intent.getAction() != null && Intent.ACTION_SEND.equals(intent.getAction())) {
+                    if ("text/plain".equals(intent.getType())) {
+                        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+                        if (sharedText != null) {
+                            title.setText(sharedText);
+                            save_button.setTextColor(getResources().getColor(android.R.color.white));
+                        }
+                    } else if (intent.getType().startsWith("image/")) {
+                        final Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                        if (imageUri != null) {
+                            img = imageUri.toString();
+                            checkImg();
+                        }
+                    }
                 }
-            });
 
-            ContextThemeWrapper mContextPicker = new ContextThemeWrapper(this, R.style.Theme_AppCompat_Light);
-            control_menu = new PopupMenu(mContextPicker, action_menu, GravityCompat.END);
-            control_menu.inflate(R.menu.control_menu);
-            control_menu.getMenu().getItem(1).setVisible(r != null);
-            control_menu.getMenu().getItem(2).setVisible(r != null);
-            control_menu.getMenu().getItem(3).setVisible(r != null);
-            checkPasw();
-            action_menu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    control_menu.show();
-                }
-            });
+                if (savedInstanceState != null) {
+                    title.setText(savedInstanceState.getString(Costants.KEY_DIALOG_TITLE));
+                    setContent(savedInstanceState.getString(Costants.KEY_DIALOG_CONTENT));
+                    img = savedInstanceState.getString(Costants.KEY_DIALOG_IMG);
+                    pasw = savedInstanceState.getString(Costants.KEY_DIALOG_PASW);
+                    action = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION);
+                    action_info = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION_INFO);
+                    setContact();
 
-            action_list.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    switchContent();
+                    setAlarm(Long.parseLong(savedInstanceState.getString(Costants.KEY_DIALOG_ALARM)), savedInstanceState.getString(Costants.KEY_DIALOG_ALARM_REPEAT));
+
+                    checkImg();
                 }
-            });
+
+                save_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        saveAll();
+                    }
+                });
+
+                title.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                        SharedPreferences SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
+                        if (s.length() > 0) {
+                            save_button.setTextColor(ContextCompat.getColor(MyDialog.this, android.R.color.white));
+                        } else {
+                            save_button.setTextColor(ContextCompat.getColor(MyDialog.this, R.color.white_back));
+                        }
+                        /* TODO rendere dinamico l'inserimento di un contatto
+                        String action_to_do = Utils.checkAction(MyDialog.this, s.toString());
+                        if (!action_to_do.equals("")) {
+                            action = action_to_do;
+                        }*/
+                    }
+                });
+
+                action_contact.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final Intent contact_intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
+                        contact_intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+
+                        if (!action.equals("")) {
+                            new AlertDialog.Builder(MyDialog.this)
+                                    .setTitle(getResources().getString(R.string.attention))
+                                    .setMessage(getResources().getString(R.string.ask_replace_contact) + "?")
+                                    .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, null).show();
+                        } else {
+                            startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
+                        }
+                        setVisibilityAttachCard(false);
+                    }
+                });
+
+                action_attach.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setVisibilityAttachCard(true);
+                    }
+                });
+
+                action_camera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                            try {
+                                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                                String imageFileName = "JPEG_" + timeStamp;
+                                File storageDir = Environment.getExternalStoragePublicDirectory(
+                                        Environment.DIRECTORY_PICTURES);
+                                final File image = File.createTempFile(
+                                        imageFileName,
+                                        ".jpg",
+                                        storageDir
+                                );
+                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                        Uri.fromFile(image));
+
+                                if (!img.equals("")) {
+                                    new AlertDialog.Builder(MyDialog.this)
+                                            .setTitle(getResources().getString(R.string.attention))
+                                            .setMessage(getResources().getString(R.string.ask_replace_img) + "?")
+                                            .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int whichButton) {
+                                                    startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
+                                                    img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
+                                                    Log.i("IMG_PATH", img);
+                                                }
+                                            })
+                                            .setNegativeButton(android.R.string.no, null).show();
+                                } else {
+                                    startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
+                                    img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
+                                    Log.i("IMG_PATH", img);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        setVisibilityAttachCard(false);
+                    }
+                });
+
+                action_gallery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent getIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        getIntent.setType("image/*");
+                        final Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
+
+                        if (!img.equals("")) {
+                            new AlertDialog.Builder(MyDialog.this)
+                                    .setTitle(getResources().getString(R.string.attention))
+                                    .setMessage(getResources().getString(R.string.ask_replace_img) + "?")
+                                    .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, null).show();
+                        } else {
+                            startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+                        }
+                        setVisibilityAttachCard(false);
+                    }
+                });
+
+                action_reminder.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ReminderDialog r_dialog = new ReminderDialog(MyDialog.this, alarm, alarm_repeat);
+                        r_dialog.show();
+                    }
+                });
+
+                ContextThemeWrapper mContextPicker = new ContextThemeWrapper(this, R.style.Theme_AppCompat_Light);
+                control_menu = new PopupMenu(mContextPicker, action_menu, GravityCompat.END);
+                control_menu.inflate(R.menu.control_menu);
+                control_menu.getMenu().getItem(1).setVisible(r != null);
+                control_menu.getMenu().getItem(2).setVisible(r != null);
+                control_menu.getMenu().getItem(3).setVisible(r != null);
+                checkPasw();
+                action_menu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        control_menu.show();
+                    }
+                });
+
+                action_list.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switchContent();
+                    }
+                });
+            }
         }
     }
 
