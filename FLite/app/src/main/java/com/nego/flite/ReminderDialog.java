@@ -38,7 +38,7 @@ public class ReminderDialog extends Dialog {
     private TextView delete_button;
 
     public ReminderDialog(final Context context, final long alarm_i, String alarm_repeat_i) {
-        super(context, R.style.Dialog_Pop);
+        super(context, R.style.mDialog);
         mContext = context;
 
         if (Utils.isBrokenSamsungDevice()) {
@@ -79,7 +79,7 @@ public class ReminderDialog extends Dialog {
                 mContext.getString(R.string.alarm_repeat_week),
                 mContext.getString(R.string.alarm_repeat_month),
                 mContext.getString(R.string.alarm_repeat_year),};
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_dropdown_item, titles);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(mContext, R.layout.simple_item_dropdown, titles);
         action_repeat.setAdapter(spinnerAdapter);
         action_repeat.setSelection(Utils.getRepeat(context, alarm_repeat));
 

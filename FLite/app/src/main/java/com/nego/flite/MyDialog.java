@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -71,16 +72,12 @@ public class MyDialog extends AppCompatActivity {
     public EditText content;
     private TextView save_button;
     private ImageView action_attach;
-    private LinearLayout action_camera;
-    private LinearLayout action_gallery;
     private ImageView selected_img;
     private ImageView cancel_img;
-    public LinearLayout action_contact;
     private ImageView action_reminder;
     private CardView img_card;
     private ImageView action_menu;
     private PopupMenu control_menu;
-    private CardView card_attach;
     private CardView contact_card;
     private ImageView action_list;
     private RecyclerView content_list;
@@ -173,15 +170,11 @@ public class MyDialog extends AppCompatActivity {
                 content = (EditText) findViewById(R.id.content);
                 save_button = (TextView) findViewById(R.id.action_save);
                 action_attach = (ImageView) findViewById(R.id.action_attach);
-                action_camera = (LinearLayout) findViewById(R.id.action_camera);
-                action_gallery = (LinearLayout) findViewById(R.id.action_gallery);
                 selected_img = (ImageView) findViewById(R.id.selected_img);
                 cancel_img = (ImageView) findViewById(R.id.action_cancel_image);
-                action_contact = (LinearLayout) findViewById(R.id.action_contact);
                 action_reminder = (ImageView) findViewById(R.id.action_reminder);
                 img_card = (CardView) findViewById(R.id.card_img);
                 action_menu = (ImageView) findViewById(R.id.control_menu);
-                card_attach = (CardView) findViewById(R.id.card_attach);
                 contact_card = (CardView) findViewById(R.id.card_contact);
                 action_list = (ImageView) findViewById(R.id.action_list);
                 content_list = (RecyclerView) findViewById(R.id.content_list);
@@ -285,103 +278,13 @@ public class MyDialog extends AppCompatActivity {
                     }
                 });
 
-                action_contact.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final Intent contact_intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
-                        contact_intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-
-                        if (!action.equals("")) {
-                            new AlertDialog.Builder(MyDialog.this)
-                                    .setTitle(getResources().getString(R.string.attention))
-                                    .setMessage(getResources().getString(R.string.ask_replace_contact) + "?")
-                                    .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.no, null).show();
-                        } else {
-                            startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-                        }
-                        setVisibilityAttachCard(false);
-                    }
-                });
-
                 action_attach.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setVisibilityAttachCard(true);
+                        setVisibilityAttachCard();
                     }
                 });
 
-                action_camera.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                            try {
-                                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                                String imageFileName = "JPEG_" + timeStamp;
-                                File storageDir = Environment.getExternalStoragePublicDirectory(
-                                        Environment.DIRECTORY_PICTURES);
-                                final File image = File.createTempFile(
-                                        imageFileName,
-                                        ".jpg",
-                                        storageDir
-                                );
-                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                        Uri.fromFile(image));
-
-                                if (!img.equals("")) {
-                                    new AlertDialog.Builder(MyDialog.this)
-                                            .setTitle(getResources().getString(R.string.attention))
-                                            .setMessage(getResources().getString(R.string.ask_replace_img) + "?")
-                                            .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int whichButton) {
-                                                    startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
-                                                    img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
-                                                    Log.i("IMG_PATH", img);
-                                                }
-                                            })
-                                            .setNegativeButton(android.R.string.no, null).show();
-                                } else {
-                                    startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
-                                    img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
-                                    Log.i("IMG_PATH", img);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        setVisibilityAttachCard(false);
-                    }
-                });
-
-                action_gallery.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent getIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        getIntent.setType("image/*");
-                        final Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
-
-                        if (!img.equals("")) {
-                            new AlertDialog.Builder(MyDialog.this)
-                                    .setTitle(getResources().getString(R.string.attention))
-                                    .setMessage(getResources().getString(R.string.ask_replace_img) + "?")
-                                    .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.no, null).show();
-                        } else {
-                            startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
-                        }
-                        setVisibilityAttachCard(false);
-                    }
-                });
 
                 action_reminder.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -692,33 +595,107 @@ public class MyDialog extends AppCompatActivity {
         }
     }
 
-    public void setVisibilityAttachCard(boolean b) {
-        if (b && card_attach.getVisibility() != View.VISIBLE) {
-            card_attach.setVisibility(View.INVISIBLE);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                Animator anim =
-                        ViewAnimationUtils.createCircularReveal(card_attach, (int) getResources().getDimension(R.dimen.activity_horizontal_margin)*8, 0, 0, card_attach.getWidth());
-                card_attach.setVisibility(View.VISIBLE);
-                anim.start();
-            } else {
-                card_attach.setVisibility(View.VISIBLE);
+    public void setVisibilityAttachCard() {
+        final View attachView = LayoutInflater.from(this).inflate(R.layout.attach_dialog, null);
+        LinearLayout action_camera = (LinearLayout) attachView.findViewById(R.id.action_camera);
+        LinearLayout action_gallery = (LinearLayout) attachView.findViewById(R.id.action_gallery);
+        LinearLayout action_contact = (LinearLayout) attachView.findViewById(R.id.action_contact);
+
+        final Dialog attachDialog = new Dialog(this, R.style.Theme_AppCompat_Light_Dialog);
+
+        action_contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent contact_intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
+                contact_intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+
+                if (!action.equals("")) {
+                    new AlertDialog.Builder(MyDialog.this)
+                            .setTitle(getResources().getString(R.string.attention))
+                            .setMessage(getResources().getString(R.string.ask_replace_contact) + "?")
+                            .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
+                                    attachDialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null).show();
+                } else {
+                    startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
+                    attachDialog.dismiss();
+                }
             }
-        } else {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                Animator anim =
-                        ViewAnimationUtils.createCircularReveal(card_attach, (int) getResources().getDimension(R.dimen.activity_horizontal_margin)*8, 0, card_attach.getWidth(), 0);
-                anim.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        card_attach.setVisibility(View.GONE);
+        });
+
+        action_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    try {
+                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                        String imageFileName = "JPEG_" + timeStamp;
+                        File storageDir = Environment.getExternalStoragePublicDirectory(
+                                Environment.DIRECTORY_PICTURES);
+                        final File image = File.createTempFile(
+                                imageFileName,
+                                ".jpg",
+                                storageDir
+                        );
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                Uri.fromFile(image));
+
+                        if (!img.equals("")) {
+                            new AlertDialog.Builder(MyDialog.this)
+                                    .setTitle(getResources().getString(R.string.attention))
+                                    .setMessage(getResources().getString(R.string.ask_replace_img) + "?")
+                                    .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
+                                            img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
+                                            attachDialog.dismiss();
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, null).show();
+                        } else {
+                            startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
+                            img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
+                            attachDialog.dismiss();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                });
-                anim.start();
-            } else {
-                card_attach.setVisibility(View.GONE);
+                }
             }
-        }
+        });
+
+        action_gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent getIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                getIntent.setType("image/*");
+                final Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
+
+                if (!img.equals("")) {
+                    new AlertDialog.Builder(MyDialog.this)
+                            .setTitle(getResources().getString(R.string.attention))
+                            .setMessage(getResources().getString(R.string.ask_replace_img) + "?")
+                            .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+                                    attachDialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null).show();
+                } else {
+                    startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+                    attachDialog.dismiss();
+                }
+            }
+        });
+
+        attachDialog.setContentView(attachView);
+        attachDialog.show();
     }
 
     public void showInfo() {
@@ -784,16 +761,20 @@ public class MyDialog extends AppCompatActivity {
                         if (contact[2] != null) {
                             ((ImageView) findViewById(R.id.contact_img)).setImageURI(Uri.parse(contact[2]));
                         }
-                    } catch (Exception e) {e.printStackTrace();}
-                    contact_card.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(action_info));
-                            intent.setData(uri);
-                            startActivity(intent);
-                        }
-                    });
+                        contact_card.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(action_info));
+                                intent.setData(uri);
+                                startActivity(intent);
+                            }
+                        });
+                    } catch (Exception e) {
+                        action = "";
+                        action_info = "";
+                        setContact();
+                    }
                     break;
             }
             contact_card.findViewById(R.id.remove_contact).setOnClickListener(new View.OnClickListener() {
