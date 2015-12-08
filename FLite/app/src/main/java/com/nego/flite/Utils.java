@@ -385,7 +385,7 @@ public class Utils {
             c = c.replace(Costants.LIST_COSTANT, "");
             String[] content_split = c.split(Costants.LIST_ITEM_SEPARATOR);
             for (String i : content_split) {
-                if (i.split(Costants.LIST_ORDER_SEPARATOR)[0].equals("0"))
+                if (i.split(Costants.LIST_ORDER_SEPARATOR, -1)[0].equals("0"))
                     n++;
             }
             return context.getString(R.string.num_items_todo, n);
@@ -400,8 +400,8 @@ public class Utils {
             c = c.replace(Costants.LIST_COSTANT, "");
             String[] content_split = c.split(Costants.LIST_ITEM_SEPARATOR);
             for (String i : content_split) {
-                if (i.split(Costants.LIST_ORDER_SEPARATOR)[0].equals("1"))
-                    text += i.split(Costants.LIST_ORDER_SEPARATOR)[1];
+                if (i.split(Costants.LIST_ORDER_SEPARATOR, -1)[0].equals("1"))
+                    text += i.split(Costants.LIST_ORDER_SEPARATOR, -1)[1];
             }
             return text.trim();
         }

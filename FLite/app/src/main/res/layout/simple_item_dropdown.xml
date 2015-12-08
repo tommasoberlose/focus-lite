@@ -4,9 +4,10 @@
     style="?android:attr/spinnerDropDownItemStyle"
     android:singleLine="true"
     android:layout_width="match_parent"
-    android:textColor="@color/primary_text"
+    android:textColor="@color/primary"
     android:layout_height="wrap_content"
     android:background="@android:color/background_light"
     android:padding="12dp"
     android:foreground="?attr/selectableItemBackground"
+    android:textAppearance="?android:attr/textAppearanceMedium"
     android:ellipsize="marquee"/>

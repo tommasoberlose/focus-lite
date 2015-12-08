@@ -21,6 +21,7 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,7 +46,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nego.flite.Adapter.ImgViewPagerAdapter;
 import com.nego.flite.Adapter.MyAdapter;
+import com.nego.flite.Adapter.ViewPagerAdapter;
 import com.nego.flite.Functions.AlarmF;
 import com.nego.flite.Functions.NotificationF;
 import com.nego.flite.Functions.ReminderService;
@@ -72,10 +75,8 @@ public class MyDialog extends AppCompatActivity {
     public EditText content;
     private TextView save_button;
     private ImageView action_attach;
-    private ImageView selected_img;
-    private ImageView cancel_img;
     private ImageView action_reminder;
-    private CardView img_card;
+    private ViewPager img_card;
     private ImageView action_menu;
     private PopupMenu control_menu;
     private CardView contact_card;
@@ -170,10 +171,8 @@ public class MyDialog extends AppCompatActivity {
                 content = (EditText) findViewById(R.id.content);
                 save_button = (TextView) findViewById(R.id.action_save);
                 action_attach = (ImageView) findViewById(R.id.action_attach);
-                selected_img = (ImageView) findViewById(R.id.selected_img);
-                cancel_img = (ImageView) findViewById(R.id.action_cancel_image);
                 action_reminder = (ImageView) findViewById(R.id.action_reminder);
-                img_card = (CardView) findViewById(R.id.card_img);
+                img_card = (ViewPager) findViewById(R.id.card_img);
                 action_menu = (ImageView) findViewById(R.id.control_menu);
                 contact_card = (CardView) findViewById(R.id.card_contact);
                 action_list = (ImageView) findViewById(R.id.action_list);
@@ -183,6 +182,7 @@ public class MyDialog extends AppCompatActivity {
                 LinearLayoutManager llm = new LinearLayoutManager(this);
                 llm.setOrientation(LinearLayoutManager.VERTICAL);
                 content_list.setLayoutManager(llm);
+                content_list.setNestedScrollingEnabled(false);
 
                 if (intent.getAction() != null && Costants.ACTION_EDIT_ITEM.equals(intent.getAction())) {
                     r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
@@ -193,14 +193,7 @@ public class MyDialog extends AppCompatActivity {
                     title.setText(r.getTitle());
                     setContent(r.getContent());
                     img = r.getImg();
-
-
-                    if (!img.equals("")) {
-                        selected_img.setImageURI(Uri.parse(img));
-                        if (selected_img.getDrawable() != null) {
-                            checkImg();
-                        }
-                    }
+                    checkImg();
 
                     save_button.setTextColor(getResources().getColor(android.R.color.white));
 
@@ -324,8 +317,7 @@ public class MyDialog extends AppCompatActivity {
         if (requestCode == Costants.CODE_REQUEST_IMG && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Uri selectedImageURI = data.getData();
-                img = selectedImageURI.toString();
-                checkImg();
+                addImg(selectedImageURI.toString());
             }
         } else if (requestCode == Costants.CODE_REQUEST_CONTACT && resultCode == Activity.RESULT_OK) {
             Uri contactData = data.getData();
@@ -431,45 +423,40 @@ public class MyDialog extends AppCompatActivity {
 
     public void checkImg() {
         if (!img.equals("")) {
-            selected_img.setImageURI(Uri.parse(img));
+            ImgViewPagerAdapter mPageAdapter = new ImgViewPagerAdapter(getSupportFragmentManager());
+            String[] imgs = img.split(Costants.LIST_IMG_SEPARATOR);
+            int n = 1;
+            for (String im : imgs) {
+                mPageAdapter.addFrag(im, n + "/" + imgs.length);
+                n++;
+            }
+            img_card.setAdapter(mPageAdapter);
             img_card.setVisibility(View.VISIBLE);
-            selected_img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.parse(img), "image/*");
-                    startActivity(intent);
-                }
-            });
-
-            cancel_img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new AlertDialog.Builder(MyDialog.this)
-                            .setTitle(getResources().getString(R.string.attention))
-                            .setMessage(getResources().getString(R.string.ask_delete_img) + "?")
-                            .setPositiveButton(R.string.action_remove, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    img = "";
-                                    checkImg();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null).show();
-                }
-            });
-            findViewById(R.id.action_share_image).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent share_intent = new Intent(Intent.ACTION_SEND);
-                    share_intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(img));
-                    share_intent.setType("image/*");
-                    startActivity(Intent.createChooser(share_intent, getString(R.string.action_share)));
-                }
-            });
         } else {
             img_card.setVisibility(View.GONE);
         }
+    }
+
+    public void addImg(String i) {
+        String separator = "";
+        if (!img.equals(""))
+            separator = Costants.LIST_IMG_SEPARATOR;
+        img += separator + i;
+        checkImg();
+    }
+
+    public void removeImg(String i) {
+        String[] imgs = img.split(Costants.LIST_IMG_SEPARATOR);
+        img = "";
+        String separator = "";
+        for (String im : imgs) {
+            if (!img.equals("")) {
+                separator = Costants.LIST_IMG_SEPARATOR;
+            }
+            if (!im.equals(i))
+                img += separator + im;
+        }
+        checkImg();
     }
 
     public void setAlarm(long alarm, String alarm_repeat) {
@@ -645,23 +632,9 @@ public class MyDialog extends AppCompatActivity {
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                                 Uri.fromFile(image));
 
-                        if (!img.equals("")) {
-                            new AlertDialog.Builder(MyDialog.this)
-                                    .setTitle(getResources().getString(R.string.attention))
-                                    .setMessage(getResources().getString(R.string.ask_replace_img) + "?")
-                                    .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
-                                            img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
-                                            attachDialog.dismiss();
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.no, null).show();
-                        } else {
-                            startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
-                            img = Uri.fromFile(new File(image.getAbsolutePath())).toString();
-                            attachDialog.dismiss();
-                        }
+                        startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
+                        addImg(Uri.fromFile(new File(image.getAbsolutePath())).toString());
+                        attachDialog.dismiss();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -676,21 +649,8 @@ public class MyDialog extends AppCompatActivity {
                 getIntent.setType("image/*");
                 final Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
 
-                if (!img.equals("")) {
-                    new AlertDialog.Builder(MyDialog.this)
-                            .setTitle(getResources().getString(R.string.attention))
-                            .setMessage(getResources().getString(R.string.ask_replace_img) + "?")
-                            .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
-                                    attachDialog.dismiss();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null).show();
-                } else {
-                    startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
-                    attachDialog.dismiss();
-                }
+                startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+                attachDialog.dismiss();
             }
         });
 
@@ -715,6 +675,8 @@ public class MyDialog extends AppCompatActivity {
 
     public void setContact() {
         if (action.equals("")) {
+            ((ImageView) findViewById(R.id.contact_img_replace)).setImageResource(R.drawable.ic_action_account_circle);
+            findViewById(R.id.contact_img).setVisibility(View.GONE);
             contact_card.setVisibility(View.GONE);
         } else {
             switch (action) {
@@ -760,6 +722,7 @@ public class MyDialog extends AppCompatActivity {
                         }
                         if (contact[2] != null) {
                             ((ImageView) findViewById(R.id.contact_img)).setImageURI(Uri.parse(contact[2]));
+                            findViewById(R.id.contact_img).setVisibility(View.VISIBLE);
                         }
                         contact_card.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -803,6 +766,7 @@ public class MyDialog extends AppCompatActivity {
                     mHandler.post(new Runnable() {
                         public void run() {
                             content_list.setAdapter(mAdapter);
+                            updateHeight();
                         }
                     });
                 }
@@ -813,6 +777,11 @@ public class MyDialog extends AppCompatActivity {
         content_list.setVisibility(list ? View.VISIBLE : View.GONE);
         action_list.setImageResource(!list ? R.drawable.ic_action_ic_playlist_add_check_white_24dp : R.drawable.ic_action_ic_playlist_remove_white_48dp);
 
+    }
+
+    public void updateHeight() {
+        content_list.getLayoutParams().height =
+                mAdapter.getItemCount() * getResources().getDimensionPixelSize(R.dimen.list_item_height) + getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin) / 2;
     }
 
     public String getContent() {
@@ -834,32 +803,40 @@ public class MyDialog extends AppCompatActivity {
             text = "";
             actual_content = actual_content.replace(Costants.LIST_COSTANT, "");
             final String[] content_split = actual_content.split(Costants.LIST_ITEM_SEPARATOR, -1);
-            new AlertDialog.Builder(MyDialog.this)
-                    .setTitle(getResources().getString(R.string.attention))
-                    .setMessage(getResources().getString(R.string.ask_keep_checked_item) + "?")
-                    .setPositiveButton(R.string.action_keep, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            for (String i : content_split) {
-                                text += i.split(Costants.LIST_ORDER_SEPARATOR)[1] + "\n";
+            if (mAdapter.doneSomeItems()) {
+                new AlertDialog.Builder(MyDialog.this)
+                        .setTitle(getResources().getString(R.string.attention))
+                        .setMessage(getResources().getString(R.string.ask_keep_checked_item) + "?")
+                        .setPositiveButton(R.string.action_keep, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                for (String i : content_split) {
+                                    text += i.split(Costants.LIST_ORDER_SEPARATOR, -1)[1] + "\n";
+                                }
+                                text = text.trim();
+                                setContent(text);
                             }
-                            text = text.trim();
-                            setContent(text);
-                        }
-                    })
-                    .setNegativeButton(R.string.action_delete, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            for (String i : content_split) {
-                                if (i.split(Costants.LIST_ORDER_SEPARATOR)[0].equals("0"))
-                                    text += i.split(Costants.LIST_ORDER_SEPARATOR)[1] + "\n";
+                        })
+                        .setNegativeButton(R.string.action_delete, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                for (String i : content_split) {
+                                    if (i.split(Costants.LIST_ORDER_SEPARATOR, -1)[0].equals("0"))
+                                        text += i.split(Costants.LIST_ORDER_SEPARATOR, -1)[1] + "\n";
+                                }
+                                text = text.trim();
+                                setContent(text);
                             }
-                            text = text.trim();
-                            setContent(text);
-                        }
-                    }).show();
+                        }).show();
+            } else {
+                for (String i : content_split) {
+                    text += i.split(Costants.LIST_ORDER_SEPARATOR, -1)[1] + "\n";
+                }
+                text = text.trim();
+                setContent(text);
+            }
         } else {
             String text = Costants.LIST_COSTANT;
-            String[] content_split = actual_content.split("\n");
+            String[] content_split = actual_content.split("\n", -1);
             for (String s : content_split) {
                 text += "0" + Costants.LIST_ORDER_SEPARATOR + s + Costants.LIST_ITEM_SEPARATOR;
             }

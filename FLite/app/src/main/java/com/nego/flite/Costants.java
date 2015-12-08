@@ -71,4 +71,5 @@ public class Costants {
     public static final String LIST_COSTANT = "LIST@@@";
     public static final String LIST_ORDER_SEPARATOR = "ORDER@@@";
     public static final String LIST_ITEM_SEPARATOR = "ITEM@@@";
+    public static final String LIST_IMG_SEPARATOR = "IMG@@@";
 }

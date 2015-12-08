@@ -6,5 +6,6 @@
     <dimen name="fab_elevation">8dp</dimen>
     <dimen name="fab_size">56dp</dimen>
     <dimen name="fab_icon_size">24dp</dimen>
+    <dimen name="list_item_height">48dp</dimen>
 
 </resources>
