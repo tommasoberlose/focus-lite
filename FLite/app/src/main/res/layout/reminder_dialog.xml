@@ -25,14 +25,14 @@
                     android:layout_height="32dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    android:tint="@color/primary"
+                    android:tint="@color/primary_text"
                     android:src="@drawable/ic_action_today" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/primary"
+                    android:textColor="@color/primary_text"
                     android:id="@+id/text_day"/>
             </LinearLayout>
             <LinearLayout
@@ -49,14 +49,14 @@
                     android:layout_height="32dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    android:tint="@color/primary"
+                    android:tint="@color/primary_text"
                     android:src="@drawable/ic_action_time" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/primary"
+                    android:textColor="@color/primary_text"
                     android:id="@+id/text_time"/>
             </LinearLayout>
             <LinearLayout
@@ -72,12 +72,12 @@
                     android:layout_height="32dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    android:tint="@color/primary"
+                    android:tint="@color/primary_text"
                     android:src="@drawable/ic_action_repeat" />
                 <android.support.v7.widget.AppCompatSpinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primary"
+                    android:textColor="@color/primary_text"
                     android:id="@+id/text_repeat"/>
             </LinearLayout>
             <LinearLayout
@@ -110,7 +110,7 @@
                     android:padding="8dp"
                     android:clickable="true"
                     android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/secondary_text"
+                    android:textColor="@color/third_text"
                     android:background="?attr/selectableItemBackground"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@+id/action_save"

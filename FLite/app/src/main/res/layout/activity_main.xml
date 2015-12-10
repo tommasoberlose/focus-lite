@@ -3,74 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/primary_dark">
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.8"
-            app:cardCornerRadius="0dp"
-            app:cardElevation="2dp"
-            android:background="@color/primary"
-            app:cardBackgroundColor="@color/primary">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/container">
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/my_awesome_toolbar"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_width="match_parent"
-                    android:theme="@style/style_actionBar"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    android:gravity="center_horizontal"/>
-                <android.support.v4.view.ViewPager
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/stack"
-                    android:layout_below="@+id/my_awesome_toolbar" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:id="@+id/action_new"
-            android:background="?android:attr/selectableItemBackground"
-            android:padding="16dp">
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_add"
-                android:layout_marginBottom="4dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_activity_add_item"
-                android:textAppearance="?android:textAppearanceButton"
-                android:textColor="@android:color/white"/>
+            android:id="@+id/container"
+            android:orientation="vertical">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_awesome_toolbar"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_width="match_parent"
+                android:theme="@style/style_actionBar"
+                app:layout_scrollFlags="scroll|enterAlways"
+                android:background="@color/primary"
+                android:gravity="center_horizontal"/>
         </LinearLayout>
+    </RelativeLayout>
 
-        <android.support.design.widget.FloatingActionButton
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:src="@drawable/ic_add"
-            app:elevation="8dp"
-            android:clickable="true"
-            android:animateLayoutChanges="true"
-            android:layout_gravity="center|bottom"
-            android:transitionName="floating_button"
-            app:borderWidth="0dp"
-            android:layout_margin="16dp"
-            app:backgroundTint="@color/primary"
-            android:visibility="gone"/>
-    </LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_add"
+        app:elevation="8dp"
+        android:id="@+id/action_new"
+        android:clickable="true"
+        android:animateLayoutChanges="true"
+        android:layout_gravity="center|bottom"
+        android:transitionName="floating_button"
+        app:borderWidth="0dp"
+        android:layout_margin="16dp"
+        app:backgroundTint="@color/primary"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -83,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="16dp"
+            android:layout_margin="24dp"
             android:layout_centerInParent="true">
             <TextView
                 android:layout_width="match_parent"
@@ -98,8 +63,8 @@
                 android:text="@android:string/ok"
                 android:layout_gravity="end"
                 android:id="@+id/button_first_use"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/item_background"/>
+                android:background="@drawable/item_background"
+                android:layout_margin="16dp" />
         </LinearLayout>
     </RelativeLayout>
 

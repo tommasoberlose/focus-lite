@@ -1,5 +1,6 @@
 package com.nego.flite;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,6 +21,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -389,7 +392,7 @@ public class MyDialog extends AppCompatActivity {
 
     public void saveAll() {
         if (Utils.isEmpty(title)) {
-            title.setError(getResources().getString(R.string.error));
+            Toast.makeText(this, R.string.error_title, Toast.LENGTH_SHORT).show();
         } else {
             generateReminder();
             if (!edit)
@@ -423,26 +426,39 @@ public class MyDialog extends AppCompatActivity {
 
     public void checkImg() {
         if (!img.equals("")) {
-            ImgViewPagerAdapter mPageAdapter = new ImgViewPagerAdapter(getSupportFragmentManager());
-            String[] imgs = img.split(Costants.LIST_IMG_SEPARATOR);
-            int n = 1;
-            for (String im : imgs) {
-                mPageAdapter.addFrag(im, n + "/" + imgs.length);
-                n++;
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                ImgViewPagerAdapter mPageAdapter = new ImgViewPagerAdapter(getSupportFragmentManager());
+                String[] imgs = img.split(Costants.LIST_IMG_SEPARATOR);
+                int n = 1;
+                for (String im : imgs) {
+                    mPageAdapter.addFrag(im, n + "/" + imgs.length);
+                    n++;
+                }
+                img_card.setAdapter(mPageAdapter);
+                img_card.setVisibility(View.VISIBLE);
+            } else {
+                requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
             }
-            img_card.setAdapter(mPageAdapter);
-            img_card.setVisibility(View.VISIBLE);
         } else {
             img_card.setVisibility(View.GONE);
         }
     }
 
     public void addImg(String i) {
-        String separator = "";
-        if (!img.equals(""))
-            separator = Costants.LIST_IMG_SEPARATOR;
-        img += separator + i;
-        checkImg();
+        if (i.contains(Costants.LIST_IMG_SEPARATOR)) {
+            Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
+        } else {
+            String separator = "";
+            if (!img.equals(""))
+                separator = Costants.LIST_IMG_SEPARATOR;
+            img += separator + i;
+            checkImg();
+            if (title.getText().toString().equals("")) {
+                String[] name = i.split("/", -1);
+                title.setText(name[name.length-1]);
+            }
+        }
     }
 
     public void removeImg(String i) {
@@ -593,23 +609,28 @@ public class MyDialog extends AppCompatActivity {
         action_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent contact_intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
-                contact_intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+                if (ContextCompat.checkSelfPermission(MyDialog.this,
+                        Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                    final Intent contact_intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
+                    contact_intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
 
-                if (!action.equals("")) {
-                    new AlertDialog.Builder(MyDialog.this)
-                            .setTitle(getResources().getString(R.string.attention))
-                            .setMessage(getResources().getString(R.string.ask_replace_contact) + "?")
-                            .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-                                    attachDialog.dismiss();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null).show();
+                    if (!action.equals("")) {
+                        new AlertDialog.Builder(MyDialog.this)
+                                .setTitle(getResources().getString(R.string.attention))
+                                .setMessage(getResources().getString(R.string.ask_replace_contact) + "?")
+                                .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
+                                        attachDialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, null).show();
+                    } else {
+                        startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
+                        attachDialog.dismiss();
+                    }
                 } else {
-                    startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-                    attachDialog.dismiss();
+                    requestPermission(Manifest.permission.READ_CONTACTS);
                 }
             }
         });
@@ -617,27 +638,32 @@ public class MyDialog extends AppCompatActivity {
         action_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    try {
-                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                        String imageFileName = "JPEG_" + timeStamp;
-                        File storageDir = Environment.getExternalStoragePublicDirectory(
-                                Environment.DIRECTORY_PICTURES);
-                        final File image = File.createTempFile(
-                                imageFileName,
-                                ".jpg",
-                                storageDir
-                        );
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                Uri.fromFile(image));
+                if (ContextCompat.checkSelfPermission(MyDialog.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        try {
+                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                            String imageFileName = "JPEG_" + timeStamp;
+                            File storageDir = Environment.getExternalStoragePublicDirectory(
+                                    Environment.DIRECTORY_PICTURES);
+                            final File image = File.createTempFile(
+                                    imageFileName,
+                                    ".jpg",
+                                    storageDir
+                            );
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                    Uri.fromFile(image));
 
-                        startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
-                        addImg(Uri.fromFile(new File(image.getAbsolutePath())).toString());
-                        attachDialog.dismiss();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                            startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
+                            addImg(Uri.fromFile(new File(image.getAbsolutePath())).toString());
+                            attachDialog.dismiss();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
+                } else {
+                    requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 }
             }
         });
@@ -645,12 +671,17 @@ public class MyDialog extends AppCompatActivity {
         action_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent getIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                getIntent.setType("image/*");
-                final Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
+                if (ContextCompat.checkSelfPermission(MyDialog.this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    Intent getIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    getIntent.setType("image/*");
+                    final Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
 
-                startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
-                attachDialog.dismiss();
+                    startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+                    attachDialog.dismiss();
+                } else {
+                    requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+                }
             }
         });
 
@@ -679,76 +710,89 @@ public class MyDialog extends AppCompatActivity {
             findViewById(R.id.contact_img).setVisibility(View.GONE);
             contact_card.setVisibility(View.GONE);
         } else {
-            switch (action) {
-                case Costants.ACTION_CALL:
-                    ((TextView) findViewById(R.id.contact_name)).setText(getString(R.string.action_call) + " " + action_info);
-                    ((ImageView) findViewById(R.id.contact_img_replace)).setImageResource(R.drawable.ic_action_communication_call);
-                    contact_card.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent call_intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+action_info));
-                            startActivity(call_intent);
-                        }
-                    });
-                    break;
-                case Costants.ACTION_SMS:
-                    ((TextView) findViewById(R.id.contact_name)).setText(getString(R.string.action_sms) + " " + action_info);
-                    ((ImageView) findViewById(R.id.contact_img_replace)).setImageResource(R.drawable.ic_action_communication_messenger);
-                    contact_card.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent sms_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+action_info));
-                            startActivity(sms_intent);
-                        }
-                    });
-                    break;
-                case Costants.ACTION_MAIL:
-                    ((TextView) findViewById(R.id.contact_name)).setText(getString(R.string.action_mail) + " " + action_info);
-                    ((ImageView) findViewById(R.id.contact_img_replace)).setImageResource(R.drawable.ic_action_communication_email);
-                    contact_card.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent mail_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:"+action_info));
-                            startActivity(mail_intent);
-                        }
-                    });
-                    break;
-                case Costants.ACTION_CONTACT:
-                    ((TextView) findViewById(R.id.contact_name)).setText(getString(R.string.text_contact));
-                    final String[] contact = Utils.fetchContacts(MyDialog.this, action_info);
-                    try {
-                        if (contact[1] != null) {
-                            ((TextView) findViewById(R.id.contact_name)).setText(contact[1]);
-                        }
-                        if (contact[2] != null) {
-                            ((ImageView) findViewById(R.id.contact_img)).setImageURI(Uri.parse(contact[2]));
-                            findViewById(R.id.contact_img).setVisibility(View.VISIBLE);
-                        }
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                switch (action) {
+                    case Costants.ACTION_CALL:
+                        ((TextView) findViewById(R.id.contact_name)).setText(getString(R.string.action_call) + " " + action_info);
+                        ((ImageView) findViewById(R.id.contact_img_replace)).setImageResource(R.drawable.ic_action_communication_call);
                         contact_card.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(Intent.ACTION_VIEW);
-                                Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(action_info));
-                                intent.setData(uri);
-                                startActivity(intent);
+                                Intent call_intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + action_info));
+                                startActivity(call_intent);
                             }
                         });
-                    } catch (Exception e) {
+                        break;
+                    case Costants.ACTION_SMS:
+                        ((TextView) findViewById(R.id.contact_name)).setText(getString(R.string.action_sms) + " " + action_info);
+                        ((ImageView) findViewById(R.id.contact_img_replace)).setImageResource(R.drawable.ic_action_communication_messenger);
+                        contact_card.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent sms_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + action_info));
+                                startActivity(sms_intent);
+                            }
+                        });
+                        break;
+                    case Costants.ACTION_MAIL:
+                        ((TextView) findViewById(R.id.contact_name)).setText(getString(R.string.action_mail) + " " + action_info);
+                        ((ImageView) findViewById(R.id.contact_img_replace)).setImageResource(R.drawable.ic_action_communication_email);
+                        contact_card.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent mail_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + action_info));
+                                startActivity(mail_intent);
+                            }
+                        });
+                        break;
+                    case Costants.ACTION_CONTACT:
+                        ((TextView) findViewById(R.id.contact_name)).setText(getString(R.string.text_contact));
+                        final String[] contact = Utils.fetchContacts(MyDialog.this, action_info);
+                        try {
+                            if (contact[1] != null) {
+                                ((TextView) findViewById(R.id.contact_name)).setText(contact[1]);
+                            }
+                            if (contact[2] != null) {
+                                ((ImageView) findViewById(R.id.contact_img)).setImageURI(Uri.parse(contact[2]));
+                                findViewById(R.id.contact_img).setVisibility(View.VISIBLE);
+                            }
+                            contact_card.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                                    Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(action_info));
+                                    intent.setData(uri);
+                                    startActivity(intent);
+                                }
+                            });
+                        } catch (Exception e) {
+                            new AlertDialog.Builder(MyDialog.this)
+                                    .setTitle(getResources().getString(R.string.attention))
+                                    .setMessage(getResources().getString(R.string.ask_remove_contact) + "?")
+                                    .setPositiveButton(R.string.action_remove, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            action = "";
+                                            action_info = "";
+                                            setContact();
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, null).show();
+                        }
+                        break;
+                }
+                contact_card.findViewById(R.id.remove_contact).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         action = "";
                         action_info = "";
                         setContact();
                     }
-                    break;
+                });
+                contact_card.setVisibility(View.VISIBLE);
+            } else {
+                requestPermission(Manifest.permission.READ_CONTACTS);
             }
-            contact_card.findViewById(R.id.remove_contact).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    action = "";
-                    action_info = "";
-                    setContact();
-                }
-            });
-            contact_card.setVisibility(View.VISIBLE);
         }
     }
 
@@ -842,6 +886,44 @@ public class MyDialog extends AppCompatActivity {
             }
             text = text.substring(0, text.length() - Costants.LIST_ITEM_SEPARATOR.length());
             setContent(text);
+        }
+    }
+
+    public void requestPermission(String code) {
+        switch (code) {
+            case Manifest.permission.READ_EXTERNAL_STORAGE:
+                ActivityCompat.requestPermissions(MyDialog.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        Costants.CODE_REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
+                break;
+            case Manifest.permission.WRITE_EXTERNAL_STORAGE:
+                ActivityCompat.requestPermissions(MyDialog.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        Costants.CODE_REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
+                break;
+            case Manifest.permission.READ_CONTACTS:
+                ActivityCompat.requestPermissions(MyDialog.this,
+                        new String[]{Manifest.permission.READ_CONTACTS},
+                        Costants.CODE_REQUEST_PERMISSION_READ_CONTACTS);
+                break;
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case Costants.CODE_REQUEST_PERMISSION_READ_EXTERNAL_STORAGE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    checkImg();
+                }
+                break;
+            case Costants.CODE_REQUEST_PERMISSION_READ_CONTACTS:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    setContact();
+                }
+                break;
         }
     }
 }

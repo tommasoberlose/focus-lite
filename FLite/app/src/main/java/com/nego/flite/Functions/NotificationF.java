@@ -81,7 +81,7 @@ public class NotificationF {
             n.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
         }
         if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_LED, true)) {
-            n.setLights(context.getResources().getColor(R.color.primary_dark), 3000, 3000);
+            n.setLights(ContextCompat.getColor(context, R.color.primary_dark), 3000, 3000);
         }
         if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_VIBRATE, true)) {
             n.setVibrate(new long[]{0, 400, 400, 400});
@@ -91,7 +91,7 @@ public class NotificationF {
             try {
                 n.setStyle(new android.support.v4.app.NotificationCompat.BigPictureStyle().bigPicture(MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(r.getImg()))));
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
 
@@ -280,44 +280,48 @@ public class NotificationF {
 
     // NOTIFICATION ADD
     public static void NotificationAdd(Context context) {
-        Intent i=new Intent(context,MyDialog.class);
-        i.setAction(Costants.ACTION_ADD_ITEM);
-        PendingIntent pi= PendingIntent.getActivity(context, -1, i, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        String item_to_do = context.getString(R.string.no_items);
-        int count = Utils.itemsToDo(context);
-        if (count > 0)
-            item_to_do = context.getResources().getString(R.string.num_items_todo, count);
-
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder n  = new NotificationCompat.Builder(context)
-                .setContentTitle(context.getString(R.string.title_activity_add_item))
-                .setContentText(item_to_do)
-                .setSmallIcon(R.drawable.ic_stat_bookmark_plus)
-                .setContentIntent(pi)
-                .setOngoing(true)
-                .setPriority(-1)
-                .setPriority(Notification.PRIORITY_MIN)
-                .setAutoCancel(false);
-
-
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-        if (count > 0) {
-            if (SP.getBoolean(Costants.PREFERENCES_VIEW_ALL, true)) {
-                PendingIntent pi_hide = PendingIntent.getBroadcast(context, -2, new Intent(Costants.ACTION_HIDE_ALL), PendingIntent.FLAG_UPDATE_CURRENT);
 
-                n.setColor(context.getResources().getColor(R.color.primary));
-                n.addAction(R.drawable.ic_action_hide_all, context.getString(R.string.action_hide_all), pi_hide);
-            } else {
-                PendingIntent pi_view = PendingIntent.getBroadcast(context, -2, new Intent(Costants.ACTION_VIEW_ALL), PendingIntent.FLAG_UPDATE_CURRENT);
+        int count = Utils.itemsToDo(context);
+        if (!(SP.getBoolean(Costants.PREFERENCE_SHOW_ADD_NOTIFICATION, false) && count == 0)) {
+            String item_to_do = context.getString(R.string.no_items);
+            if (count > 0)
+                item_to_do = context.getResources().getString(R.string.num_items_todo, count);
 
-                n.setColor(context.getResources().getColor(R.color.accent));
-                n.addAction(R.drawable.ic_action_view_all, context.getString(R.string.action_view_all), pi_view);
+
+            Intent i = new Intent(context, MyDialog.class);
+            i.setAction(Costants.ACTION_ADD_ITEM);
+            PendingIntent pi = PendingIntent.getActivity(context, -1, i, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationManager notificationManager = (NotificationManager)
+                    context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationCompat.Builder n = new NotificationCompat.Builder(context)
+                    .setContentTitle(context.getString(R.string.title_activity_add_item))
+                    .setContentText(item_to_do)
+                    .setSmallIcon(R.drawable.ic_stat_bookmark_plus)
+                    .setContentIntent(pi)
+                    .setOngoing(true)
+                    .setPriority(-1)
+                    .setPriority(Notification.PRIORITY_MIN)
+                    .setAutoCancel(false);
+
+
+            if (count > 0) {
+                if (SP.getBoolean(Costants.PREFERENCES_VIEW_ALL, true)) {
+                    PendingIntent pi_hide = PendingIntent.getBroadcast(context, -2, new Intent(Costants.ACTION_HIDE_ALL), PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    n.setColor(context.getResources().getColor(R.color.primary));
+                    n.addAction(R.drawable.ic_action_hide_all, context.getString(R.string.action_hide_all), pi_hide);
+                } else {
+                    PendingIntent pi_view = PendingIntent.getBroadcast(context, -2, new Intent(Costants.ACTION_VIEW_ALL), PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    n.setColor(context.getResources().getColor(R.color.accent));
+                    n.addAction(R.drawable.ic_action_view_all, context.getString(R.string.action_view_all), pi_view);
+                }
             }
-        }
 
-        notificationManager.notify(-1, n.build());
+            notificationManager.notify(-1, n.build());
+        }
     }
 
     public static void CancelAllNotification(Context context) {

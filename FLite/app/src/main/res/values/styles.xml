@@ -11,7 +11,7 @@
 
 
     <!-- MAIN ACTIONBAR -->
-    <style name="style_actionBar" parent="@style/Widget.AppCompat.ActionBar">
+    <style name="style_actionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
     </style>

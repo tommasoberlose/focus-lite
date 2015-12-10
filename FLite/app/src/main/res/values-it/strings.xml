@@ -61,10 +61,10 @@
     <string name="style_material_dark">Material Dark</string>
     <string name="style_material_light">Material Light</string>
     <string name="style_deafult">Default</string>
-    <string name="title_popup_style">Cambia lo stile del popup</string>
+    <string name="title_popup_style">Stile Popup</string>
     <string name="add_widget">Aggiungi Widget</string>
     <string name="text_loading">Caricamento...</string>
-    <string name="title_widget_style">Cambia stile widget</string>
+    <string name="title_widget_style">Stile Widget</string>
     <string name="title_customize_settings">Impostazioni Stili</string>
     <string name="title_notification_settings">Impostazioni Notifiche</string>
     <string name="title_notification_preferences">Preferenze Notifiche Allarmi</string>
@@ -109,8 +109,8 @@
     <string name="action_settings">Impostazioni</string>
     <string name="title_activity_password_check">Inserisci Password</string>
     <string name="title_app_settings">Impostazioni App</string>
-    <string name="title_view_intro">Intro Applicazione</string>
-    <string name="subtitle_view_intro">Guarda nuovamente l\'intro dell\'applicazione</string>
+    <string name="title_view_intro">Introduzione Applicazione</string>
+    <string name="subtitle_view_intro">Guarda nuovamente l\'introduzione all\'applicazione</string>
     <string name="warning_pasw">Attenzione: inserendo una password verranno bloccate TUTTE le note e in caso tu non te la ricordassi sarà necessario attuare un reset</string>
     <string name="title_reset">Resetta Password</string>
     <string name="subtitle_reset">Attenzione: TUTTE le tue note protette da password verranno eliminate nel caso in cui venga confermata questa procedura</string>
@@ -150,4 +150,13 @@
     <string name="ask_replace_contact">Sei sicuro di voler cambiare il contatto scelto</string>
     <string name="action_keep">Mantieni</string>
     <string name="ask_keep_checked_item">Vuoi mantenere gli elementi già conclusi</string>
+    <string name="action_add_item">Aggiungi Elemento</string>
+    <string name="ask_remove_contact">Sei sicuro di voler rimuovere il contatto scelto</string>
+    <string name="error_title">Errore, inserisci un titolo</string>
+    <string name="title_custom_sound">Modifica il Suono delle Notifiche</string>
+    <string name="title_show_add_notification">Visibilità notifica "aggiungi nota"</string>
+    <string name="subtitle_show_add_notification">Nascondi la notifica "aggiungi nota" quando non sono presenti elementi</string>
+    <string name="title_section_alarm">Impostazioni Allarmi</string>
+    <string name="title_persistent_sound">Notifica promemoria persistente</string>
+    <string name="subtitle_persistent_sound">Rendi la notifica dei promemoria persistente e utilizzala come un allarme</string>
 </resources>

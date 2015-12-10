@@ -2,24 +2,16 @@ package com.nego.flite;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.bartoszlipinski.flippablestackview.FlippableStackView;
-import com.bartoszlipinski.flippablestackview.StackPageTransformer;
-import com.nego.flite.Adapter.ViewPagerAdapter;
-import com.nego.flite.Pages.PageFragment;
-import com.nego.flite.Pages.SettingsFragment;
-
 
 public class Main extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private ViewPager stack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +31,6 @@ public class Main extends AppCompatActivity {
                 startActivity(new_note);
             }
         });
-
-        ViewPagerAdapter mPageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mPageAdapter.addFrag(getString(R.string.title_action_help), getString(R.string.subtitle_action_help), R.drawable.ic_action_communication_call);
-        mPageAdapter.addFrag(getString(R.string.title_feature_widget), getString(R.string.subtitle_feature_widget), R.drawable.ic_action_widget);
-        mPageAdapter.addFrag(getString(R.string.title_feature_hide), getString(R.string.subtitle_features_hide), R.drawable.ic_action_hide_all);
-        mPageAdapter.addFrag(getString(R.string.title_feature_url), getString(R.string.subtitle_feature_url), R.drawable.ic_action_explore);
-        mPageAdapter.addFrag(getString(R.string.title_feature_image), getString(R.string.subtitle_feature_image), R.drawable.ic_action_camera);
-        mPageAdapter.addFrag(getString(R.string.title_lock), getString(R.string.subtitle_add_pasw), R.drawable.ic_action_lock_big);
-        mPageAdapter.addFrag(getString(R.string.title_feature_alarm), getString(R.string.subtitle_feature_alarm), R.drawable.ic_action_alarm_on);
-
-        stack = (ViewPager) findViewById(R.id.stack);
-        stack.setAdapter(mPageAdapter);
 
     }
 

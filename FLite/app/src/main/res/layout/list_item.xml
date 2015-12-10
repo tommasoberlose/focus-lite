@@ -31,7 +31,9 @@
         android:clickable="true"
         android:id="@+id/add_icon"
         android:layout_toEndOf="@+id/checkbox"
-        android:src="@drawable/ic_add"/>
+        android:src="@drawable/ic_add"
+        android:padding="2dp"
+        android:visibility="gone" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,6 +44,7 @@
         android:background="@android:color/transparent"
         android:layout_margin="8dp"
         android:singleLine="false"
+        android:textColorHint="@color/black_500"
         android:inputType="textCapSentences|textAutoCorrect"
         android:imeOptions="actionGo"
         android:layout_toEndOf="@+id/add_icon"

@@ -16,14 +16,14 @@
 
 
     <!-- MAIN ACTIONBAR -->
-    <style name="style_actionBar" parent="@style/Widget.AppCompat.ActionBar">
+    <style name="style_actionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:colorPrimary">@color/primary</item>
         <item name="android:colorPrimaryDark">@color/primary_dark</item>
         <item name="android:colorAccent">@color/accent</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:actionModeBackground">@color/primary</item>
-        <item name="android:popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="android:popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
     <style name="MyDialog_theme" parent="Theme.AppCompat.NoActionBar">
@@ -54,8 +54,8 @@
 
         <item name="android:colorPrimary">@color/primary</item>
         <item name="android:colorPrimaryDark">@color/primary_dark</item>
-        <item name="android:colorAccent">@color/accent_material_light</item>
-        <item name="colorControlActivated">@color/accent_material_light</item>
+        <item name="android:colorAccent">@color/primary</item>
+        <item name="colorControlActivated">@color/primary</item>
         <item name="colorSwitchThumbNormal">@color/back_selected_item</item>
 
     </style>

@@ -39,5 +39,6 @@
     <color name="black_opacity">#db000000</color>
     <color name="back_card">#424242</color>
     <color name="background_dialog">#bb000000</color>
+    <color name="black_500">#80000000</color>
 
 </resources>

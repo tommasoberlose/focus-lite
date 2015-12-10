@@ -138,6 +138,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                         newFromEnter = true;
                         holder.text.clearFocus();
                         notifyItemInserted(position + 1);
+                        notifyDataSetChanged();
                         ((MyDialog) mContext).updateHeight();
                     }
                     return false;
@@ -152,6 +153,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 public void onClick(View v) {
                     mDataset.remove(position);
                     notifyItemRemoved(position);
+                    notifyDataSetChanged();
                     ((MyDialog) mContext).updateHeight();
                 }
             });
@@ -165,7 +167,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             holder.img.setVisibility(View.INVISIBLE);
             holder.checkBox.setVisibility(View.GONE);
             holder.add_icon.setVisibility(View.VISIBLE);
-            holder.text.setHint(mContext.getString(R.string.title_activity_add_item));
+            holder.text.setHint(mContext.getString(R.string.action_add_item));
             holder.text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

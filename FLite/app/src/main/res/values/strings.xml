@@ -61,9 +61,9 @@
     <string name="style_deafult">Default</string>
     <string name="style_material_dark">Material Dark</string>
     <string name="style_material_light">Material Light</string>
-    <string name="title_popup_style">Change popup style</string>
+    <string name="title_popup_style">Popup Style</string>
     <string name="text_loading">Loading...</string>
-    <string name="title_widget_style">Change widget style</string>
+    <string name="title_widget_style">Widget Style</string>
     <string name="add_widget">Add Widget</string>
     <string name="title_customize_settings">Style Settings</string>
     <string name="title_notification_settings">Notification Settings</string>
@@ -109,8 +109,8 @@
     <string name="title_activity_password_check">Insert Password</string>
     <string name="action_settings">Settings</string>
     <string name="title_app_settings">App Settings</string>
-    <string name="title_view_intro">App Intro</string>
-    <string name="subtitle_view_intro">View app intro again</string>
+    <string name="title_view_intro">Application Intro</string>
+    <string name="subtitle_view_intro">View application intro again</string>
     <string name="warning_pasw">Attention: If you enter a password will be blocked ALL the notes and in case you do not remember you will need to reset them all</string>
     <string name="title_reset">Reset Password</string>
     <string name="subtitle_reset">Attention: ALL your notes with password will be deleted if it is confirmed this procedure</string>
@@ -118,7 +118,7 @@
     <string name="ask_reset_pasw">Are you sure you want to delete all of your notes and reset the password?</string>
     <string name="action_reset">Reset</string>
     <string name="text_first_use">Welcome and thank you for downloading Focus Notify.\n\nTo start adding notes pull down the notification bar.</string>
-    <string name="title_order">Order Notifications</string>
+    <string name="title_order">Sort Notifications</string>
     <string name="subtitle_order">Put notifications with the notes before and after the "add" notification</string>
     <string name="title_preferences_share">Share Button</string>
     <string name="subtitle_preferences_share">Add an option to each note to share them faster</string>
@@ -150,4 +150,13 @@
     <string name="ask_replace_contact">Are you sure you want to replace the contact selected</string>
     <string name="action_keep">Keep</string>
     <string name="ask_keep_checked_item">Do you want to keep checked items</string>
+    <string name="action_add_item">Add Item</string>
+    <string name="ask_remove_contact">Are you sure you want to remove the contact selected</string>
+    <string name="error_title">Error, insert title</string>
+    <string name="title_custom_sound">Custom Notification Sound</string>
+    <string name="title_show_add_notification">"New note" notification visibility</string>
+    <string name="subtitle_show_add_notification">Hide "new note" notification when there\'re no notes</string>
+    <string name="title_section_alarm">Alarm Settings</string>
+    <string name="title_persistent_sound">Persistent Reminder Notification</string>
+    <string name="subtitle_persistent_sound">Make reminder notifications persistent and use them like alarms</string>
 </resources>

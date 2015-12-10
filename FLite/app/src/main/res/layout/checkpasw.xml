@@ -64,7 +64,7 @@
                     android:clickable="true"
                     android:background="?attr/selectableItemBackground"
                     android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/accent_material_light"
+                    android:textColor="@color/primary"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"

@@ -1,21 +1,16 @@
 package com.nego.flite;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.TextView;
 
 public class Settings extends AppCompatActivity {
@@ -123,7 +118,7 @@ public class Settings extends AppCompatActivity {
 
         // WIDGET STYLE
 
-        switch (SP.getString(Costants.PREFERENCE_STYLE_WIDGET, Costants.PREFERENCE_STYLE_WIDGET_MD)) {
+        switch (SP.getString(Costants.PREFERENCE_STYLE_WIDGET, Costants.PREFERENCE_STYLE_POPUP_DEFAULT)) {
             case Costants.PREFERENCE_STYLE_WIDGET_ML:
                 ((TextView) findViewById(R.id.widget_style_subtitle)).setText(getString(R.string.style_material_light));
                 break;
@@ -239,6 +234,9 @@ public class Settings extends AppCompatActivity {
                                     } else {
                                         text_not = getString(R.string.text_sound);
                                     }
+                                    findViewById(R.id.action_show_add_notification).setVisibility(View.VISIBLE);
+                                } else {
+                                    findViewById(R.id.action_show_add_notification).setVisibility(View.GONE);
                                 }
                                 if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_LED, true)) {
                                     if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_VIBRATE, true) || SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_SOUND, true)) {
@@ -270,7 +268,7 @@ public class Settings extends AppCompatActivity {
         });
 
         // ORDER NOTIFICATIONS
-        final CheckBox order_check = (CheckBox) findViewById(R.id.order_check);
+        final AppCompatCheckBox order_check = (AppCompatCheckBox) findViewById(R.id.order_check);
         order_check.setChecked(SP.getBoolean(Costants.PREFERENCE_ORDER_NOTIFICATIONS, true));
         order_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -287,7 +285,7 @@ public class Settings extends AppCompatActivity {
         });
 
         // SHARE BUTTON
-        final CheckBox share_check = (CheckBox) findViewById(R.id.share_check);
+        final AppCompatCheckBox share_check = (AppCompatCheckBox) findViewById(R.id.share_check);
         share_check.setChecked(SP.getBoolean(Costants.PREFERENCE_BUTTON_SHARE, true));
         share_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -304,7 +302,7 @@ public class Settings extends AppCompatActivity {
         });
 
         // ONGOING NOTIFICATIONS
-        final CheckBox ongoing_check = (CheckBox) findViewById(R.id.ongoing_check);
+        final AppCompatCheckBox ongoing_check = (AppCompatCheckBox) findViewById(R.id.ongoing_check);
         ongoing_check.setChecked(SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true));
         ongoing_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -320,29 +318,27 @@ public class Settings extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.action_reset).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new android.support.v7.app.AlertDialog.Builder(Settings.this, R.style.mDialog)
-                        .setTitle(R.string.title_reset)
-                        .setMessage(R.string.ask_reset_pasw)
-                        .setPositiveButton(R.string.action_reset, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Utils.resetPasw(Settings.this);
-                                Utils.notification_add_update(Settings.this);
-                                Utils.SnackbarC(Settings.this, getString(R.string.text_pasw_reset), toolbar);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .show();
+        // HIDE ADD NOTIFICATION
+        if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_SOUND, true)) {
+            final AppCompatCheckBox hide_new_check = (AppCompatCheckBox) findViewById(R.id.show_add_notification_check);
+            hide_new_check.setChecked(SP.getBoolean(Costants.PREFERENCE_SHOW_ADD_NOTIFICATION, false));
+            hide_new_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    SP.edit().putBoolean(Costants.PREFERENCE_SHOW_ADD_NOTIFICATION, isChecked).apply();
+                    Utils.notification_add_update(Settings.this);
+                }
+            });
+            findViewById(R.id.action_show_add_notification).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hide_new_check.setChecked(!hide_new_check.isChecked());
+                }
+            });
+        } else {
+            findViewById(R.id.action_show_add_notification).setVisibility(View.GONE);
+        }
 
-            }
-        });
     }
 
 

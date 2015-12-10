@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nego.flite" >
+    package="com.nego.flite">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -11,10 +11,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".Main"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,13 +22,13 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".Receiver.BootReceiver" >
+        <receiver android:name=".Receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".Receiver.HideNotesReceiver" >
+        <receiver android:name=".Receiver.HideNotesReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_HIDE_ALL" />
                 <action android:name="android.intent.action.ACTION_VIEW_ALL" />
@@ -37,15 +37,14 @@
 
         <service
             android:name=".Functions.ReminderService"
-            android:exported="false" >
-        </service>
+            android:exported="false"></service>
 
         <activity
             android:name=".MyDialog"
             android:excludeFromRecents="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/title_activity_add_item"
-            android:theme="@style/MyDialog_theme" >
+            android:theme="@style/MyDialog_theme">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -70,12 +69,12 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".Receiver.AlarmReceiver" >
+        <receiver android:name=".Receiver.AlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.ALARM" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".Widget.FocusWidget" >
+        <receiver android:name=".Widget.FocusWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -96,28 +95,27 @@
             android:name=".PasswordCheck"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_password_check"
-            android:theme="@style/mDialog" >
-        </activity>
+            android:theme="@style/mDialog"></activity>
         <activity
             android:name=".About"
             android:label="@string/title_tab_developer"
             android:parentActivityName=".Main"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity
             android:name=".Settings"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".Main"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nego.flite.Main" />
         </activity>
         <activity
             android:name=".Receiver.ShortcutReceiver"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

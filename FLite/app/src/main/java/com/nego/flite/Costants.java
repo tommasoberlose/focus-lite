@@ -24,6 +24,9 @@ public class Costants {
     public static final int CODE_REQUEST_CONTACT = 2;
     public static final int CODE_REQUEST_PASW = 5;
     public static final int CODE_REQUEST_CAMERA = 4;
+    public static final int CODE_REQUEST_PERMISSION_READ_CONTACTS = 3;
+    public static final int CODE_REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 6;
+    public static final int CODE_REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 7;
 
     public static final String KEY_DIALOG_TITLE = "KEY_DIALOG_TITLE";
     public static final String KEY_DIALOG_CONTENT = "KEY_DIALOG_CONTENT";
@@ -58,6 +61,7 @@ public class Costants {
     public static final String PREFERENCE_ORDER_NOTIFICATIONS = "PREFERENCE_ORDER_NOTIFICATIONS";
     public static final String PREFERENCE_BUTTON_SHARE = "PREFERENCE_BUTTON_SHARE";
     public static final String PREFERENCE_BUTTON_DELETE = "PREFERENCE_BUTTON_DELETE";
+    public static final String PREFERENCE_SHOW_ADD_NOTIFICATION = "PREFERENCE_SHOW_ADD_NOTIFICATION";
 
     public static final String ALARM_ACTION = "android.intent.action.ALARM";
     public static final String ACTION_SNOOZE = "com.nego.flite.intent.action.ACTION_SNOOZE";
