@@ -61,7 +61,10 @@ public class Costants {
     public static final String PREFERENCE_ORDER_NOTIFICATIONS = "PREFERENCE_ORDER_NOTIFICATIONS";
     public static final String PREFERENCE_BUTTON_SHARE = "PREFERENCE_BUTTON_SHARE";
     public static final String PREFERENCE_BUTTON_DELETE = "PREFERENCE_BUTTON_DELETE";
+    public static final String PREFERENCE_ONGOING_NOTIFICATIONS = "PREFERENCE_ONGOING_NOTIFICATIONS";
     public static final String PREFERENCE_SHOW_ADD_NOTIFICATION = "PREFERENCE_SHOW_ADD_NOTIFICATION";
+    public static final String PREFERENCE_TWELVE_HOUR_FORMAT = "PREFERENCE_TWELVE_HOUR_FORMAT";
+    public static final String PREFERENCE_ORDER_ALARM_FIRST = "PREFERENCE_ORDER_ALARM_FIRST";
 
     public static final String ALARM_ACTION = "android.intent.action.ALARM";
     public static final String ACTION_SNOOZE = "com.nego.flite.intent.action.ACTION_SNOOZE";

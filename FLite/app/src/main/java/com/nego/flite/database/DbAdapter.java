@@ -101,8 +101,12 @@ public class DbAdapter {
     }
 
     //fetch all reminders
-    public Cursor fetchAllReminders() {
-        return database.query(DATABASE_TABLE, new String[]{KEY_ID, KEY_TITLE, KEY_CONTENT, KEY_ACTION_TYPE, KEY_ACTION_INFO, KEY_IMG, KEY_PASW, KEY_DATE_CREATE, KEY_LAST_CHANGED, KEY_ALARM, KEY_ALARM_REPEAT}, null, null, null, null, KEY_DATE_CREATE + " DESC");
+    public Cursor fetchAllReminders(boolean order) {
+        if (order) { // Alarm first
+            return database.query(DATABASE_TABLE, new String[]{KEY_ID, KEY_TITLE, KEY_CONTENT, KEY_ACTION_TYPE, KEY_ACTION_INFO, KEY_IMG, KEY_PASW, KEY_DATE_CREATE, KEY_LAST_CHANGED, KEY_ALARM, KEY_ALARM_REPEAT}, null, null, null, null, KEY_ALARM + ", " + KEY_DATE_CREATE + " DESC");
+        } else {
+            return database.query(DATABASE_TABLE, new String[]{KEY_ID, KEY_TITLE, KEY_CONTENT, KEY_ACTION_TYPE, KEY_ACTION_INFO, KEY_IMG, KEY_PASW, KEY_DATE_CREATE, KEY_LAST_CHANGED, KEY_ALARM, KEY_ALARM_REPEAT}, null, null, null, null, KEY_DATE_CREATE + " DESC");
+        }
     }
 
     //fetch reminder filter by id

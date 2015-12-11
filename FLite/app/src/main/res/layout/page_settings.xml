@@ -55,31 +55,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/primary_text"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_order"
-                        android:id="@+id/order_title"
-                        android:layout_toLeftOf="@+id/order_check"
-                        android:layout_toStartOf="@+id/order_check" />
+                        android:id="@+id/order_title" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/secondary_text"
                         android:id="@+id/order_subtitle"
                         android:text="@string/subtitle_order"
-                        android:layout_below="@+id/order_title"
-                        android:layout_toLeftOf="@+id/order_check"
-                        android:layout_toStartOf="@+id/order_check" />
-                    <android.support.v7.widget.AppCompatCheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/order_check"
-                        android:checked="true"
-                        app:theme="@style/mDialog"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginStart="16dp"/>
+                        android:layout_below="@+id/order_title"/>
                 </RelativeLayout>
 
                 <LinearLayout
@@ -93,79 +78,21 @@
                     android:padding="16dp"
                     android:foreground="?attr/selectableItemBackground"
                     android:clickable="true"
-                    android:id="@+id/action_switch_share">
+                    android:id="@+id/action_notification_preference">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/primary_text"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/title_preferences_share"
-                        android:id="@+id/share_title"
-                        android:layout_toLeftOf="@+id/share_check"
-                        android:layout_toStartOf="@+id/share_check" />
+                        android:textAppearance="?android:attr/textAppearanceListItem"
+                        android:text="@string/title_notification_preference"
+                        android:id="@+id/notification_preference_title" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/secondary_text"
-                        android:id="@+id/share_subtitle"
-                        android:text="@string/subtitle_preferences_share"
-                        android:layout_below="@+id/share_title"
-                        android:layout_toLeftOf="@+id/share_check"
-                        android:layout_toStartOf="@+id/share_check" />
-                    <android.support.v7.widget.AppCompatCheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/share_check"
-                        android:checked="true"
-                        app:theme="@style/mDialog"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginStart="16dp"/>
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/back_selected_item"/>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:id="@+id/action_swicth_ongoing">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/title_preferences_ongoing"
-                        android:id="@+id/ongoing_title"
-                        android:layout_toLeftOf="@+id/ongoing_check"
-                        android:layout_toStartOf="@+id/ongoing_check" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
-                        android:id="@+id/ongoing_subtitle"
-                        android:text="@string/subtitle_preferences_ongoing"
-                        android:layout_below="@+id/ongoing_title"
-                        android:layout_toLeftOf="@+id/ongoing_check"
-                        android:layout_toStartOf="@+id/ongoing_check" />
-                    <android.support.v7.widget.AppCompatCheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/ongoing_check"
-                        android:checked="true"
-                        app:theme="@style/mDialog"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginStart="16dp"/>
+                        android:id="@+id/notification_preference_subtitle"
+                        android:text="@string/subtitle_notification_preference"
+                        android:layout_below="@+id/notification_preference_title" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -184,7 +111,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/primary_text"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_show_add_notification"
                         android:id="@+id/show_add_notification_title"
                         android:layout_toLeftOf="@+id/show_add_notification_check"
@@ -246,7 +173,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/primary_text"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_notification_preferences"
                         android:id="@+id/notification_title" />
                     <TextView
@@ -273,7 +200,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/primary_text"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_custom_sound"
                         android:id="@+id/custom_sound_title" />
                     <TextView
@@ -283,49 +210,6 @@
                         android:id="@+id/custom_sound_subtitle"
                         android:text="@string/style_deafult"
                         android:layout_below="@+id/custom_sound_title"/>
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/back_selected_item"/>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:id="@+id/action_persistent_sound">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/title_persistent_sound"
-                        android:id="@+id/persistent_sound_title"
-                        android:layout_toLeftOf="@+id/persistent_sound_check"
-                        android:layout_toStartOf="@+id/persistent_sound_check" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
-                        android:id="@+id/persistent_sound_subtitle"
-                        android:text="@string/subtitle_persistent_sound"
-                        android:layout_below="@+id/persistent_sound_title"
-                        android:layout_toLeftOf="@+id/persistent_sound_check"
-                        android:layout_toStartOf="@+id/persistent_sound_check" />
-                    <android.support.v7.widget.AppCompatCheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/persistent_sound_check"
-                        android:checked="true"
-                        app:theme="@style/mDialog"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginStart="16dp"/>
                 </RelativeLayout>
 
             </LinearLayout>
@@ -362,7 +246,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/primary_text"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_popup_style"
                         android:id="@+id/popup_style_title" />
                     <TextView
@@ -389,7 +273,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/primary_text"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_widget_style"
                         android:id="@+id/widget_style_title"/>
                     <TextView
@@ -434,7 +318,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/primary_text"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_view_intro"
                         android:id="@+id/view_intro_title" />
                     <TextView
@@ -444,6 +328,49 @@
                         android:text="@string/subtitle_view_intro"
                         android:id="@+id/view_intro_subtitle"
                         android:layout_below="@+id/view_intro_title"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/back_selected_item"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/action_twelve_hour">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary_text"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
+                        android:text="@string/title_twelve_hour"
+                        android:id="@+id/twelve_hour_title"
+                        android:layout_toLeftOf="@+id/twelve_hour_check"
+                        android:layout_toStartOf="@+id/twelve_hour_check" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/secondary_text"
+                        android:id="@+id/twelve_hour_subtitle"
+                        android:text="@string/subtitle_twelve_hour"
+                        android:layout_below="@+id/twelve_hour_title"
+                        android:layout_toLeftOf="@+id/twelve_hour_check"
+                        android:layout_toStartOf="@+id/twelve_hour_check" />
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/twelve_hour_check"
+                        android:checked="true"
+                        app:theme="@style/mDialog"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginStart="16dp"/>
                 </RelativeLayout>
             </LinearLayout>
 

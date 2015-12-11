@@ -119,7 +119,7 @@
     <string name="action_reset">Reset</string>
     <string name="text_first_use">Welcome and thank you for downloading Focus Notify.\n\nTo start adding notes pull down the notification bar.</string>
     <string name="title_order">Sort Notifications</string>
-    <string name="subtitle_order">Put notifications with the notes before and after the "add" notification</string>
+    <string name="subtitle_order">Choose what to display with higher priority</string>
     <string name="title_preferences_share">Share Button</string>
     <string name="subtitle_preferences_share">Add an option to each note to share them faster</string>
     <string name="title_preferences_ongoing">Ongoing Notifications</string>
@@ -154,9 +154,16 @@
     <string name="ask_remove_contact">Are you sure you want to remove the contact selected</string>
     <string name="error_title">Error, insert title</string>
     <string name="title_custom_sound">Custom Notification Sound</string>
-    <string name="title_show_add_notification">"New note" notification visibility</string>
-    <string name="subtitle_show_add_notification">Hide "new note" notification when there\'re no notes</string>
+    <string name="title_show_add_notification">"New note" Notification Visibility</string>
+    <string name="subtitle_show_add_notification">Show always "new note" notification also when there\'re no notes</string>
     <string name="title_section_alarm">Alarm Settings</string>
     <string name="title_persistent_sound">Persistent Reminder Notification</string>
     <string name="subtitle_persistent_sound">Make reminder notifications persistent and use them like alarms</string>
+    <string name="title_twelve_hour">Use 12-hour Format</string>
+    <string name="subtitle_twelve_hour">Use 12-hour format instead of 24-hour format</string>
+    <string name="title_notification_preference">Notification Preferences</string>
+    <string name="subtitle_notification_preference">Optional buttons, ongoing notification and more preferences about fixed notification</string>
+    <string name="title_delete_button_preferences">Delete on Dismiss</string>
+    <string name="preferences_addnote_first">Add Note Notification</string>
+    <string name="preferences_alarm_first">Reminders and Alarm</string>
 </resources>

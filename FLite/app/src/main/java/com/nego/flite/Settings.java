@@ -234,9 +234,9 @@ public class Settings extends AppCompatActivity {
                                     } else {
                                         text_not = getString(R.string.text_sound);
                                     }
-                                    findViewById(R.id.action_show_add_notification).setVisibility(View.VISIBLE);
+                                    findViewById(R.id.action_custom_sound).setVisibility(View.VISIBLE);
                                 } else {
-                                    findViewById(R.id.action_show_add_notification).setVisibility(View.GONE);
+                                    findViewById(R.id.action_custom_sound).setVisibility(View.GONE);
                                 }
                                 if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_LED, true)) {
                                     if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_VIBRATE, true) || SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_SOUND, true)) {
@@ -268,76 +268,119 @@ public class Settings extends AppCompatActivity {
         });
 
         // ORDER NOTIFICATIONS
-        final AppCompatCheckBox order_check = (AppCompatCheckBox) findViewById(R.id.order_check);
-        order_check.setChecked(SP.getBoolean(Costants.PREFERENCE_ORDER_NOTIFICATIONS, true));
-        order_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.edit().putBoolean(Costants.PREFERENCE_ORDER_NOTIFICATIONS, isChecked).apply();
-                Utils.notification_add_update(Settings.this);
-            }
-        });
         findViewById(R.id.action_order).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                order_check.setChecked(!order_check.isChecked());
+                boolean[] actual_not_pref = new boolean[]{SP.getBoolean(Costants.PREFERENCE_ORDER_NOTIFICATIONS, true), SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, true)};
+                selected_not_pref = actual_not_pref;
+                new AlertDialog.Builder(Settings.this, R.style.mDialog)
+                        .setTitle(getString(R.string.title_order))
+                        .setMultiChoiceItems(new String[]{getString(R.string.preferences_addnote_first), getString(R.string.preferences_alarm_first)},
+                                actual_not_pref, new DialogInterface.OnMultiChoiceClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                        selected_not_pref[which] = isChecked;
+                                    }
+                                })
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SP.edit().putBoolean(Costants.PREFERENCE_ORDER_NOTIFICATIONS, selected_not_pref[0]).apply();
+                                SP.edit().putBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, selected_not_pref[1]).apply();
+                                Utils.notification_add_update(Settings.this);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
             }
         });
 
-        // SHARE BUTTON
-        final AppCompatCheckBox share_check = (AppCompatCheckBox) findViewById(R.id.share_check);
-        share_check.setChecked(SP.getBoolean(Costants.PREFERENCE_BUTTON_SHARE, true));
-        share_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.edit().putBoolean(Costants.PREFERENCE_BUTTON_SHARE, isChecked).apply();
-                Utils.notification_add_update(Settings.this);
-            }
-        });
-        findViewById(R.id.action_switch_share).setOnClickListener(new View.OnClickListener() {
+        // NOTIFICATION PREFERENCES
+        findViewById(R.id.action_notification_preference).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                share_check.setChecked(!share_check.isChecked());
+                boolean[] actual_not_pref = new boolean[]{SP.getBoolean(Costants.PREFERENCE_BUTTON_SHARE, true), SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true), SP.getBoolean(Costants.PREFERENCE_ONGOING_NOTIFICATIONS, true)};
+                selected_not_pref = actual_not_pref;
+                new AlertDialog.Builder(Settings.this, R.style.mDialog)
+                        .setTitle(getString(R.string.title_notification_preference))
+                        .setMultiChoiceItems(new String[]{getString(R.string.title_preferences_share), getString(R.string.title_delete_button_preferences), getString(R.string.title_preferences_ongoing)},
+                                actual_not_pref, new DialogInterface.OnMultiChoiceClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                        selected_not_pref[which] = isChecked;
+                                    }
+                                })
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SP.edit().putBoolean(Costants.PREFERENCE_BUTTON_SHARE, selected_not_pref[0]).apply();
+                                SP.edit().putBoolean(Costants.PREFERENCE_BUTTON_DELETE, selected_not_pref[1]).apply();
+                                SP.edit().putBoolean(Costants.PREFERENCE_ONGOING_NOTIFICATIONS, selected_not_pref[2]).apply();
+                                Utils.notification_add_update(Settings.this);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
             }
         });
 
-        // ONGOING NOTIFICATIONS
-        final AppCompatCheckBox ongoing_check = (AppCompatCheckBox) findViewById(R.id.ongoing_check);
-        ongoing_check.setChecked(SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true));
-        ongoing_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.edit().putBoolean(Costants.PREFERENCE_BUTTON_DELETE, isChecked).apply();
-                Utils.notification_add_update(Settings.this);
-            }
-        });
-        findViewById(R.id.action_swicth_ongoing).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ongoing_check.setChecked(!ongoing_check.isChecked());
-            }
-        });
-
-        // HIDE ADD NOTIFICATION
+        // CUSTOM SOUND NOTIFICATION
         if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_SOUND, true)) {
-            final AppCompatCheckBox hide_new_check = (AppCompatCheckBox) findViewById(R.id.show_add_notification_check);
-            hide_new_check.setChecked(SP.getBoolean(Costants.PREFERENCE_SHOW_ADD_NOTIFICATION, false));
-            hide_new_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    SP.edit().putBoolean(Costants.PREFERENCE_SHOW_ADD_NOTIFICATION, isChecked).apply();
-                    Utils.notification_add_update(Settings.this);
-                }
-            });
-            findViewById(R.id.action_show_add_notification).setOnClickListener(new View.OnClickListener() {
+            findViewById(R.id.action_custom_sound).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    hide_new_check.setChecked(!hide_new_check.isChecked());
+                    //TODO custom sound
                 }
             });
         } else {
-            findViewById(R.id.action_show_add_notification).setVisibility(View.GONE);
+            findViewById(R.id.action_custom_sound).setVisibility(View.GONE);
         }
+
+        // SHOW ADD NOTIFICATION
+        final AppCompatCheckBox hide_new_check = (AppCompatCheckBox) findViewById(R.id.show_add_notification_check);
+        hide_new_check.setChecked(SP.getBoolean(Costants.PREFERENCE_SHOW_ADD_NOTIFICATION, true));
+        hide_new_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SP.edit().putBoolean(Costants.PREFERENCE_SHOW_ADD_NOTIFICATION, isChecked).apply();
+                Utils.notification_add_update(Settings.this);
+            }
+        });
+        findViewById(R.id.action_show_add_notification).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hide_new_check.setChecked(!hide_new_check.isChecked());
+            }
+        });
+
+        // 12-HOUR FORMAT
+        final AppCompatCheckBox twelve_hour_check = (AppCompatCheckBox) findViewById(R.id.twelve_hour_check);
+        twelve_hour_check.setChecked(SP.getBoolean(Costants.PREFERENCE_TWELVE_HOUR_FORMAT, false));
+        twelve_hour_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SP.edit().putBoolean(Costants.PREFERENCE_TWELVE_HOUR_FORMAT, isChecked).apply();
+                Utils.notification_add_update(Settings.this);
+            }
+        });
+        findViewById(R.id.action_twelve_hour).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                twelve_hour_check.setChecked(!twelve_hour_check.isChecked());
+            }
+        });
 
     }
 

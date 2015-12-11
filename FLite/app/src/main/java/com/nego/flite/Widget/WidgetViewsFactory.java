@@ -36,13 +36,14 @@ public class WidgetViewsFactory implements
     private int mAppWidgetId;
 
     public WidgetViewsFactory(Context context, Intent intent) {
+        SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         mContext = context;
         mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
 
         DbAdapter dbHelper = new DbAdapter(mContext);
         dbHelper.open();
-        Cursor c = dbHelper.fetchAllReminders();
+        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
         while (c.moveToNext()) {
             mWidgetItems.add(new Reminder(c));
         }
@@ -55,12 +56,13 @@ public class WidgetViewsFactory implements
 
     @Override
     public void onDataSetChanged() {
+        SharedPreferences SP = mContext.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
 
         mWidgetItems.clear();
 
         DbAdapter dbHelper = new DbAdapter(mContext);
         dbHelper.open();
-        Cursor c = dbHelper.fetchAllReminders();
+        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
         while (c.moveToNext()) {
             mWidgetItems.add(new Reminder(c));
         }

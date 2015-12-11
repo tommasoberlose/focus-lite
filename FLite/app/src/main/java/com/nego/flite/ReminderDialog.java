@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.ContextThemeWrapper;
@@ -18,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class ReminderDialog extends Dialog {
@@ -37,9 +39,13 @@ public class ReminderDialog extends Dialog {
     private TextView save_button;
     private TextView delete_button;
 
+    private SharedPreferences SP;
+
     public ReminderDialog(final Context context, final long alarm_i, String alarm_repeat_i) {
         super(context, R.style.mDialog);
         mContext = context;
+
+        SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
 
         if (Utils.isBrokenSamsungDevice()) {
             mContextPicker = new ContextThemeWrapper(context, android.R.style.Theme_Holo_Light_Dialog);
@@ -131,7 +137,7 @@ public class ReminderDialog extends Dialog {
                             error_date.setVisibility(View.GONE);
                         }
                     }
-                }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+                }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), !SP.getBoolean(Costants.PREFERENCE_TWELVE_HOUR_FORMAT, false));
                 mTimePicker.show();
             }
         });

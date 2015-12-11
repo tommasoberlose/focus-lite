@@ -119,9 +119,9 @@
     <string name="action_reset">Resetta</string>
     <string name="text_first_use">Benvenuto e grazie per aver scaricato Focus Notify.\n\nPer iniziare ad aggiungere note abbassa la barra delle notifiche.</string>
     <string name="title_order">Ordine Notifiche</string>
-    <string name="subtitle_order">Metti le notifiche con le note per prime e successivamente la notifica per aggiungerle</string>
+    <string name="subtitle_order">Scegli cosa visualizzare con maggiore priorità</string>
     <string name="subtitle_preferences_share">Aggiungi un\'opzione ad ogni nota per condividerle più velocemente </string>
-    <string name="title_preferences_share">Pulsante Condividi</string>
+    <string name="title_preferences_share">Azione Condividi</string>
     <string name="title_preferences_ongoing">Notifiche Bloccate</string>
     <string name="subtitle_preferences_ongoing">Blocca l\'eliminazione delle note tramite swipe sulla notifica</string>
     <string name="action_snooze">Rimanda</string>
@@ -154,9 +154,16 @@
     <string name="ask_remove_contact">Sei sicuro di voler rimuovere il contatto scelto</string>
     <string name="error_title">Errore, inserisci un titolo</string>
     <string name="title_custom_sound">Modifica il Suono delle Notifiche</string>
-    <string name="title_show_add_notification">Visibilità notifica "aggiungi nota"</string>
-    <string name="subtitle_show_add_notification">Nascondi la notifica "aggiungi nota" quando non sono presenti elementi</string>
+    <string name="title_show_add_notification">Visibilità Notifica "Aggiungi Nota"</string>
+    <string name="subtitle_show_add_notification">Mostra sempre la notifica "aggiungi nota" anche quando non sono presenti elementi</string>
     <string name="title_section_alarm">Impostazioni Allarmi</string>
     <string name="title_persistent_sound">Notifica promemoria persistente</string>
     <string name="subtitle_persistent_sound">Rendi la notifica dei promemoria persistente e utilizzala come un allarme</string>
+    <string name="title_twelve_hour">Usa il formato da 12h</string>
+    <string name="subtitle_twelve_hour">Utilizza il formato per l\'orario da 12h invece che quello da 24h</string>
+    <string name="title_notification_preference">Preferenze Notifiche</string>
+    <string name="subtitle_notification_preference">Azioni opzionali, notifiche fisse e altre preferenze riguardanti le notifiche fisse</string>
+    <string name="title_delete_button_preferences">Elimina quando Rimuovi</string>
+    <string name="preferences_addnote_first">Notifica Aggiungi Nota</string>
+    <string name="preferences_alarm_first">Promemoria e Allarmi</string>
 </resources>

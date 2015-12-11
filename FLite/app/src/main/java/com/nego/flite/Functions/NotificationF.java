@@ -13,6 +13,7 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.widget.RemoteViews;
 
 import com.nego.flite.Costants;
 import com.nego.flite.Main;
@@ -32,10 +33,6 @@ public class NotificationF {
         i.setAction(Costants.ACTION_EDIT_ITEM);
         i.putExtra(Costants.EXTRA_REMINDER, r);
         PendingIntent pi= PendingIntent.getActivity(context, r.getId(), i, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Intent clear_i=new Intent(context,MyDialog.class);
-        clear_i.setAction(Costants.ACTION_UPDATE_LIST);
-        PendingIntent pi_clear= PendingIntent.getActivity(context, r.getId(), clear_i, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent delete_i = new Intent(context, MyDialog.class);
         delete_i.setAction(Costants.ACTION_DELETE);
@@ -72,8 +69,6 @@ public class NotificationF {
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
-            n.setDeleteIntent(pi_clear);
-        } else {
             n.setDeleteIntent(pi_delete);
         }
 
@@ -119,7 +114,7 @@ public class NotificationF {
         }
 
         String url = Utils.checkURL(r.getTitle());
-        if (url != "") {
+        if (url.equals("")) {
             Intent url_intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             PendingIntent url_pi = PendingIntent.getActivity(context, r.getId(), url_intent, 0);
             n.addAction(R.drawable.ic_action_open_in_browser, context.getString(R.string.open_in_browser), url_pi);
@@ -136,7 +131,6 @@ public class NotificationF {
         }
 
         if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
-            n.addAction(R.drawable.ic_action_delete, context.getString(R.string.action_delete), pi_delete);
             delete_i.putExtra(Costants.FROM_WEAR, true);
             PendingIntent pi_delete_wear = PendingIntent.getActivity(context, r.getId(), delete_i, PendingIntent.FLAG_UPDATE_CURRENT);
             wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_delete, context.getString(R.string.action_delete), pi_delete_wear).build());
@@ -218,10 +212,13 @@ public class NotificationF {
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
+            n.setDeleteIntent(pi_delete);
+        }
+
+        if (SP.getBoolean(Costants.PREFERENCE_ONGOING_NOTIFICATIONS, true)) {
             n.setOngoing(true);
         } else {
             n.setOngoing(false);
-            n.setDeleteIntent(pi_delete);
         }
 
         if (!r.getImg().equals("")) {
@@ -283,11 +280,10 @@ public class NotificationF {
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
 
         int count = Utils.itemsToDo(context);
-        if (!(SP.getBoolean(Costants.PREFERENCE_SHOW_ADD_NOTIFICATION, false) && count == 0)) {
+        if (!(!SP.getBoolean(Costants.PREFERENCE_SHOW_ADD_NOTIFICATION, true) && count == 0)) {
             String item_to_do = context.getString(R.string.no_items);
             if (count > 0)
                 item_to_do = context.getResources().getString(R.string.num_items_todo, count);
-
 
             Intent i = new Intent(context, MyDialog.class);
             i.setAction(Costants.ACTION_ADD_ITEM);
@@ -296,8 +292,6 @@ public class NotificationF {
             NotificationManager notificationManager = (NotificationManager)
                     context.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationCompat.Builder n = new NotificationCompat.Builder(context)
-                    .setContentTitle(context.getString(R.string.title_activity_add_item))
-                    .setContentText(item_to_do)
                     .setSmallIcon(R.drawable.ic_stat_bookmark_plus)
                     .setContentIntent(pi)
                     .setOngoing(true)
@@ -305,20 +299,31 @@ public class NotificationF {
                     .setPriority(Notification.PRIORITY_MIN)
                     .setAutoCancel(false);
 
+            /*
+            n.setContentTitle(context.getString(R.string.title_activity_add_item))
+                .setContentText(item_to_do)
+            */
+
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                    R.layout.add_notification_layout);
+            remoteViews.setTextViewText(R.id.notification_title, context.getString(R.string.title_activity_add_item));
+            remoteViews.setTextViewText(R.id.notification_subtitle, item_to_do);
 
             if (count > 0) {
                 if (SP.getBoolean(Costants.PREFERENCES_VIEW_ALL, true)) {
                     PendingIntent pi_hide = PendingIntent.getBroadcast(context, -2, new Intent(Costants.ACTION_HIDE_ALL), PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    n.setColor(context.getResources().getColor(R.color.primary));
-                    n.addAction(R.drawable.ic_action_hide_all, context.getString(R.string.action_hide_all), pi_hide);
+                    remoteViews.setOnClickPendingIntent(R.id.toogle_icon, pi_hide);
+                    remoteViews.setImageViewResource(R.id.toogle_icon, R.drawable.ic_action_hide_all);
+                    remoteViews.setOnClickFillInIntent(R.id.toogle_icon, new Intent(Costants.ACTION_HIDE_ALL));
                 } else {
                     PendingIntent pi_view = PendingIntent.getBroadcast(context, -2, new Intent(Costants.ACTION_VIEW_ALL), PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    n.setColor(context.getResources().getColor(R.color.accent));
-                    n.addAction(R.drawable.ic_action_view_all, context.getString(R.string.action_view_all), pi_view);
+                    remoteViews.setOnClickPendingIntent(R.id.toogle_icon, pi_view);
+                    remoteViews.setImageViewResource(R.id.toogle_icon, R.drawable.ic_action_view_all);
+                    remoteViews.setOnClickFillInIntent(R.id.toogle_icon, new Intent(Costants.ACTION_VIEW_ALL));
                 }
             }
+
+            n.setContent(remoteViews);
 
             notificationManager.notify(-1, n.build());
         }

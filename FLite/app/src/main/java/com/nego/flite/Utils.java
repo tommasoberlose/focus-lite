@@ -47,7 +47,7 @@ public class Utils {
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         if (SP.getBoolean(Costants.PREFERENCES_VIEW_ALL, true)) {
 
-            Cursor c = dbHelper.fetchAllReminders();
+            Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
             while (c.moveToNext()) {
                 NotificationF.NotificationFixed(context, new Reminder(c));
             }
@@ -85,7 +85,7 @@ public class Utils {
         NotificationF.CancelAllNotification(context);
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-        if (SP.getBoolean(Costants.PREFERENCE_ORDER_NOTIFICATIONS, true)) {
+        if (!SP.getBoolean(Costants.PREFERENCE_ORDER_NOTIFICATIONS, true)) {
             NotificationF.NotificationAdd(context);
             oldReminder(context);
         } else {
@@ -111,12 +111,18 @@ public class Utils {
     }
 
     public static String getDate(Context context, long date) {
+        SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         Calendar today = Calendar.getInstance();
         Calendar byR = Calendar.getInstance();
         byR.setTimeInMillis(date);
         SimpleDateFormat HM = new SimpleDateFormat("HH:mm");
         SimpleDateFormat DM = new SimpleDateFormat("MMM d, HH:mm");
-        SimpleDateFormat MY = new SimpleDateFormat("MMM d y, HH:mm ");
+        SimpleDateFormat MY = new SimpleDateFormat("MMM d y, HH:mm");
+        if (SP.getBoolean(Costants.PREFERENCE_TWELVE_HOUR_FORMAT, false)) {
+            HM = new SimpleDateFormat("hh:mm a");
+            DM = new SimpleDateFormat("MMM d, hh:mm a");
+            MY = new SimpleDateFormat("MMM d y, hh:mm a");
+        }
         if (today.get(Calendar.YEAR) == byR.get(Calendar.YEAR) &&
                 today.get(Calendar.MONTH) == byR.get(Calendar.MONTH) &&
                 today.get(Calendar.DAY_OF_MONTH) == byR.get(Calendar.DAY_OF_MONTH)) {
@@ -129,12 +135,18 @@ public class Utils {
     }
 
     public static String getDateAlarm(Context context, long date) {
+        SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         Calendar today = Calendar.getInstance();
         Calendar byR = Calendar.getInstance();
         byR.setTimeInMillis(date);
         SimpleDateFormat HM = new SimpleDateFormat("HH:mm");
         SimpleDateFormat DM = new SimpleDateFormat("MMM d, HH:mm");
-        SimpleDateFormat MY = new SimpleDateFormat("MMM d y, HH:mm ");
+        SimpleDateFormat MY = new SimpleDateFormat("MMM d y, HH:mm");
+        if (SP.getBoolean(Costants.PREFERENCE_TWELVE_HOUR_FORMAT, false)) {
+            HM = new SimpleDateFormat("hh:mm a");
+            DM = new SimpleDateFormat("MMM d, hh:mm a");
+            MY = new SimpleDateFormat("MMM d y, hh:mm a");
+        }
         if (date > today.getTimeInMillis()) {
             if (today.get(Calendar.YEAR) == byR.get(Calendar.YEAR) &&
                     today.get(Calendar.MONTH) == byR.get(Calendar.MONTH) &&
@@ -176,9 +188,13 @@ public class Utils {
     }
 
     public static String getTime(Context context, long date) {
+        SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         Calendar byR = Calendar.getInstance();
         byR.setTimeInMillis(date);
         SimpleDateFormat HM = new SimpleDateFormat("HH:mm");
+        if (SP.getBoolean(Costants.PREFERENCE_TWELVE_HOUR_FORMAT, false)) {
+            HM = new SimpleDateFormat("hh:mm a");
+        }
         return HM.format(new Date(byR.getTimeInMillis()));
     }
 
@@ -320,11 +336,12 @@ public class Utils {
     }
 
     public static void resetPasw(Context context) {
+        SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
 
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
 
-        Cursor c = dbHelper.fetchAllReminders();
+        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
         while (c.moveToNext()) {
             Reminder r = new Reminder(c);
             if (!r.getPasw().equals(""))
