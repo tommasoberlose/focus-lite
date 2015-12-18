@@ -126,7 +126,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    mDataset.get(position)[1] = s.toString().replace(Costants.LIST_COSTANT, "").replace(Costants.LIST_ORDER_SEPARATOR, "").replace(Costants.LIST_ITEM_SEPARATOR, "").trim();
+                    if (mDataset.size() > position)
+                        mDataset.get(position)[1] = s.toString().replace(Costants.LIST_COSTANT, "").replace(Costants.LIST_ORDER_SEPARATOR, "").replace(Costants.LIST_ITEM_SEPARATOR, "").trim();
                 }
             });
 
