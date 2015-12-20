@@ -37,7 +37,7 @@
 
         <service
             android:name=".Functions.ReminderService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <activity
             android:name=".MyDialog"
@@ -46,26 +46,24 @@
             android:label="@string/title_activity_add_item"
             android:theme="@style/MyDialog_theme">
             <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="com.google.android.voicesearch.SELF_NOTE"/>
+                <action android:name="com.google.android.gm.action.AUTO_SEND" />
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.SEND" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="text/plain" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="image/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="intent.action.EDIT_ITEM" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="com.google.android.voicesearch.SELF_NOTE" />
             </intent-filter>
         </activity>
 

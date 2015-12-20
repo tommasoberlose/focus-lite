@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.nego.flite.Functions.AlarmF;
 import com.nego.flite.database.DbAdapter;
@@ -17,11 +18,13 @@ public class Reminder implements Parcelable {
     private String img;
     private String pasw;
     private long date_create;
+    private long date_reminded;
     private long last_changed;
     private long alarm;
     private String alarm_repeat;
+    private int priority;
 
-    public Reminder(String title, String content, String action_type, String action_info, String img, String pasw, long date_create, long last_changed, long alarm, String alarm_repeat){
+    public Reminder(String title, String content, String action_type, String action_info, String img, String pasw, long date_create, long date_reminded, long last_changed, long alarm, String alarm_repeat, int priority){
         this.title = title;
         this.content = content;
         this.action_type = action_type;
@@ -29,12 +32,14 @@ public class Reminder implements Parcelable {
         this.img = img;
         this.pasw = pasw;
         this.date_create = date_create;
+        this.date_reminded = date_reminded;
         this.last_changed = last_changed;
         this.alarm = alarm;
         this.alarm_repeat = alarm_repeat;
+        this.priority = priority;
     }
 
-    public Reminder(int id, String title, String content, String action_type, String action_info, String img, String pasw, long date_create, long last_changed, long alarm, String alarm_repeat){
+    public Reminder(int id, String title, String content, String action_type, String action_info, String img, String pasw, long date_create, long date_reminded, long last_changed, long alarm, String alarm_repeat, int priority){
         this.id = id;
         this.title = title;
         this.content = content;
@@ -43,9 +48,11 @@ public class Reminder implements Parcelable {
         this.img = img;
         this.pasw = pasw;
         this.date_create = date_create;
+        this.date_reminded = date_reminded;
         this.last_changed = last_changed;
         this.alarm = alarm;
         this.alarm_repeat = alarm_repeat;
+        this.priority = priority;
     }
 
     public Reminder(Cursor cursor){
@@ -57,9 +64,11 @@ public class Reminder implements Parcelable {
         this.img = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_IMG));
         this.pasw = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_PASW));
         this.date_create = cursor.getLong(cursor.getColumnIndex(DbAdapter.KEY_DATE_CREATE));
+        this.date_reminded = cursor.getLong(cursor.getColumnIndex(DbAdapter.KEY_DATE_REMINDED));
         this.last_changed = cursor.getLong(cursor.getColumnIndex(DbAdapter.KEY_LAST_CHANGED));
         this.alarm = cursor.getLong( cursor.getColumnIndex(DbAdapter.KEY_ALARM) );
         this.alarm_repeat = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_ALARM_REPEAT));
+        this.priority = cursor.getInt(cursor.getColumnIndex(DbAdapter.KEY_PRIORITY));
     }
 
     public int getId() {
@@ -124,6 +133,14 @@ public class Reminder implements Parcelable {
         return date_create;
     }
 
+    public void setDate_reminded(long date_reminded) {
+        this.date_reminded = date_reminded;
+    }
+
+    public long getDate_reminded() {
+        return date_reminded;
+    }
+
     public void setLast_changed(long last_changed) {
         this.last_changed = last_changed;
     }
@@ -148,6 +165,14 @@ public class Reminder implements Parcelable {
         return alarm_repeat;
     }
 
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
     public boolean create_reminder(Context context, DbAdapter dbHelper) {
         this.id = (int) dbHelper.createReminder(this);
         if (id > 0) {
@@ -165,6 +190,10 @@ public class Reminder implements Parcelable {
         return false;
     }
 
+    public boolean update_reminder_date(Context context, DbAdapter dbHelper) {
+        return dbHelper.updateReminder(this);
+    }
+
     public boolean delete_reminder(Context context, DbAdapter dbHelper) {
         if (dbHelper.deleteReminder("" + this.getId())) {
             AlarmF.deleteAlarm(context, this.getId());
@@ -178,7 +207,7 @@ public class Reminder implements Parcelable {
 
     public static final Parcelable.Creator<Reminder> CREATOR = new Creator<Reminder>() {
         public Reminder createFromParcel(Parcel source) {
-            return new Reminder(source.readInt(), source.readString(), source.readString(), source.readString(), source.readString(), source.readString(), source.readString(), source.readLong(), source.readLong(), source.readLong(), source.readString());
+            return new Reminder(source.readInt(), source.readString(), source.readString(), source.readString(), source.readString(), source.readString(), source.readString(), source.readLong(), source.readLong(), source.readLong(), source.readLong(), source.readString(), source.readInt());
         }
         public Reminder[] newArray(int size) {
             return new Reminder[size];
@@ -200,8 +229,10 @@ public class Reminder implements Parcelable {
         dest.writeString(img);
         dest.writeString(pasw);
         dest.writeLong(date_create);
+        dest.writeLong(date_reminded);
         dest.writeLong(last_changed);
         dest.writeLong(alarm);
         dest.writeString(alarm_repeat);
+        dest.writeInt(priority);
     }
 }

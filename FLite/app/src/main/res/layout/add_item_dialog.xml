@@ -221,6 +221,18 @@
                                 android:layout_gravity="center_vertical"/>
 
                             <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_action_toggle_star"
+                                android:tint="@android:color/black"
+                                android:alpha="0.5"
+                                android:id="@+id/action_priority"
+                                android:padding="8dp"
+                                android:background="?attr/selectableItemBackground"
+                                android:clickable="true"
+                                android:layout_gravity="center_vertical"/>
+
+                            <ImageView
                                 android:layout_width="40dp"
                                 android:layout_height="48dp"
                                 android:src="@drawable/ic_action_navigation_more_vert"

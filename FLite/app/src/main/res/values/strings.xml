@@ -165,5 +165,6 @@
     <string name="subtitle_notification_preference">Optional buttons, ongoing notification and more preferences about fixed notification</string>
     <string name="title_delete_button_preferences">Delete on Dismiss</string>
     <string name="preferences_addnote_first">Add Note Notification</string>
-    <string name="preferences_alarm_first">Reminders and Alarm</string>
+    <string name="preferences_alarm_first">Reminders and Alarms</string>
+    <string name="text_reminded_date">Note reminded on</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.nego.flite;
 
+import android.app.AlarmManager;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -14,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -57,8 +59,15 @@ public class Utils {
         Cursor a = dbHelper.fetchAllAlarm();
         while (a.moveToNext()) {
             Reminder reminder = new Reminder(a);
-            if (!isOldDate(reminder.getAlarm()))
+            // Missed alarms
+            if (isMissedAlarm(reminder))
+                NotificationF.Notification(context, reminder);
+
+            // Future alarm
+            if (reminder.getAlarm() != 0 && !isOldAlarm(reminder)) {
                 AlarmF.updateAlarm(context, reminder.getId(), reminder.getAlarm(), reminder.getAlarm_repeat());
+                Log.i("NEGO_ERROR", "FROM_FUTURE_ALARM");
+            }
         }
         a.close();
 
@@ -249,6 +258,35 @@ public class Utils {
         Calendar checkDate = Calendar.getInstance();
         checkDate.setTimeInMillis(date);
         return (yesterday.get(Calendar.YEAR) == checkDate.get(Calendar.YEAR) && yesterday.get(Calendar.MONTH) == checkDate.get(Calendar.MONTH) && yesterday.get(Calendar.DAY_OF_MONTH) == checkDate.get(Calendar.DAY_OF_MONTH));
+    }
+
+    public static boolean isOldAlarm(Reminder r) {
+        return r.getAlarm_repeat().equals("") && isOldDate(r.getAlarm());
+    }
+
+    public static boolean isMissedAlarm(Reminder r) {
+        if (r.getAlarm() != 0) {
+            if (r.getAlarm_repeat().equals("")) {
+                if (isOldDate(r.getAlarm()))
+                    return r.getDate_reminded() == 0;
+            } else {
+                // ho perso qualche ripetizione?
+                Calendar c = Calendar.getInstance();
+                switch (r.getAlarm_repeat()) {
+                    case Costants.ALARM_REPEAT_DAY:
+                        return (c.getTimeInMillis() - r.getDate_reminded()) > AlarmManager.INTERVAL_DAY;
+                    case Costants.ALARM_REPEAT_WEEK:
+                        return (c.getTimeInMillis() - r.getDate_reminded()) > 7 * AlarmManager.INTERVAL_DAY;
+                    case Costants.ALARM_REPEAT_MONTH:
+                        c.add(Calendar.MONTH, -1);
+                        return c.getTimeInMillis() > r.getDate_reminded();
+                    case Costants.ALARM_REPEAT_YEAR:
+                        c.add(Calendar.YEAR, -1);
+                        return c.getTimeInMillis() > r.getDate_reminded();
+                }
+            }
+        }
+        return false;
     }
 
     public static boolean isOldDate(long date) {

@@ -24,6 +24,7 @@ import com.nego.flite.Utils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Calendar;
 
 public class NotificationF {
 
@@ -45,11 +46,18 @@ public class NotificationF {
                 .setContentTitle(r.getTitle())
                 .setSmallIcon(R.drawable.ic_not_flite)
                 .setContentIntent(pi)
-                .setColor(context.getResources().getColor(R.color.primary))
+                .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
         NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender();
+        /* TODO IMG BACKGROUND WEAR NOTIFICATION
+        try {
+            wearableExtender.setBackground(MediaStore.Images.Media.getBitmap(context.getContentResolver(), URLIMG));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        */
 
         if (r.getContent().equals("")) {
             if (r.getAlarm() == 0) {
@@ -114,7 +122,7 @@ public class NotificationF {
         }
 
         String url = Utils.checkURL(r.getTitle());
-        if (url.equals("")) {
+        if (!url.equals("")) {
             Intent url_intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             PendingIntent url_pi = PendingIntent.getActivity(context, r.getId(), url_intent, 0);
             n.addAction(R.drawable.ic_action_open_in_browser, context.getString(R.string.open_in_browser), url_pi);
@@ -131,8 +139,10 @@ public class NotificationF {
         }
 
         if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
-            delete_i.putExtra(Costants.FROM_WEAR, true);
-            PendingIntent pi_delete_wear = PendingIntent.getActivity(context, r.getId(), delete_i, PendingIntent.FLAG_UPDATE_CURRENT);
+            Intent delete_i_wear = new Intent(context, MyDialog.class);
+            delete_i_wear.setAction(Costants.ACTION_DELETE_WEAR);
+            delete_i_wear.putExtra(Costants.EXTRA_REMINDER, r);
+            PendingIntent pi_delete_wear = PendingIntent.getActivity(context, r.getId(), delete_i_wear, PendingIntent.FLAG_UPDATE_CURRENT);
             wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_delete, context.getString(R.string.action_delete), pi_delete_wear).build());
         }
 
@@ -141,8 +151,11 @@ public class NotificationF {
         snooze_i.putExtra(Costants.EXTRA_REMINDER, r);
         PendingIntent pi_snooze = PendingIntent.getActivity(context, r.getId(), snooze_i, PendingIntent.FLAG_UPDATE_CURRENT);
         n.addAction(R.drawable.ic_action_time_small, context.getString(R.string.action_snooze), pi_snooze);
-        snooze_i.putExtra(Costants.FROM_WEAR, true);
-        PendingIntent pi_snooze_wear = PendingIntent.getActivity(context, r.getId(), snooze_i, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent snooze_i_wear = new Intent(context, MyDialog.class);
+        snooze_i_wear.setAction(Costants.ACTION_SNOOZE_WEAR);
+        snooze_i_wear.putExtra(Costants.EXTRA_REMINDER, r);
+        PendingIntent pi_snooze_wear = PendingIntent.getActivity(context, r.getId(), snooze_i_wear, PendingIntent.FLAG_UPDATE_CURRENT);
         wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_time_small, context.getString(R.string.action_snooze), pi_snooze_wear).build());
 
 
@@ -164,6 +177,10 @@ public class NotificationF {
         n.extend(wearableExtender);
 
         notificationManager.notify(r.getId(), n.build());
+
+        // Aggiorno il promemoria con il fatto di aver fatto suonare l'allarme
+        r.setDate_reminded(Calendar.getInstance().getTimeInMillis());
+        ReminderService.startAction(context, Costants.ACTION_UPDATE_DATE, r);
     }
 
     // NOTIFICATION FIXED
@@ -184,7 +201,7 @@ public class NotificationF {
                 .setContentTitle(r.getTitle())
                 .setContentIntent(pi)
                 .setPriority(-1)
-                .setColor(context.getResources().getColor(R.color.primary))
+                .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(Notification.PRIORITY_MIN)
                 .setAutoCancel(false);
 
@@ -225,7 +242,7 @@ public class NotificationF {
             try {
                 n.setStyle(new android.support.v4.app.NotificationCompat.BigPictureStyle().bigPicture(MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(r.getImg()))));
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
 
@@ -257,7 +274,7 @@ public class NotificationF {
         }
 
         String url = Utils.checkURL(r.getTitle());
-        if (url != "") {
+        if (!url.equals("")) {
             Intent url_intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             PendingIntent url_pi = PendingIntent.getActivity(context, r.getId(), url_intent, 0);
             n.addAction(R.drawable.ic_action_open_in_browser, context.getString(R.string.open_in_browser), url_pi);
@@ -298,11 +315,6 @@ public class NotificationF {
                     .setPriority(-1)
                     .setPriority(Notification.PRIORITY_MIN)
                     .setAutoCancel(false);
-
-            /*
-            n.setContentTitle(context.getString(R.string.title_activity_add_item))
-                .setContentText(item_to_do)
-            */
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.add_notification_layout);

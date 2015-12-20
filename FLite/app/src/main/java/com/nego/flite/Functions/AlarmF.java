@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.nego.flite.Costants;
 import com.nego.flite.Receiver.AlarmReceiver;
+import com.nego.flite.Utils;
 
 import java.util.Calendar;
 
@@ -26,13 +27,35 @@ public class AlarmF {
             intent.putExtra(Costants.EXTRA_REMINDER_ID, "" + id);
             PendingIntent alarmIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+            Calendar now = Calendar.getInstance();
+            Calendar timeToSet = Calendar.getInstance();
+            timeToSet.setTimeInMillis(time);
 
             switch (repeat) {
                 case Costants.ALARM_REPEAT_DAY:
-                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, alarmIntent);
+                    if (Utils.isOldDate(time)) {
+                        now.set(Calendar.HOUR_OF_DAY, timeToSet.get(Calendar.HOUR_OF_DAY));
+                        now.set(Calendar.MINUTE, timeToSet.get(Calendar.MINUTE));
+                        now.set(Calendar.MILLISECOND, 0);
+                        if (Utils.isOldDate(now.getTimeInMillis()))
+                            now.add(Calendar.DAY_OF_WEEK, 1);
+                        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, now.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
+                    } else {
+                        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, alarmIntent);
+                    }
                     break;
                 case Costants.ALARM_REPEAT_WEEK:
-                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY * 7, alarmIntent);
+                    if (Utils.isOldDate(time)) {
+                        now.set(Calendar.DAY_OF_WEEK, timeToSet.get(Calendar.DAY_OF_WEEK));
+                        now.set(Calendar.HOUR_OF_DAY, timeToSet.get(Calendar.HOUR_OF_DAY));
+                        now.set(Calendar.MINUTE, timeToSet.get(Calendar.MINUTE));
+                        now.set(Calendar.MILLISECOND, 0);
+                        if (Utils.isOldDate(now.getTimeInMillis()))
+                            now.add(Calendar.MONTH, 1);
+                        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, now.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
+                    } else {
+                        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY * 7, alarmIntent);
+                    }
                     break;
                 case Costants.ALARM_REPEAT_MONTH:
                     Calendar c = Calendar.getInstance();
@@ -40,14 +63,8 @@ public class AlarmF {
 
                     while (time < today) {
                         c.setTimeInMillis(time);
-                        if (c.get(Calendar.MONTH) == 11) {
-                            c.set(Calendar.MONTH, 0);
-                            c.set(Calendar.YEAR, c.get(Calendar.YEAR) + 1);
-                            time = c.getTimeInMillis();
-                        } else {
-                            c.set(Calendar.YEAR, c.get(Calendar.YEAR) + 1);
-                            time = c.getTimeInMillis();
-                        }
+                        c.add(Calendar.MONTH, 1);
+                        time = c.getTimeInMillis();
                     }
 
                     if (Build.VERSION.SDK_INT >= 19)
@@ -61,7 +78,7 @@ public class AlarmF {
 
                     while (time < today1) {
                         c1.setTimeInMillis(time);
-                        c1.set(Calendar.YEAR, c1.get(Calendar.YEAR) + 1);
+                        c1.add(Calendar.YEAR, 1);
                         time = c1.getTimeInMillis();
                     }
 

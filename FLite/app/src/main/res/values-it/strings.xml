@@ -166,4 +166,5 @@
     <string name="title_delete_button_preferences">Elimina quando Rimuovi</string>
     <string name="preferences_addnote_first">Notifica Aggiungi Nota</string>
     <string name="preferences_alarm_first">Promemoria e Allarmi</string>
+    <string name="text_reminded_date">Nota ricordata il</string>
 </resources>

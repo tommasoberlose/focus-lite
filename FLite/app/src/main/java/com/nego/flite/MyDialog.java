@@ -73,6 +73,7 @@ public class MyDialog extends AppCompatActivity {
     public String action_info = "";
     public long alarm = 0;
     public String alarm_repeat = "";
+    public int priority = 0;
 
     public EditText title;
     public EditText content;
@@ -85,6 +86,7 @@ public class MyDialog extends AppCompatActivity {
     private CardView contact_card;
     private ImageView action_list;
     private RecyclerView content_list;
+    private ImageView action_priority;
 
     private MyAdapter mAdapter;
 
@@ -103,9 +105,9 @@ public class MyDialog extends AppCompatActivity {
                     i.setDataAndType(Uri.parse(intent.getStringExtra(Costants.EXTRA_ACTION_TYPE)), "image/*");
                 startActivity(i);
                 finish();
-            } else if (intent.getAction().equals(Costants.ACTION_DELETE)) {
+            } else if (intent.getAction().equals(Costants.ACTION_DELETE) || intent.getAction().equals(Costants.ACTION_DELETE_WEAR)) {
                 from_notifications = true;
-                if (intent.getBooleanExtra(Costants.FROM_WEAR, false)) {
+                if (intent.getAction().equals(Costants.ACTION_DELETE_WEAR)) {
                     Reminder r_delete = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
                     ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r_delete);
                     NotificationF.CancelNotification(MyDialog.this, "" + r_delete.getId());
@@ -128,10 +130,11 @@ public class MyDialog extends AppCompatActivity {
                             })
                             .show();
                 }
-            } else if (intent.getAction().equals(Costants.ACTION_SNOOZE)) {
+            } else if (intent.getAction().equals(Costants.ACTION_SNOOZE) || intent.getAction().equals(Costants.ACTION_SNOOZE_WEAR)) {
                 from_notifications = true;
                 r_snooze = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
-                if (intent.getBooleanExtra(Costants.FROM_WEAR, false)) {
+                if (intent.getAction().equals(Costants.ACTION_SNOOZE_WEAR)) {
+                    Log.i("FROM_WEAR_NEGO", "true?");
                     AlarmF.addAlarm(MyDialog.this, r_snooze.getId(), r_snooze.getAlarm() + 10 * 60 * 1000, r_snooze.getAlarm_repeat());
                     NotificationF.CancelNotification(MyDialog.this, "" + r_snooze.getId());
                     finish();
@@ -180,6 +183,7 @@ public class MyDialog extends AppCompatActivity {
                 contact_card = (CardView) findViewById(R.id.card_contact);
                 action_list = (ImageView) findViewById(R.id.action_list);
                 content_list = (RecyclerView) findViewById(R.id.content_list);
+                action_priority = (ImageView) findViewById(R.id.action_priority);
 
                 content_list.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -197,8 +201,9 @@ public class MyDialog extends AppCompatActivity {
                     setContent(r.getContent());
                     img = r.getImg();
                     checkImg();
+                    setPriority(r.getPriority());
 
-                    save_button.setTextColor(getResources().getColor(android.R.color.white));
+                    save_button.setTextColor(ContextCompat.getColor(this, android.R.color.white));
 
                     edit = true;
 
@@ -216,7 +221,7 @@ public class MyDialog extends AppCompatActivity {
                         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
                         if (sharedText != null) {
                             title.setText(sharedText);
-                            save_button.setTextColor(getResources().getColor(android.R.color.white));
+                            save_button.setTextColor(ContextCompat.getColor(this, android.R.color.white));
                         }
                     } else if (intent.getType().startsWith("image/")) {
                         final Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
@@ -231,10 +236,13 @@ public class MyDialog extends AppCompatActivity {
                     title.setText(savedInstanceState.getString(Costants.KEY_DIALOG_TITLE));
                     setContent(savedInstanceState.getString(Costants.KEY_DIALOG_CONTENT));
                     img = savedInstanceState.getString(Costants.KEY_DIALOG_IMG);
+                    checkImg();
                     pasw = savedInstanceState.getString(Costants.KEY_DIALOG_PASW);
+                    controlPasw();
                     action = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION);
                     action_info = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION_INFO);
                     setContact();
+                    setPriority(savedInstanceState.getInt(Costants.KEY_DIALOG_PRIORITY));
 
                     setAlarm(Long.parseLong(savedInstanceState.getString(Costants.KEY_DIALOG_ALARM)), savedInstanceState.getString(Costants.KEY_DIALOG_ALARM_REPEAT));
 
@@ -304,6 +312,8 @@ public class MyDialog extends AppCompatActivity {
                     }
                 });
 
+                setPriority(priority);
+
                 action_list.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -325,14 +335,13 @@ public class MyDialog extends AppCompatActivity {
         } else if (requestCode == Costants.CODE_REQUEST_CONTACT && resultCode == Activity.RESULT_OK) {
             Uri contactData = data.getData();
 
-            String name = "";
-            String id = "";
+            String name;
 
             // Get the name
             Cursor cursor = getContentResolver().query(contactData,
                     new String[]{ContactsContract.Contacts.DISPLAY_NAME},
                     null, null, null);
-            if (cursor.moveToFirst()) {
+            if (cursor != null && cursor.moveToFirst()) {
                 name = cursor.getString(cursor.getColumnIndex(
                         ContactsContract.Contacts.DISPLAY_NAME));
 
@@ -344,8 +353,8 @@ public class MyDialog extends AppCompatActivity {
                 } else {
                     Toast.makeText(this, R.string.error_contact_not_found, Toast.LENGTH_SHORT).show();
                 }
+                cursor.close();
             }
-            cursor.close();
         } else if (requestCode == Costants.CODE_REQUEST_PASW) {
             if (resultCode == RESULT_OK)
                 findViewById(R.id.back_to_dismiss).setVisibility(View.VISIBLE);
@@ -387,6 +396,7 @@ public class MyDialog extends AppCompatActivity {
             outState.putString(Costants.KEY_DIALOG_ACTION_INFO, action_info);
             outState.putString(Costants.KEY_DIALOG_ALARM, "" + alarm);
             outState.putString(Costants.KEY_DIALOG_ALARM_REPEAT, alarm_repeat);
+            outState.putInt(Costants.KEY_DIALOG_PRIORITY, priority);
         }
     }
 
@@ -410,7 +420,7 @@ public class MyDialog extends AppCompatActivity {
         if (!edit) {
             Calendar c = Calendar.getInstance();
             long dateC = c.getTimeInMillis();
-            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, 0, alarm, alarm_repeat);
+            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, 0, 0, alarm, alarm_repeat, priority);
         } else {
             r.setTitle(titleN);
             r.setContent(contentT);
@@ -421,6 +431,7 @@ public class MyDialog extends AppCompatActivity {
             r.setLast_changed(Calendar.getInstance().getTimeInMillis());
             r.setAlarm(alarm);
             r.setAlarm_repeat(alarm_repeat);
+            r.setPriority(priority);
         }
     }
 
@@ -576,7 +587,7 @@ public class MyDialog extends AppCompatActivity {
         final View paswView = LayoutInflater.from(this).inflate(R.layout.pin_dialog, null);
         final EditText pasw_text = (EditText) paswView.findViewById(R.id.pasw);
         pasw_text.setText(pasw);
-        new android.support.v7.app.AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog)
+        new android.support.v7.app.AlertDialog.Builder(this, R.style.mDialog)
                 .setView(paswView)
                 .setPositiveButton(R.string.action_lock, new DialogInterface.OnClickListener() {
                     @Override
@@ -692,8 +703,9 @@ public class MyDialog extends AppCompatActivity {
     public void showInfo() {
         final View infoView = LayoutInflater.from(this).inflate(R.layout.info_dialog, null);
         ((TextView) infoView.findViewById(R.id.creation_date)).setText(Utils.getDay(this, r.getDate_create()));
+        ((TextView) infoView.findViewById(R.id.reminded_date)).setText(Utils.getDay(this, r.getDate_reminded()));
         ((TextView) infoView.findViewById(R.id.last_changed)).setText(Utils.getDay(this, r.getLast_changed()));
-        new android.support.v7.app.AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog)
+        new android.support.v7.app.AlertDialog.Builder(this, R.style.mDialog)
                 .setView(infoView)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -924,6 +936,27 @@ public class MyDialog extends AppCompatActivity {
                     setContact();
                 }
                 break;
+        }
+    }
+
+    public void setPriority(int p) {
+        priority = p;
+        if (p == 1) {
+            action_priority.setImageResource(R.drawable.ic_action_toggle_star);
+            action_priority.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setPriority(0);
+                }
+            });
+        } else {
+            action_priority.setImageResource(R.drawable.ic_action_toggle_star_outline);
+            action_priority.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setPriority(1);
+                }
+            });
         }
     }
 }

@@ -126,7 +126,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (mDataset.size() > position)
+                    if (mDataset.size() > position && !mDataset.get(position)[0].equals(""))
                         mDataset.get(position)[1] = s.toString().replace(Costants.LIST_COSTANT, "").replace(Costants.LIST_ORDER_SEPARATOR, "").replace(Costants.LIST_ITEM_SEPARATOR, "").trim();
                 }
             });
@@ -145,7 +145,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     return false;
                 }
             });
-            if (newFromEnter) {
+            if (newFromEnter || (mDataset.size() == 2 && mDataset.get(position)[1].equals(""))) {
                 newFromEnter = false;
                 holder.text.requestFocus();
             }
@@ -159,6 +159,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 }
             });
             // TODO img drag
+            holder.text.setHint("");
             holder.action_remove.setVisibility(View.VISIBLE);
             holder.img.setVisibility(View.VISIBLE);
             holder.checkBox.setVisibility(View.VISIBLE);
@@ -169,6 +170,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             holder.checkBox.setVisibility(View.GONE);
             holder.add_icon.setVisibility(View.VISIBLE);
             holder.text.setHint(mContext.getString(R.string.action_add_item));
+            holder.text.setText("");
             holder.text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

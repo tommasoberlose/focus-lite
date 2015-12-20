@@ -21,7 +21,8 @@ public class ReminderService extends IntentService {
     }
 
     private void sendResponse(String s, Reminder r) {
-        Utils.notification_update(this, s, r);
+        if (!s.equals(Costants.ACTION_UPDATE_DATE))
+            Utils.notification_update(this, s, r);
     }
 
     public ReminderService() {
@@ -38,6 +39,9 @@ public class ReminderService extends IntentService {
             } else if (Costants.ACTION_UPDATE.equals(action)) {
                 final Reminder r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
                 updateReminder(r);
+            } else if (Costants.ACTION_UPDATE_DATE.equals(action)) {
+                final Reminder r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
+                updateReminderDate(r);
             } else if (Costants.ACTION_DELETE.equals(action)) {
                 final Reminder r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
                 deleteReminder(r);
@@ -59,6 +63,15 @@ public class ReminderService extends IntentService {
         dbHelper.open();
         if (r.update_reminder(this, dbHelper)) {
             sendResponse(Costants.ACTION_UPDATE, r);
+        }
+        dbHelper.close();
+    }
+
+    private void updateReminderDate(Reminder r) {
+        DbAdapter dbHelper = new DbAdapter(this);
+        dbHelper.open();
+        if (r.update_reminder_date(this, dbHelper)) {
+            sendResponse(Costants.ACTION_UPDATE_DATE, r);
         }
         dbHelper.close();
     }

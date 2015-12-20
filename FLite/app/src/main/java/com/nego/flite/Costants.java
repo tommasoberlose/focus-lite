@@ -4,7 +4,9 @@ public class Costants {
 
     public static final String ACTION_CREATE = "android.intent.action.ACTION_CREATE";
     public static final String ACTION_UPDATE = "android.intent.action.ACTION_UPDATE";
+    public static final String ACTION_UPDATE_DATE = "android.intent.action.ACTION_UPDATE_DATE";
     public static final String ACTION_DELETE = "android.intent.action.ACTION_DELETE";
+    public static final String ACTION_DELETE_WEAR = "android.intent.action.ACTION_DELETE_WEAR";
 
     public static final String EXTRA_ACTION_TYPE = "android.intent.extra.ACTION_TYPE";
     public static final String EXTRA_REMINDER = "android.intent.extra.REMINDER";
@@ -36,6 +38,7 @@ public class Costants {
     public static final String KEY_DIALOG_ACTION_INFO = "KEY_DIALOG_ACTION_INFO";
     public static final String KEY_DIALOG_ALARM = "KEY_DIALOG_ALARM";
     public static final String KEY_DIALOG_ALARM_REPEAT = "KEY_DIALOG_ALARM_REPEAT";
+    public static final String KEY_DIALOG_PRIORITY = "KEY_DIALOG_PRIORITY";
 
     public static final String ACTION_HIDE_ALL = "android.intent.action.ACTION_HIDE_ALL";
     public static final String ACTION_VIEW_ALL = "android.intent.action.ACTION_VIEW_ALL";
@@ -68,13 +71,14 @@ public class Costants {
 
     public static final String ALARM_ACTION = "android.intent.action.ALARM";
     public static final String ACTION_SNOOZE = "com.nego.flite.intent.action.ACTION_SNOOZE";
+    public static final String ACTION_SNOOZE_WEAR = "com.nego.flite.intent.action.ACTION_SNOOZE_WEAR";
 
     public static final String ALARM_REPEAT_DAY = "ALARM_REPEAT_DAY";
     public static final String ALARM_REPEAT_WEEK = "ALARM_REPEAT_WEEK";
     public static final String ALARM_REPEAT_MONTH = "ALARM_REPEAT_MONTH";
     public static final String ALARM_REPEAT_YEAR = "ALARM_REPEAT_YEAR";
 
-    public static final String FROM_WEAR = "FROM_WEAR";
+
     public static final String LIST_COSTANT = "LIST@@@";
     public static final String LIST_ORDER_SEPARATOR = "ORDER@@@";
     public static final String LIST_ITEM_SEPARATOR = "ITEM@@@";
