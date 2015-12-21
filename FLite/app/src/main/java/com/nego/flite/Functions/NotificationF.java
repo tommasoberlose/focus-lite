@@ -13,6 +13,7 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.nego.flite.Costants;
@@ -76,18 +77,18 @@ public class NotificationF {
         }
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-        if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
+        if (r.getAlarm_repeat().equals("") && SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
             n.setDeleteIntent(pi_delete);
         }
 
         if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_SOUND, true)) {
-            n.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+            n.setSound(Uri.parse(SP.getString(Costants.PREFERENCES_NOTIFICATION_RINGTONE, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString())));
         }
         if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_LED, true)) {
             n.setLights(ContextCompat.getColor(context, R.color.primary_dark), 3000, 3000);
         }
         if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_VIBRATE, true)) {
-            n.setVibrate(new long[]{0, 400, 400, 400});
+            n.setVibrate(new long[]{0, 300, 200, 300});
         }
 
         if (!r.getImg().equals("")) {
@@ -121,7 +122,11 @@ public class NotificationF {
             }
         }
 
-        String url = Utils.checkURL(r.getTitle());
+        String url_title = Utils.checkURL(r.getTitle());
+        String url_content = Utils.checkURL(Utils.getBigContentList(context, r.getContent()));
+        String url = url_title;
+        if (url.equals(""))
+            url = url_content;
         if (!url.equals("")) {
             Intent url_intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             PendingIntent url_pi = PendingIntent.getActivity(context, r.getId(), url_intent, 0);
@@ -157,22 +162,6 @@ public class NotificationF {
         snooze_i_wear.putExtra(Costants.EXTRA_REMINDER, r);
         PendingIntent pi_snooze_wear = PendingIntent.getActivity(context, r.getId(), snooze_i_wear, PendingIntent.FLAG_UPDATE_CURRENT);
         wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_time_small, context.getString(R.string.action_snooze), pi_snooze_wear).build());
-
-
-        if (r.getTitle().length() >= 40) {
-            // Create a big text style for the second page
-            NotificationCompat.BigTextStyle secondPageStyle = new NotificationCompat.BigTextStyle();
-            secondPageStyle.setBigContentTitle(context.getString(R.string.text_big_notification))
-                    .bigText(r.getTitle());
-
-            // Create second page notification
-            Notification secondPageNotification =
-                    new NotificationCompat.Builder(context)
-                            .setStyle(secondPageStyle)
-                            .build();
-
-            wearableExtender.addPage(secondPageNotification);
-        }
 
         n.extend(wearableExtender);
 
@@ -273,7 +262,11 @@ public class NotificationF {
             }
         }
 
-        String url = Utils.checkURL(r.getTitle());
+        String url_title = Utils.checkURL(r.getTitle());
+        String url_content = Utils.checkURL(Utils.getBigContentList(context, r.getContent()));
+        String url = url_title;
+        if (url.equals(""))
+            url = url_content;
         if (!url.equals("")) {
             Intent url_intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             PendingIntent url_pi = PendingIntent.getActivity(context, r.getId(), url_intent, 0);

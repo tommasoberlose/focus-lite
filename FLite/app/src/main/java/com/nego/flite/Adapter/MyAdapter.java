@@ -37,6 +37,7 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private List<String[]> mDataset = new ArrayList<>();
     private Context mContext;
+    private SharedPreferences SP;
 
     private boolean newFromEnter = false;
 
@@ -67,6 +68,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public MyAdapter(Context mContext, String list) {
         this.mContext = mContext;
+        SP = mContext.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         generate_list(list);
     }
 
@@ -94,14 +96,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         if (!mDataset.get(position)[0].equals("")) {
 
+            if (SP.getString(Costants.PREFERENCE_STYLE_POPUP, Costants.PREFERENCE_STYLE_POPUP_DEFAULT).equals(Costants.PREFERENCE_STYLE_POPUP_ML))
+                holder.text.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
+            else
+                holder.text.setTextColor(ContextCompat.getColor(mContext, android.R.color.white));
+
             holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     mDataset.get(position)[0] = isChecked ? "1" : "0";
                     if (mDataset.get(position)[0].equals("1"))
-                        holder.text.setTextColor(ContextCompat.getColor(mContext, R.color.primary_dark));
+                        holder.text.setAlpha(0.5f);
                     else
-                        holder.text.setTextColor(ContextCompat.getColor(mContext, android.R.color.white));
+                        holder.text.setAlpha(1f);
                     ((MyDialog) mContext).updateHeight();
                 }
             });
@@ -109,9 +116,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             holder.checkBox.setChecked(mDataset.get(position)[0].equals("1"));
             holder.text.setText(mDataset.get(position)[1]);
             if (mDataset.get(position)[0].equals("1"))
-                holder.text.setTextColor(ContextCompat.getColor(mContext, R.color.primary_dark));
+                holder.text.setAlpha(0.5f);
             else
-                holder.text.setTextColor(ContextCompat.getColor(mContext, android.R.color.white));
+                holder.text.setAlpha(1f);
 
             holder.text.addTextChangedListener(new TextWatcher() {
                 @Override

@@ -27,6 +27,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/section_notification_settings"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -144,6 +145,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/section_alarm_settings"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -208,7 +210,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/secondary_text"
                         android:id="@+id/custom_sound_subtitle"
-                        android:text="@string/style_deafult"
+                        android:text="@string/subtitle_custom_sound"
                         android:layout_below="@+id/custom_sound_title"/>
                 </RelativeLayout>
 
@@ -218,6 +220,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/section_style_settings"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -290,6 +293,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/section_application_settings"
                 android:orientation="vertical">
 
                 <RelativeLayout

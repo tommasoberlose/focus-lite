@@ -3,6 +3,7 @@ package com.nego.flite.Functions;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.nego.flite.Costants;

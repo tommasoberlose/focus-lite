@@ -87,6 +87,7 @@ public class MyDialog extends AppCompatActivity {
     private ImageView action_list;
     private RecyclerView content_list;
     private ImageView action_priority;
+    private CardView url_card;
 
     private MyAdapter mAdapter;
 
@@ -134,7 +135,6 @@ public class MyDialog extends AppCompatActivity {
                 from_notifications = true;
                 r_snooze = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
                 if (intent.getAction().equals(Costants.ACTION_SNOOZE_WEAR)) {
-                    Log.i("FROM_WEAR_NEGO", "true?");
                     AlarmF.addAlarm(MyDialog.this, r_snooze.getId(), r_snooze.getAlarm() + 10 * 60 * 1000, r_snooze.getAlarm_repeat());
                     NotificationF.CancelNotification(MyDialog.this, "" + r_snooze.getId());
                     finish();
@@ -184,6 +184,10 @@ public class MyDialog extends AppCompatActivity {
                 action_list = (ImageView) findViewById(R.id.action_list);
                 content_list = (RecyclerView) findViewById(R.id.content_list);
                 action_priority = (ImageView) findViewById(R.id.action_priority);
+                url_card = (CardView) findViewById(R.id.card_browser);
+
+                // TODO fix list
+                action_list.setVisibility(View.GONE);
 
                 content_list.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -203,7 +207,7 @@ public class MyDialog extends AppCompatActivity {
                     checkImg();
                     setPriority(r.getPriority());
 
-                    save_button.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+                    save_button.setAlpha(1f);
 
                     edit = true;
 
@@ -221,13 +225,21 @@ public class MyDialog extends AppCompatActivity {
                         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
                         if (sharedText != null) {
                             title.setText(sharedText);
-                            save_button.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+                            save_button.setAlpha(1f);
                         }
                     } else if (intent.getType().startsWith("image/")) {
                         final Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
                         if (imageUri != null) {
                             img = imageUri.toString();
                             checkImg();
+                        }
+                    }
+                } else if (intent.getAction() != null && intent.getAction().equals("com.google.android.gm.action.AUTO_SEND")) {
+                    if ("text/plain".equals(intent.getType())) {
+                        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+                        if (sharedText != null) {
+                            title.setText(sharedText);
+                            saveAll();
                         }
                     }
                 }
@@ -270,10 +282,31 @@ public class MyDialog extends AppCompatActivity {
 
                         SharedPreferences SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
                         if (s.length() > 0) {
-                            save_button.setTextColor(ContextCompat.getColor(MyDialog.this, android.R.color.white));
+                            save_button.setAlpha(1f);
                         } else {
-                            save_button.setTextColor(ContextCompat.getColor(MyDialog.this, R.color.white_back));
+                            save_button.setAlpha(0.5f);
                         }
+                        updateUrl();
+                        /* TODO rendere dinamico l'inserimento di un contatto
+                        String action_to_do = Utils.checkAction(MyDialog.this, s.toString());
+                        if (!action_to_do.equals("")) {
+                            action = action_to_do;
+                        }*/
+                    }
+                });
+
+                content.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        updateUrl();
                         /* TODO rendere dinamico l'inserimento di un contatto
                         String action_to_do = Utils.checkAction(MyDialog.this, s.toString());
                         if (!action_to_do.equals("")) {
@@ -313,6 +346,8 @@ public class MyDialog extends AppCompatActivity {
                 });
 
                 setPriority(priority);
+                updateUrl();
+                updateUrl();
 
                 action_list.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -722,6 +757,7 @@ public class MyDialog extends AppCompatActivity {
             findViewById(R.id.contact_img).setVisibility(View.GONE);
             contact_card.setVisibility(View.GONE);
         } else {
+            findViewById(R.id.contact_img).setVisibility(View.GONE);
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                 switch (action) {
@@ -957,6 +993,30 @@ public class MyDialog extends AppCompatActivity {
                     setPriority(1);
                 }
             });
+        }
+    }
+
+    public void updateUrl() {
+        String url_from_title = Utils.checkURL(title.getText().toString());
+        String url_from_content = Utils.checkURL(Utils.getBigContentList(this, getContent()));
+
+        String toGo = url_from_title;
+        if (toGo.equals(""))
+            toGo = url_from_content;
+
+        final String url_toGo = toGo;
+        if (!url_toGo.equals("")) {
+            url_card.setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.title_url_to_open)).setText(url_toGo);
+            url_card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent url_intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url_toGo));
+                    startActivity(url_intent);
+                }
+            });
+        } else {
+            url_card.setVisibility(View.GONE);
         }
     }
 }

@@ -108,7 +108,7 @@
     <string name="error_password">Errore: password sbagliata</string>
     <string name="action_settings">Impostazioni</string>
     <string name="title_activity_password_check">Inserisci Password</string>
-    <string name="title_app_settings">Impostazioni App</string>
+    <string name="title_app_settings">Impostazioni Applicazione</string>
     <string name="title_view_intro">Introduzione Applicazione</string>
     <string name="subtitle_view_intro">Guarda nuovamente l\'introduzione all\'applicazione</string>
     <string name="warning_pasw">Attenzione: inserendo una password verranno bloccate TUTTE le note e in caso tu non te la ricordassi sarà necessario attuare un reset</string>
@@ -167,4 +167,5 @@
     <string name="preferences_addnote_first">Notifica Aggiungi Nota</string>
     <string name="preferences_alarm_first">Promemoria e Allarmi</string>
     <string name="text_reminded_date">Nota ricordata il</string>
+    <string name="subtitle_custom_sound">Scegli un suono personalizzato per le notifiche</string>
 </resources>

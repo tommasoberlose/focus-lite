@@ -5,7 +5,7 @@
             <corners
                 android:radius="24dp" />
             <solid
-                android:color="@color/primary_dark"/>
+                android:color="@color/black_200"/>
         </shape>
     </item>
 </selector>

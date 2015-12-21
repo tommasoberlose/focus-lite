@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,61 @@ public class Main extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
+
+        findViewById(R.id.section_notification_settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Main.this, Settings.class);
+                i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_NOTIFICATION_SETTINGS);
+                startActivity(i);
+            }
+        });
+
+        findViewById(R.id.section_alarm_settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Main.this, Settings.class);
+                i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_ALARM_SETTINGS);
+                startActivity(i);
+            }
+        });
+
+        findViewById(R.id.section_style_settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Main.this, Settings.class);
+                i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_STYLE_SETTINGS);
+                startActivity(i);
+            }
+        });
+
+        findViewById(R.id.section_application_settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Main.this, Settings.class);
+                i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_APPLICATION_SETTINGS);
+                startActivity(i);
+            }
+        });
+
+        findViewById(R.id.action_feedback).setVisibility(View.GONE);
+        /* TODO HELP
+
+        findViewById(R.id.action_feedback).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        */
+
+        findViewById(R.id.action_about).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Main.this, About.class));
+            }
+        });
 
         findViewById(R.id.action_new).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,14 +101,6 @@ public class Main extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(Main.this, Settings.class));
-        }
-
-        if (id == R.id.action_about) {
-            startActivity(new Intent(Main.this, About.class));
-        }
 
         return super.onOptionsItemSelected(item);
     }

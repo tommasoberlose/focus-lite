@@ -111,56 +111,12 @@ public class WidgetViewsFactory implements
             i.setAction(Costants.ACTION_EDIT_ITEM);
             rv.setOnClickFillInIntent(R.id.row, i);
 
-            if (!mWidgetItems.get(position).getImg().equals("")) {
-                rv.setViewVisibility(R.id.action_open_img, View.VISIBLE);
-                Intent img_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, mWidgetItems.get(position).getImg());
-                img_intent.putExtra(Costants.EXTRA_IS_PHOTO, true);
-                rv.setOnClickFillInIntent(R.id.action_open_img, img_intent);
+            if (mWidgetItems.get(position).getPriority() == 1) {
+                rv.setViewVisibility(R.id.action_priority, View.VISIBLE);
             } else {
-                rv.setViewVisibility(R.id.action_open_img, View.GONE);
+                rv.setViewVisibility(R.id.action_priority, View.GONE);
             }
-
-            String url = Utils.checkURL(mWidgetItems.get(position).getTitle());
-            if (url != "") {
-                rv.setViewVisibility(R.id.action_open_browser, View.VISIBLE);
-                Intent url_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, url);
-                rv.setOnClickFillInIntent(R.id.action_open_browser, url_intent);
-            } else {
-                rv.setViewVisibility(R.id.action_open_browser, View.GONE);
-            }
-
-            if (!mWidgetItems.get(position).getAction_type().equals("")) {
-                switch (mWidgetItems.get(position).getAction_type()) {
-                    case Costants.ACTION_CALL:
-                        Intent call_intent = new Intent(Intent.ACTION_DIAL).putExtra(Costants.EXTRA_ACTION_TYPE, "tel:" + mWidgetItems.get(position).getAction_info());
-                        rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
-                        rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_call);
-                        rv.setOnClickFillInIntent(R.id.action_contact, call_intent);
-                        break;
-                    case Costants.ACTION_SMS:
-                        Intent sms_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "sms:" + mWidgetItems.get(position).getAction_info());
-                        rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
-                        rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_messenger);
-                        rv.setOnClickFillInIntent(R.id.action_contact, sms_intent);
-                        break;
-                    case Costants.ACTION_MAIL:
-                        Intent mail_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "mailto:" + mWidgetItems.get(position).getAction_info());
-                        rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
-                        rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_email);
-                        rv.setOnClickFillInIntent(R.id.action_contact, mail_intent);
-                        break;
-                    case Costants.ACTION_CONTACT:
-                        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(mWidgetItems.get(position).getAction_info()));
-                        Intent contact_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, uri.toString());
-                        rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
-                        rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_account_circle);
-                        rv.setOnClickFillInIntent(R.id.action_contact, contact_intent);
-                        break;
-                }
-            } else {
-                rv.setViewVisibility(R.id.action_contact, View.GONE);
-            }
-
+            
             return rv;
         } else {
             return null;

@@ -19,8 +19,7 @@ public class AlarmF {
 
 
     public static void addAlarm(Context context, int id, long time, String repeat) {
-        if (time != 0) {
-
+        if (time != 0 && !(repeat.equals("") && Utils.isOldDate(time))) {
             AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(context, AlarmReceiver.class);
             intent.setAction(Costants.ALARM_ACTION);

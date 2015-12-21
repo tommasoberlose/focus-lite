@@ -64,10 +64,8 @@ public class Utils {
                 NotificationF.Notification(context, reminder);
 
             // Future alarm
-            if (reminder.getAlarm() != 0 && !isOldAlarm(reminder)) {
+            if (reminder.getAlarm() != 0 && !isOldAlarm(reminder))
                 AlarmF.updateAlarm(context, reminder.getId(), reminder.getAlarm(), reminder.getAlarm_repeat());
-                Log.i("NEGO_ERROR", "FROM_FUTURE_ALARM");
-            }
         }
         a.close();
 

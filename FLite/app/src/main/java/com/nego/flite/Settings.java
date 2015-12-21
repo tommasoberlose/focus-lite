@@ -1,17 +1,27 @@
 package com.nego.flite;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.media.RingtoneManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class Settings extends AppCompatActivity {
 
@@ -22,9 +32,16 @@ public class Settings extends AppCompatActivity {
     private int selected_new_style;
     private int selected_new_style_widget;
     private boolean[] selected_not_pref = new boolean[3];
+    private String section = Costants.SECTION_NOTIFICATION_SETTINGS;
+    private int selected_new_ringtone;
 
     private SharedPreferences SP;
     private Toolbar toolbar;
+
+    private LinearLayout section_notification;
+    private LinearLayout section_alarm;
+    private LinearLayout section_style;
+    private LinearLayout section_application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +51,22 @@ public class Settings extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        section_notification = (LinearLayout) findViewById(R.id.section_notification_settings);
+        section_alarm = (LinearLayout) findViewById(R.id.section_alarm_settings);
+        section_style = (LinearLayout) findViewById(R.id.section_style_settings);
+        section_application = (LinearLayout) findViewById(R.id.section_application_settings);
+
+        if (getIntent() != null && getIntent().getStringExtra(Costants.SECTION_SETTINGS) != null)
+            section = getIntent().getStringExtra(Costants.SECTION_SETTINGS);
 
         if (savedInstanceState != null) {
             selected_new_style = savedInstanceState.getInt(KEY_SELECTED_NEW_STYLE);
             selected_new_style_widget = savedInstanceState.getInt(KEY_SELECTED_NEW_STYLE_WIDGET);
             selected_not_pref = savedInstanceState.getBooleanArray(KEY_SELECTED_PREF);
+            section = savedInstanceState.getString(Costants.SECTION_SETTINGS);
         }
+
+        setSection(section);
 
 
         SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
@@ -341,7 +368,55 @@ public class Settings extends AppCompatActivity {
             findViewById(R.id.action_custom_sound).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO custom sound
+                    if (ContextCompat.checkSelfPermission(Settings.this,
+                            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        int selected_ringtone = 0;
+                        final ArrayList<String> ringtone_title = new ArrayList<String>();
+                        final ArrayList<String> ringtone_url = new ArrayList<String>();
+
+                        RingtoneManager manager = new RingtoneManager(Settings.this);
+                        manager.setType(RingtoneManager.TYPE_RINGTONE);
+                        Cursor cursor = manager.getCursor();
+                        while (cursor.moveToNext()) {
+                            ringtone_title.add(cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX));
+                            ringtone_url.add(manager.getRingtoneUri(cursor.getPosition()).toString());
+                            if (manager.getRingtoneUri(cursor.getPosition()).toString().equals(SP.getString(Costants.PREFERENCES_NOTIFICATION_RINGTONE, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString())))
+                                selected_ringtone = ringtone_title.size() - 1;
+                        }
+
+                        ringtone_title.add(0, getString(R.string.style_deafult));
+                        ringtone_url.add(0, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
+
+                        String[] title_ringtone_array = new String[ringtone_title.size()];
+                        title_ringtone_array = ringtone_title.toArray(title_ringtone_array);
+
+                        new AlertDialog.Builder(Settings.this, R.style.mDialog)
+                                .setTitle(getString(R.string.title_custom_sound))
+                                .setSingleChoiceItems(title_ringtone_array, selected_ringtone, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        selected_new_ringtone = which;
+                                    }
+                                })
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        SP.edit().putString(Costants.PREFERENCES_NOTIFICATION_RINGTONE, ringtone_url.get(selected_new_ringtone)).apply();
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    } else {
+                        ActivityCompat.requestPermissions(Settings.this,
+                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                Costants.CODE_REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
+                    }
                 }
             });
         } else {
@@ -391,6 +466,51 @@ public class Settings extends AppCompatActivity {
         outState.putInt(KEY_SELECTED_NEW_STYLE, selected_new_style);
         outState.putInt(KEY_SELECTED_NEW_STYLE_WIDGET, selected_new_style_widget);
         outState.putBooleanArray(KEY_SELECTED_PREF, selected_not_pref);
+        outState.putString(Costants.SECTION_SETTINGS, section);
+    }
+
+    public void setSection(String section) {
+        switch (section) {
+            case Costants.SECTION_ALARM_SETTINGS:
+                setTitle(R.string.title_section_alarm);
+                section_notification.setVisibility(View.GONE);
+                section_alarm.setVisibility(View.VISIBLE);
+                section_style.setVisibility(View.GONE);
+                section_application.setVisibility(View.GONE);
+                break;
+            case Costants.SECTION_STYLE_SETTINGS:
+                setTitle(R.string.title_customize_settings);
+                section_notification.setVisibility(View.GONE);
+                section_alarm.setVisibility(View.GONE);
+                section_style.setVisibility(View.VISIBLE);
+                section_application.setVisibility(View.GONE);
+                break;
+            case Costants.SECTION_APPLICATION_SETTINGS:
+                setTitle(R.string.title_app_settings);
+                section_notification.setVisibility(View.GONE);
+                section_alarm.setVisibility(View.GONE);
+                section_style.setVisibility(View.GONE);
+                section_application.setVisibility(View.VISIBLE);
+                break;
+            default:
+                setTitle(R.string.title_notification_settings);
+                section_notification.setVisibility(View.VISIBLE);
+                section_alarm.setVisibility(View.GONE);
+                section_style.setVisibility(View.GONE);
+                section_application.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case Costants.CODE_REQUEST_PERMISSION_READ_EXTERNAL_STORAGE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                }
+                break;
+        }
     }
 
 }
