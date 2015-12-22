@@ -248,6 +248,7 @@
                             android:orientation="horizontal"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
+                            android:background="@color/primary_dark"
                             android:layout_centerVertical="true">
 
                             <ImageView
@@ -257,7 +258,7 @@
                                 android:tint="@android:color/black"
                                 android:alpha="0.5"
                                 android:id="@+id/action_attach"
-                                android:padding="8dp"
+                                android:padding="10dp"
                                 android:background="?attr/selectableItemBackground"
                                 android:layout_gravity="center_vertical"/>
 

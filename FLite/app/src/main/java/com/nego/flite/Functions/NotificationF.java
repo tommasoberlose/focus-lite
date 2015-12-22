@@ -194,10 +194,22 @@ public class NotificationF {
                 .setPriority(Notification.PRIORITY_MIN)
                 .setAutoCancel(false);
 
-        if (r.getAlarm() == 0) {
-            n.setSmallIcon(R.drawable.ic_notification_note);
+        // ICONS
+        if (r.getPriority() == 1) {
+            n.setSmallIcon(R.drawable.ic_stat_action_bookmark_star);
         } else {
-            n.setSmallIcon(R.drawable.ic_action_note_reminded);
+            if (!r.getAlarm_repeat().equals("")) {
+                n.setSmallIcon(R.drawable.ic_stat_action_bookmark_snoozed);
+            } else {
+                if (r.getAlarm() != 0) {
+                    if (r.getDate_reminded() != 0)
+                        n.setSmallIcon(R.drawable.ic_not_bookmark_check);
+                    else
+                        n.setSmallIcon(R.drawable.ic_stat_action_bookmark_snoozed);
+                } else {
+                    n.setSmallIcon(R.drawable.ic_not_action_bookmark);
+                }
+            }
         }
 
         if (r.getContent().equals("")) {

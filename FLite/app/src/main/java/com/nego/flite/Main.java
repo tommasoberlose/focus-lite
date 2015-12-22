@@ -2,6 +2,7 @@ package com.nego.flite;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,6 +24,7 @@ public class Main extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
+        setTitle("");
 
         findViewById(R.id.section_notification_settings).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +81,8 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.action_new).setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.action_new);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent new_note = new Intent(Main.this, MyDialog.class);

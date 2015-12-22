@@ -50,7 +50,7 @@ public class Utils {
         if (SP.getBoolean(Costants.PREFERENCES_VIEW_ALL, true)) {
 
             Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
-            while (c.moveToNext()) {
+            for (c.moveToLast(); !c.isBeforeFirst(); c.moveToPrevious()) {
                 NotificationF.NotificationFixed(context, new Reminder(c));
             }
             c.close();
