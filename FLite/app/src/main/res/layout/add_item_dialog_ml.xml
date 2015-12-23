@@ -203,7 +203,7 @@
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:textColorHint="@color/secondary_text"
                                 android:background="@android:color/white"
-                                android:hint="Title"
+                                android:hint="@string/text_title"
                                 android:focusable="true"
                                 android:textStyle="bold"
                                 android:focusableInTouchMode="true"

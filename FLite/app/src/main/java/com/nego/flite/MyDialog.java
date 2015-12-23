@@ -78,6 +78,7 @@ public class MyDialog extends AppCompatActivity {
     public long alarm = 0;
     public String alarm_repeat = "";
     public int priority = 0;
+    private String tmpImgNameFile = "";
 
     public EditText title;
     public EditText content;
@@ -234,8 +235,7 @@ public class MyDialog extends AppCompatActivity {
                     } else if (intent.getType().startsWith("image/")) {
                         final Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
                         if (imageUri != null) {
-                            img = imageUri.toString();
-                            checkImg();
+                            addImg(imageUri.toString());
                         }
                     }
                 } else if (intent.getAction() != null && intent.getAction().equals("com.google.android.gm.action.AUTO_SEND")) {
@@ -401,8 +401,9 @@ public class MyDialog extends AppCompatActivity {
             else
                 finish();
         } else if (requestCode == Costants.CODE_REQUEST_CAMERA && resultCode == RESULT_OK) {
-            if (data != null) {
-                checkImg();
+            if (data != null && !tmpImgNameFile.equals("")) {
+                addImg(tmpImgNameFile);
+                tmpImgNameFile = "";
             }
         }
     }
@@ -707,7 +708,7 @@ public class MyDialog extends AppCompatActivity {
                                     Uri.fromFile(image));
 
                             startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
-                            addImg(Uri.fromFile(new File(image.getAbsolutePath())).toString());
+                            tmpImgNameFile = Uri.fromFile(new File(image.getAbsolutePath())).toString();
                             attachDialog.dismiss();
                         } catch (Exception e) {
                             e.printStackTrace();

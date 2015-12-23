@@ -3,8 +3,12 @@ package com.nego.flite.Pages;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +31,46 @@ public class ImgFragment extends Fragment {
         final View view = inflater.inflate(R.layout.img_item, container, false);
 
 
-        ImageView selected_img = (ImageView) view.findViewById(R.id.selected_img);
+        final ImageView selected_img = (ImageView) view.findViewById(R.id.selected_img);
+
+        // TODO ridurre la dimensione dell'immagine
+        /*final Handler mHandler = new Handler();
+
+        new Thread(new Runnable() {
+            public void run() {
+
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.parse(getArguments().getString("IMG")));
+                    final Bitmap resizedImage = Bitmap.createScaledBitmap(bitmap, selected_img.getWidth(), bitmap.getHeight(), true);
+
+                    mHandler.post(new Runnable() {
+                        public void run() {
+                            selected_img.setImageBitmap(resizedImage);
+                        }
+                    });
+                } catch (Exception e) {
+                    mHandler.post(new Runnable() {
+                        public void run() {
+                            selected_img.setImageURI(Uri.parse(getArguments().getString("IMG")));
+                        }
+                    });
+                }
+            }
+        }).start();*/
+
+
         selected_img.setImageURI(Uri.parse(getArguments().getString("IMG")));
+
+
         if (selected_img.getDrawable() == null) {
             selected_img.setImageResource(R.drawable.ic_action_ic_image_broken_variant_white_48dp);
+            selected_img.setAlpha(0.2f);
+            view.findViewById(R.id.action_share_image).setVisibility(View.INVISIBLE);
+        } else {
+            selected_img.setAlpha(1f);
+            view.findViewById(R.id.action_share_image).setVisibility(View.VISIBLE);
         }
+
         selected_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

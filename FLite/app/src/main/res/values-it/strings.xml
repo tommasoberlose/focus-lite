@@ -53,7 +53,7 @@
     <string name="action_view_all">Espandi note</string>
     <string name="title_feature_hide">Nascondi le tue note</string>
     <string name="subtitle_features_hide">Quando non ne hai bisogno nascondi temporaneamente le tue note</string>
-    <string name="title_tab_developer">Sviluppo</string>
+    <string name="title_tab_developer">Informazioni</string>
     <string name="title_tab_features">Funzioni</string>
     <string name="title_tab_settings">Preferenze</string>
     <string name="title_widget_section">Impostazioni Widget</string>
@@ -168,4 +168,5 @@
     <string name="preferences_alarm_first">Promemoria e Allarmi</string>
     <string name="text_reminded_date">Nota ricordata il</string>
     <string name="subtitle_custom_sound">Scegli un suono personalizzato per le notifiche</string>
+    <string name="text_title">Titolo</string>
 </resources>
