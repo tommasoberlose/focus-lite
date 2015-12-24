@@ -104,6 +104,78 @@ public class WidgetViewsFactory implements
                 }
             }
 
+            String url = Utils.checkURL(mWidgetItems.get(position).getTitle());
+            if (url.equals(""))
+                url = Utils.checkURL(Utils.getBigContentList(mContext, mWidgetItems.get(position).getContent()));
+            if (!url.equals("")) {
+                rv.setViewVisibility(R.id.action_browser, View.VISIBLE);
+                Intent url_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, url);
+                rv.setOnClickFillInIntent(R.id.action_browser, url_intent);
+            } else {
+                rv.setViewVisibility(R.id.action_browser, View.GONE);
+            }
+
+            boolean contact;
+            if (!mWidgetItems.get(position).getAction_info().equals("")) {
+                rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
+                switch (mWidgetItems.get(position).getAction_type()) {
+                    case Costants.ACTION_CALL:
+                        Intent call_intent = new Intent(Intent.ACTION_DIAL).putExtra(Costants.EXTRA_ACTION_TYPE, "tel:" + mWidgetItems.get(position).getAction_info());
+                        rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
+                        rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_call);
+                        rv.setOnClickFillInIntent(R.id.action_contact, call_intent);
+                        break;
+                    case Costants.ACTION_SMS:
+                        Intent sms_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "sms:" + mWidgetItems.get(position).getAction_info());
+                        rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
+                        rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_messenger);
+                        rv.setOnClickFillInIntent(R.id.action_contact, sms_intent);
+                        break;
+                    case Costants.ACTION_MAIL:
+                        Intent mail_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "mailto:" + mWidgetItems.get(position).getAction_info());
+                        rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
+                        rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_email);
+                        rv.setOnClickFillInIntent(R.id.action_contact, mail_intent);
+                        break;
+                    case Costants.ACTION_CONTACT:
+                        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(mWidgetItems.get(position).getAction_info()));
+                        Intent contact_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, uri.toString());
+                        rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
+                        rv.setImageViewResource(R.id.action_contact, R.drawable.ic_person);
+                        rv.setOnClickFillInIntent(R.id.action_contact, contact_intent);
+                        break;
+                }
+                contact = true;
+            } else {
+                rv.setViewVisibility(R.id.action_contact, View.GONE);
+                contact = false;
+            }
+
+            boolean attach;
+            if (!mWidgetItems.get(position).getImg().equals("")) {
+                rv.setViewVisibility(R.id.action_attach, View.VISIBLE);
+
+                /* TODO far vedere la prima immagine o creare io un image viewver che me le faccia vedere tutte
+                String[] imgs = mWidgetItems.get(position).getImg().split(Costants.LIST_IMG_SEPARATOR);
+                if (imgs.length == 1) {
+                    Intent img_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, imgs[0]);
+                    img_intent.putExtra(Costants.EXTRA_IS_PHOTO, true);
+                    rv.setOnClickFillInIntent(R.id.action_attach, img_intent);
+                } else {
+                    rv.remove?
+                }
+                */
+                attach = true;
+            } else {
+                rv.setViewVisibility(R.id.action_attach, View.GONE);
+                attach = false;
+            }
+
+            if (!attach && !contact)
+                rv.setViewVisibility(R.id.container_options, View.GONE);
+            else
+                rv.setViewVisibility(R.id.container_options, View.VISIBLE);
+
             Intent i = new Intent();
             Bundle extras = new Bundle();
             extras.putParcelable(Costants.EXTRA_REMINDER, mWidgetItems.get(position));

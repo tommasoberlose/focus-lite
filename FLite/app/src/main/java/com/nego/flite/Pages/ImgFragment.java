@@ -33,43 +33,48 @@ public class ImgFragment extends Fragment {
 
         final ImageView selected_img = (ImageView) view.findViewById(R.id.selected_img);
 
-        // TODO ridurre la dimensione dell'immagine
-        /*final Handler mHandler = new Handler();
+        final Handler mHandler = new Handler();
 
         new Thread(new Runnable() {
             public void run() {
 
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.parse(getArguments().getString("IMG")));
-                    final Bitmap resizedImage = Bitmap.createScaledBitmap(bitmap, selected_img.getWidth(), bitmap.getHeight(), true);
+                    int new_width = bitmap.getWidth();
+                    if (new_width > selected_img.getWidth())
+                        new_width = selected_img.getWidth();
+                    final Bitmap resizedImage = Bitmap.createScaledBitmap(bitmap, new_width, bitmap.getHeight() * new_width / bitmap.getWidth(), true);
 
                     mHandler.post(new Runnable() {
                         public void run() {
                             selected_img.setImageBitmap(resizedImage);
+                            if (selected_img.getDrawable() == null) {
+                                selected_img.setImageResource(R.drawable.ic_action_ic_image_broken_variant_white_48dp);
+                                selected_img.setAlpha(0.2f);
+                                view.findViewById(R.id.action_share_image).setVisibility(View.INVISIBLE);
+                            } else {
+                                selected_img.setAlpha(1f);
+                                view.findViewById(R.id.action_share_image).setVisibility(View.VISIBLE);
+                            }
                         }
                     });
                 } catch (Exception e) {
                     mHandler.post(new Runnable() {
                         public void run() {
                             selected_img.setImageURI(Uri.parse(getArguments().getString("IMG")));
+                            if (selected_img.getDrawable() == null) {
+                                selected_img.setImageResource(R.drawable.ic_action_ic_image_broken_variant_white_48dp);
+                                selected_img.setAlpha(0.2f);
+                                view.findViewById(R.id.action_share_image).setVisibility(View.INVISIBLE);
+                            } else {
+                                selected_img.setAlpha(1f);
+                                view.findViewById(R.id.action_share_image).setVisibility(View.VISIBLE);
+                            }
                         }
                     });
                 }
             }
-        }).start();*/
-
-
-        selected_img.setImageURI(Uri.parse(getArguments().getString("IMG")));
-
-
-        if (selected_img.getDrawable() == null) {
-            selected_img.setImageResource(R.drawable.ic_action_ic_image_broken_variant_white_48dp);
-            selected_img.setAlpha(0.2f);
-            view.findViewById(R.id.action_share_image).setVisibility(View.INVISIBLE);
-        } else {
-            selected_img.setAlpha(1f);
-            view.findViewById(R.id.action_share_image).setVisibility(View.VISIBLE);
-        }
+        }).start();
 
         selected_img.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -16,20 +16,22 @@
         android:clickable="true"
         android:background="@color/background_material_dark">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/title"
             android:singleLine="true"
             android:textColor="@android:color/white"
             android:textIsSelectable="false"
             android:textAppearance="?android:attr/textAppearanceListItem"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/container_options" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/title">
+            android:layout_below="@+id/title"
+            android:layout_toStartOf="@+id/container_options">
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
@@ -47,6 +49,40 @@
                 android:textColor="@color/white_back"
                 android:textIsSelectable="false"
                 android:singleLine="true" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:background="@drawable/item_background_ml"
+            android:backgroundTint="@color/back_card"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:id="@+id/container_options"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="1dp"
+                android:id="@+id/action_contact"
+                android:tint="@color/secondary_text"
+                android:src="@drawable/ic_person"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="3dp"
+                android:id="@+id/action_attach"
+                android:tint="@color/secondary_text"
+                android:src="@drawable/ic_action_editor_attach_file"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="1dp"
+                android:id="@+id/action_browser"
+                android:tint="@color/secondary_text"
+                android:src="@drawable/ic_action_explore"/>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
