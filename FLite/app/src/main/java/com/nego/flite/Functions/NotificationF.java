@@ -60,20 +60,21 @@ public class NotificationF {
         }
         */
 
-        if (r.getContent().equals("")) {
-            if (r.getAlarm() == 0) {
-                n.setContentText(Utils.getDate(context, r.getDate_create()));
+
+        if (r.getPasw().equals("")) {
+            if (r.getContent().equals("")) {
+                if (r.getAlarm() == 0) {
+                    n.setContentText(Utils.getDate(context, r.getDate_create()));
+                } else {
+                    n.setContentText(Utils.getDateAlarm(context, r.getAlarm()));
+                }
             } else {
-                n.setContentText(Utils.getDateAlarm(context, r.getAlarm()));
-            }
-        } else {
-            if (r.getPasw().equals("")) {
                 n.setContentText(Utils.getContentList(context, r.getContent()));
                 n.setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(Utils.getBigContentList(context, r.getContent())));
-            } else {
-                n.setContentText(context.getString(R.string.text_locked_note));
             }
+        } else {
+            n.setContentText(context.getString(R.string.text_locked_note));
         }
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
@@ -212,20 +213,21 @@ public class NotificationF {
             }
         }
 
-        if (r.getContent().equals("")) {
-            if (r.getAlarm() == 0) {
-                n.setContentText(Utils.getDate(context, r.getDate_create()));
+
+        if (r.getPasw().equals("")) {
+            if (r.getContent().equals("")) {
+                if (r.getAlarm() == 0) {
+                    n.setContentText(Utils.getDate(context, r.getDate_create()));
+                } else {
+                    n.setContentText(Utils.getDateAlarm(context, r.getAlarm()));
+                }
             } else {
-                n.setContentText(Utils.getDateAlarm(context, r.getAlarm()));
-            }
-        } else {
-            if (r.getPasw().equals("")) {
                 n.setContentText(Utils.getContentList(context, r.getContent()));
                 n.setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(Utils.getBigContentList(context, r.getContent())));
-            } else {
-                n.setContentText(context.getString(R.string.text_locked_note));
             }
+        } else {
+            n.setContentText(context.getString(R.string.text_locked_note));
         }
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);

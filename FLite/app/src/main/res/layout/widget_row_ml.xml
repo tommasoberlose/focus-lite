@@ -6,10 +6,6 @@
     <RelativeLayout
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingStart="16dp"
-        android:paddingRight="16dp"
-        android:paddingEnd="16dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
         android:id="@+id/row"
@@ -24,14 +20,18 @@
             android:textIsSelectable="false"
             android:textAppearance="?android:attr/textAppearanceListItem"
             android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/container_options" />
+            android:layout_toStartOf="@+id/container_options"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/title"
-            android:layout_toStartOf="@+id/container_options">
+            android:layout_toStartOf="@+id/container_options"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
@@ -61,7 +61,8 @@
             android:gravity="center_vertical"
             android:id="@+id/container_options"
             android:paddingLeft="3dp"
-            android:paddingRight="3dp">
+            android:paddingRight="3dp"
+            android:layout_marginRight="16dp">
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -83,6 +84,13 @@
                 android:id="@+id/action_browser"
                 android:tint="@color/third_text"
                 android:src="@drawable/ic_action_explore"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="1dp"
+                android:id="@+id/action_password"
+                android:tint="@color/third_text"
+                android:src="@drawable/ic_action_lock_big"/>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
