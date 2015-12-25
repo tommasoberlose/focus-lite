@@ -43,6 +43,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -738,6 +739,15 @@ public class MyDialog extends AppCompatActivity {
         });
 
         attachDialog.setContentView(attachView);
+        /* TODO dialog as snackbar
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        Window window = attachDialog.getWindow();
+        lp.copyFrom(window.getAttributes());
+
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(lp);
+        */
         attachDialog.show();
     }
 

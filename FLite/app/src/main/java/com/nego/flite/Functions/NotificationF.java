@@ -92,11 +92,21 @@ public class NotificationF {
             n.setVibrate(new long[]{0, 300, 200, 300});
         }
 
+
         if (!r.getImg().equals("")) {
-            try {
-                n.setStyle(new android.support.v4.app.NotificationCompat.BigPictureStyle().bigPicture(MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(r.getImg()))));
-            } catch (Exception e) {
-                e.printStackTrace();
+            String[] imgs = r.getImg().split(Costants.LIST_IMG_SEPARATOR);
+            if (imgs.length == 1) {
+                try {
+                    n.setStyle(new android.support.v4.app.NotificationCompat.BigPictureStyle().bigPicture(MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(imgs[0]))));
+
+                    Intent img_intent = new Intent(Intent.ACTION_VIEW, Uri.parse(imgs[0]));
+                    img_intent.putExtra(Costants.EXTRA_IS_PHOTO, true);
+                    PendingIntent img_pi = PendingIntent.getActivity(context, r.getId(), img_intent, 0);
+                    n.addAction(R.drawable.ic_action_gallery, context.getString(R.string.action_view), img_pi);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -242,10 +252,19 @@ public class NotificationF {
         }
 
         if (!r.getImg().equals("")) {
-            try {
-                n.setStyle(new android.support.v4.app.NotificationCompat.BigPictureStyle().bigPicture(MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(r.getImg()))));
-            } catch (Exception e) {
-                e.printStackTrace();
+            String[] imgs = r.getImg().split(Costants.LIST_IMG_SEPARATOR);
+            if (imgs.length == 1) {
+                try {
+                    n.setStyle(new android.support.v4.app.NotificationCompat.BigPictureStyle().bigPicture(MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(imgs[0]))));
+
+                    Intent img_intent = new Intent(Intent.ACTION_VIEW, Uri.parse(imgs[0]));
+                    img_intent.putExtra(Costants.EXTRA_IS_PHOTO, true);
+                    PendingIntent img_pi = PendingIntent.getActivity(context, r.getId(), img_intent, 0);
+                    n.addAction(R.drawable.ic_action_gallery, context.getString(R.string.action_view), img_pi);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 

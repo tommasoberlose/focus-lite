@@ -169,4 +169,5 @@
     <string name="text_reminded_date">Note reminded on</string>
     <string name="subtitle_custom_sound">Choose custom sound for notifications</string>
     <string name="text_title">Title</string>
+    <string name="action_view">View</string>
 </resources>
