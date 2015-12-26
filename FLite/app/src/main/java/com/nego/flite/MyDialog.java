@@ -21,6 +21,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -69,6 +70,7 @@ import java.util.Date;
 public class MyDialog extends AppCompatActivity {
     private boolean from_notifications = false;
     private Reminder r_snooze;
+    private Snackbar snackbar;
 
     private Reminder r;
     private boolean edit = false;
@@ -115,7 +117,8 @@ public class MyDialog extends AppCompatActivity {
             } else if (intent.getAction().equals(Costants.ACTION_DELETE) || intent.getAction().equals(Costants.ACTION_DELETE_WEAR)) {
                 from_notifications = true;
                 if (intent.getAction().equals(Costants.ACTION_DELETE_WEAR)) {
-                    Reminder r_delete = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
+                    int id = ((Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER)).getId();
+                    Reminder r_delete = Utils.getReminder(this, id);
                     ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r_delete);
                     NotificationF.CancelNotification(MyDialog.this, "" + r_delete.getId());
                     finish();
@@ -139,7 +142,8 @@ public class MyDialog extends AppCompatActivity {
                 }
             } else if (intent.getAction().equals(Costants.ACTION_SNOOZE) || intent.getAction().equals(Costants.ACTION_SNOOZE_WEAR)) {
                 from_notifications = true;
-                r_snooze = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
+                int id = ((Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER)).getId();
+                r_snooze = Utils.getReminder(this, id);
                 if (intent.getAction().equals(Costants.ACTION_SNOOZE_WEAR)) {
                     AlarmF.addAlarm(MyDialog.this, r_snooze.getId(), r_snooze.getAlarm() + 10 * 60 * 1000, r_snooze.getAlarm_repeat());
                     NotificationF.CancelNotification(MyDialog.this, "" + r_snooze.getId());
@@ -172,6 +176,12 @@ public class MyDialog extends AppCompatActivity {
                         break;
                 }
 
+                snackbar = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
+                Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
+                layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
+                TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setVisibility(View.INVISIBLE);
+
                 findViewById(R.id.back_to_dismiss).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -202,7 +212,8 @@ public class MyDialog extends AppCompatActivity {
                 content_list.setNestedScrollingEnabled(false);
 
                 if (intent.getAction() != null && Costants.ACTION_EDIT_ITEM.equals(intent.getAction())) {
-                    r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
+                    int id = ((Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER)).getId();
+                    r = Utils.getReminder(this, id);
 
                     pasw = r.getPasw();
                     controlPasw();
@@ -411,18 +422,22 @@ public class MyDialog extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (from_notifications || (r == null && Utils.isEmpty(title) && img.equals("") && getContent().equals("")) || (r != null && r.getTitle().equals(title.getText().toString()) && r.getContent().equals(getContent()) && r.getImg().equals(img))) {
-            finish();
+        if (snackbar != null && snackbar.isShown()) {
+            snackbar.dismiss();
         } else {
-            new AlertDialog.Builder(MyDialog.this)
-                    .setTitle(getResources().getString(R.string.attention))
-                    .setMessage(getResources().getString(R.string.ask_exit) + "?")
-                    .setPositiveButton(R.string.action_exit_editor, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            finish();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, null).show();
+            if (from_notifications || (r == null && Utils.isEmpty(title) && img.equals("") && getContent().equals("")) || (r != null && r.getTitle().equals(title.getText().toString()) && r.getContent().equals(getContent()) && r.getImg().equals(img))) {
+                finish();
+            } else {
+                new AlertDialog.Builder(MyDialog.this)
+                        .setTitle(getResources().getString(R.string.attention))
+                        .setMessage(getResources().getString(R.string.ask_exit) + "?")
+                        .setPositiveButton(R.string.action_exit_editor, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+            }
         }
     }
 
@@ -657,8 +672,6 @@ public class MyDialog extends AppCompatActivity {
         LinearLayout action_gallery = (LinearLayout) attachView.findViewById(R.id.action_gallery);
         LinearLayout action_contact = (LinearLayout) attachView.findViewById(R.id.action_contact);
 
-        final Dialog attachDialog = new Dialog(this, R.style.Theme_AppCompat_Light_Dialog);
-
         action_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -674,13 +687,13 @@ public class MyDialog extends AppCompatActivity {
                                 .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int whichButton) {
                                         startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-                                        attachDialog.dismiss();
+                                        snackbar.dismiss();
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, null).show();
                     } else {
                         startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-                        attachDialog.dismiss();
+                        snackbar.dismiss();
                     }
                 } else {
                     requestPermission(Manifest.permission.READ_CONTACTS);
@@ -710,7 +723,7 @@ public class MyDialog extends AppCompatActivity {
 
                             startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
                             tmpImgNameFile = Uri.fromFile(new File(image.getAbsolutePath())).toString();
-                            attachDialog.dismiss();
+                            snackbar.dismiss();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -731,24 +744,15 @@ public class MyDialog extends AppCompatActivity {
                     final Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
 
                     startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
-                    attachDialog.dismiss();
+                    snackbar.dismiss();
                 } else {
                     requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
                 }
             }
         });
-
-        attachDialog.setContentView(attachView);
-        /* TODO dialog as snackbar
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        Window window = attachDialog.getWindow();
-        lp.copyFrom(window.getAttributes());
-
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-        window.setAttributes(lp);
-        */
-        attachDialog.show();
+        Snackbar.SnackbarLayout layout = ((Snackbar.SnackbarLayout) snackbar.getView());
+        layout.addView(attachView, 0);
+        snackbar.show();
     }
 
     public void showInfo() {

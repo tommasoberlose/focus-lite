@@ -41,9 +41,8 @@
 
         <activity
             android:name=".MyDialog"
-            android:excludeFromRecents="true"
             android:icon="@mipmap/ic_launcher"
-            android:label="@string/title_activity_add_item"
+            android:label="@string/text_notes"
             android:theme="@style/MyDialog_theme">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>

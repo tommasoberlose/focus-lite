@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nego.flite.Functions.AlarmF;
@@ -83,8 +84,7 @@ public class Utils {
 
     public static void SnackbarC(final Context context, String title, final View view) {
 
-        Snackbar.make(view, title, Snackbar.LENGTH_LONG)
-                .show();
+        Snackbar.make(view, title, Snackbar.LENGTH_LONG).show();
 
     }
 
@@ -330,11 +330,11 @@ public class Utils {
         context.sendBroadcast(update);
     }
 
-    public static Reminder getReminder(Context context, String id) {
+    public static Reminder getReminder(Context context, int id) {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
         Reminder r = null;
-        Cursor c = dbHelper.getReminderById(id);
+        Cursor c = dbHelper.getReminderById("" + id);
         while(c.moveToNext())
             r = new Reminder(c);
 

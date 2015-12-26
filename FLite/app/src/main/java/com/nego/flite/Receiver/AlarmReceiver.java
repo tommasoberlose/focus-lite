@@ -16,7 +16,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(Costants.ALARM_ACTION)) {
             try {
-                Reminder r = Utils.getReminder(context, intent.getStringExtra(Costants.EXTRA_REMINDER_ID));
+                Reminder r = Utils.getReminder(context, Integer.parseInt(intent.getStringExtra(Costants.EXTRA_REMINDER_ID)));
                 NotificationF.CancelNotification(context, "" + r.getId());
                 NotificationF.Notification(context, r);
             } catch (Exception e) {
