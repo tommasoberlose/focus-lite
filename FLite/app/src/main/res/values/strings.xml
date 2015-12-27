@@ -171,4 +171,10 @@
     <string name="text_title">Title</string>
     <string name="action_view">View</string>
     <string name="text_notes">Notes</string>
+    <string name="text_choose_attach">Choose Attach</string>
+    <string name="text_location">Location</string>
+    <string name="text_choose_reminder_type">Choose Reminder Type</string>
+    <string name="text_date_and_time"><![CDATA[Date & Time]]></string>
+    <string name="text_wifi">Wi-fi</string>
+    <string name="text_bluetooth">Bluetooth</string>
 </resources>

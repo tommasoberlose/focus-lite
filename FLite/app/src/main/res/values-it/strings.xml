@@ -171,4 +171,10 @@
     <string name="text_title">Titolo</string>
     <string name="action_view">Guarda</string>
     <string name="text_notes">Note</string>
+    <string name="text_location">Luogo</string>
+    <string name="text_choose_attach">Scegli allegato</string>
+    <string name="text_choose_reminder_type">Scegli il tipo di promemoria</string>
+    <string name="text_date_and_time">Data e Ora</string>
+    <string name="text_bluetooth">Bluetooth</string>
+    <string name="text_wifi">Wi-fi</string>
 </resources>

@@ -70,7 +70,8 @@ import java.util.Date;
 public class MyDialog extends AppCompatActivity {
     private boolean from_notifications = false;
     private Reminder r_snooze;
-    private Snackbar snackbar;
+    private Snackbar snackbar_attach;
+    private Snackbar snackbar_reminders;
 
     private Reminder r;
     private boolean edit = false;
@@ -175,12 +176,6 @@ public class MyDialog extends AppCompatActivity {
                         setContentView(R.layout.add_item_dialog);
                         break;
                 }
-
-                snackbar = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
-                Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
-                layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
-                TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
-                textView.setVisibility(View.INVISIBLE);
 
                 findViewById(R.id.back_to_dismiss).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -335,7 +330,7 @@ public class MyDialog extends AppCompatActivity {
                 action_attach.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setVisibilityAttachCard();
+                        setAttachSnackbar();
                     }
                 });
 
@@ -343,8 +338,7 @@ public class MyDialog extends AppCompatActivity {
                 action_reminder.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ReminderDialog r_dialog = new ReminderDialog(MyDialog.this, alarm, alarm_repeat);
-                        r_dialog.show();
+                        setRemindersSnackbar();
                     }
                 });
 
@@ -422,8 +416,10 @@ public class MyDialog extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (snackbar != null && snackbar.isShown()) {
-            snackbar.dismiss();
+        if (snackbar_attach != null && snackbar_attach.isShown()) {
+            snackbar_attach.dismiss();
+        } else if (snackbar_reminders != null && snackbar_reminders.isShown()) {
+            snackbar_reminders.dismiss();
         } else {
             if (from_notifications || (r == null && Utils.isEmpty(title) && img.equals("") && getContent().equals("")) || (r != null && r.getTitle().equals(title.getText().toString()) && r.getContent().equals(getContent()) && r.getImg().equals(img))) {
                 finish();
@@ -666,11 +662,29 @@ public class MyDialog extends AppCompatActivity {
         }
     }
 
-    public void setVisibilityAttachCard() {
+    public void setAttachSnackbar() {
         final View attachView = LayoutInflater.from(this).inflate(R.layout.attach_dialog, null);
         LinearLayout action_camera = (LinearLayout) attachView.findViewById(R.id.action_camera);
         LinearLayout action_gallery = (LinearLayout) attachView.findViewById(R.id.action_gallery);
         LinearLayout action_contact = (LinearLayout) attachView.findViewById(R.id.action_contact);
+
+        snackbar_attach = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_attach.getView();
+        layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
+        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setVisibility(View.INVISIBLE);
+
+        attachView.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar_attach.dismiss();
+            }
+        });
+
+        if (!action.equals(""))
+            attachView.findViewById(R.id.replace_contact).setVisibility(View.VISIBLE);
+        else
+            attachView.findViewById(R.id.replace_contact).setVisibility(View.GONE);
 
         action_contact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -687,13 +701,13 @@ public class MyDialog extends AppCompatActivity {
                                 .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int whichButton) {
                                         startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-                                        snackbar.dismiss();
+                                        snackbar_attach.dismiss();
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, null).show();
                     } else {
                         startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-                        snackbar.dismiss();
+                        snackbar_attach.dismiss();
                     }
                 } else {
                     requestPermission(Manifest.permission.READ_CONTACTS);
@@ -723,7 +737,7 @@ public class MyDialog extends AppCompatActivity {
 
                             startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
                             tmpImgNameFile = Uri.fromFile(new File(image.getAbsolutePath())).toString();
-                            snackbar.dismiss();
+                            snackbar_attach.dismiss();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -744,15 +758,48 @@ public class MyDialog extends AppCompatActivity {
                     final Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
 
                     startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
-                    snackbar.dismiss();
+                    snackbar_attach.dismiss();
                 } else {
                     requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
                 }
             }
         });
-        Snackbar.SnackbarLayout layout = ((Snackbar.SnackbarLayout) snackbar.getView());
+
         layout.addView(attachView, 0);
-        snackbar.show();
+        snackbar_attach.show();
+    }
+
+    public void setRemindersSnackbar() {
+        final View attachView = LayoutInflater.from(this).inflate(R.layout.reminder_types_dialog, null);
+        LinearLayout action_date = (LinearLayout) attachView.findViewById(R.id.action_date);
+        LinearLayout action_wifi = (LinearLayout) attachView.findViewById(R.id.action_wifi);
+        LinearLayout action_bluetooth = (LinearLayout) attachView.findViewById(R.id.action_bluetooth);
+
+        snackbar_reminders = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_reminders.getView();
+        layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
+        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setVisibility(View.INVISIBLE);
+
+        attachView.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar_reminders.dismiss();
+            }
+        });
+
+        action_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar_reminders.dismiss();
+                ReminderDialog r_dialog = new ReminderDialog(MyDialog.this, alarm, alarm_repeat);
+                r_dialog.show();
+            }
+        });
+
+
+        layout.addView(attachView, 0);
+        snackbar_reminders.show();
     }
 
     public void showInfo() {

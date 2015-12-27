@@ -5,4 +5,5 @@
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen|keyguard"
     android:autoAdvanceViewId="@+id/list"
+    android:previewImage="@drawable/anteprima_widget"
     android:initialKeyguardLayout="@layout/focus_widget" />
