@@ -185,7 +185,18 @@ public class WidgetViewsFactory implements
                     attach = false;
                 }
 
-                if (!attach && !contact && !link_browser)
+                boolean address;
+                if (!mWidgetItems.get(position).getAddress().equals("")) {
+                    rv.setViewVisibility(R.id.action_address, View.VISIBLE);
+                    Intent address_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + mWidgetItems.get(position).getAddress()));
+                    rv.setOnClickFillInIntent(R.id.action_address, address_intent);
+                    address = true;
+                } else {
+                    rv.setViewVisibility(R.id.action_address, View.GONE);
+                    address = false;
+                }
+
+                if (!attach && !contact && !link_browser && !address)
                     rv.setViewVisibility(R.id.container_options, View.GONE);
                 else
                     rv.setViewVisibility(R.id.container_options, View.VISIBLE);
@@ -195,6 +206,7 @@ public class WidgetViewsFactory implements
                 rv.setViewVisibility(R.id.action_contact, View.GONE);
                 rv.setViewVisibility(R.id.action_attach, View.GONE);
                 rv.setViewVisibility(R.id.action_browser, View.GONE);
+                rv.setViewVisibility(R.id.action_address, View.GONE);
                 rv.setViewVisibility(R.id.action_password, View.VISIBLE);
             }
 

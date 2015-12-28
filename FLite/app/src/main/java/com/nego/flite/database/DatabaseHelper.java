@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "reminderdb";
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 9;
 
-    private static final String DATABASE_CREATE = "create table IF NOT EXISTS reminders (id integer primary key autoincrement, title text not null, content text default '', action_type text default '', action_info text default '', img text default '', pasw default '', date_create long default 0, date_reminded long default 0, last_changed long default 0, alarm long default 0, alarm_repeat text default '', priority int default 0);";
+    private static final String DATABASE_CREATE = "create table IF NOT EXISTS reminders (id integer primary key autoincrement, title text not null, content text default '', action_type text default '', action_info text default '', img text default '', pasw default '', date_create long default 0, date_reminded long default 0, last_changed long default 0, alarm long default 0, alarm_repeat text default '', address text default '', priority int default 0);";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -44,6 +44,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion == 7) {
             database.execSQL("ALTER TABLE reminders ADD COLUMN date_reminded long default 0");
             onUpgrade(database, 8, DATABASE_VERSION);
+        }
+        if (oldVersion == 8) {
+            database.execSQL("ALTER TABLE reminders ADD COLUMN address text default ''");
+            onUpgrade(database, 9, DATABASE_VERSION);
         }
         //database.execSQL("DROP TABLE IF EXISTS reminders");
         onCreate(database);

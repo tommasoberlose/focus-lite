@@ -22,9 +22,10 @@ public class Reminder implements Parcelable {
     private long last_changed;
     private long alarm;
     private String alarm_repeat;
+    private String address;
     private int priority;
 
-    public Reminder(String title, String content, String action_type, String action_info, String img, String pasw, long date_create, long date_reminded, long last_changed, long alarm, String alarm_repeat, int priority){
+    public Reminder(String title, String content, String action_type, String action_info, String img, String pasw, long date_create, long date_reminded, long last_changed, long alarm, String alarm_repeat, String address, int priority){
         this.title = title;
         this.content = content;
         this.action_type = action_type;
@@ -36,10 +37,11 @@ public class Reminder implements Parcelable {
         this.last_changed = last_changed;
         this.alarm = alarm;
         this.alarm_repeat = alarm_repeat;
+        this.address = address;
         this.priority = priority;
     }
 
-    public Reminder(int id, String title, String content, String action_type, String action_info, String img, String pasw, long date_create, long date_reminded, long last_changed, long alarm, String alarm_repeat, int priority){
+    public Reminder(int id, String title, String content, String action_type, String action_info, String img, String pasw, long date_create, long date_reminded, long last_changed, long alarm, String alarm_repeat, String address, int priority){
         this.id = id;
         this.title = title;
         this.content = content;
@@ -52,6 +54,7 @@ public class Reminder implements Parcelable {
         this.last_changed = last_changed;
         this.alarm = alarm;
         this.alarm_repeat = alarm_repeat;
+        this.address = address;
         this.priority = priority;
     }
 
@@ -68,6 +71,7 @@ public class Reminder implements Parcelable {
         this.last_changed = cursor.getLong(cursor.getColumnIndex(DbAdapter.KEY_LAST_CHANGED));
         this.alarm = cursor.getLong( cursor.getColumnIndex(DbAdapter.KEY_ALARM) );
         this.alarm_repeat = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_ALARM_REPEAT));
+        this.address = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_ADDRESS));
         this.priority = cursor.getInt(cursor.getColumnIndex(DbAdapter.KEY_PRIORITY));
     }
 
@@ -165,6 +169,14 @@ public class Reminder implements Parcelable {
         return alarm_repeat;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
     public void setPriority(int priority) {
         this.priority = priority;
     }
@@ -207,7 +219,7 @@ public class Reminder implements Parcelable {
 
     public static final Parcelable.Creator<Reminder> CREATOR = new Creator<Reminder>() {
         public Reminder createFromParcel(Parcel source) {
-            return new Reminder(source.readInt(), source.readString(), source.readString(), source.readString(), source.readString(), source.readString(), source.readString(), source.readLong(), source.readLong(), source.readLong(), source.readLong(), source.readString(), source.readInt());
+            return new Reminder(source.readInt(), source.readString(), source.readString(), source.readString(), source.readString(), source.readString(), source.readString(), source.readLong(), source.readLong(), source.readLong(), source.readLong(), source.readString(), source.readString(), source.readInt());
         }
         public Reminder[] newArray(int size) {
             return new Reminder[size];
@@ -233,6 +245,7 @@ public class Reminder implements Parcelable {
         dest.writeLong(last_changed);
         dest.writeLong(alarm);
         dest.writeString(alarm_repeat);
+        dest.writeString(address);
         dest.writeInt(priority);
     }
 }

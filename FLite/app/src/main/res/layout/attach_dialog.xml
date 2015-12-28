@@ -18,7 +18,8 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:id="@+id/action_close">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -34,7 +35,6 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:padding="8dp"
                 android:tint="@color/all_text"
                 android:layout_marginRight="8dp"
-                android:id="@+id/action_close"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_action_hardware_keyboard_arrow_down"/>
         </LinearLayout>
@@ -63,8 +63,8 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:padding="14dp"
-                android:src="@drawable/ic_add_a_photo_white_24dp"
+                android:padding="10dp"
+                android:src="@drawable/ic_action_camera"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/circle_back_light"
                 android:backgroundTint="@color/primary"/>
@@ -166,13 +166,12 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:paddingBottom="16dp"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
-            android:paddingLeft="12dp"
-            android:visibility="gone">
+            android:paddingLeft="12dp">
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:padding="8dp"
-                android:src="@drawable/ic_action_add_location"
+                android:src="@drawable/ic_action_location_on"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/circle_back_light"
                 android:backgroundTint="@color/primary"/>
@@ -197,7 +196,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
             android:paddingLeft="12dp"
-            android:visibility="gone">
+            android:visibility="invisible">
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -227,7 +226,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
             android:paddingLeft="12dp"
-            android:visibility="gone">
+            android:visibility="invisible">
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"

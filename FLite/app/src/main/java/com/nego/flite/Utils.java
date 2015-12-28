@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -16,6 +18,7 @@ import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -34,6 +37,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 public class Utils {
@@ -293,31 +297,24 @@ public class Utils {
     }
 
     public static String checkURL(String s) {
-        String url = "";
         String[] split = s.split(" ");
         for (String match : split) {
-            try {
-                URL url_tocheck = new URL(match);
-                url = url_tocheck.toString();
-                break;
-            } catch (MalformedURLException e) {
-
-            }
-        }
-        return url;
-    }
-
-    public static String checkAction(Context context, String s) {
-        String[] split = s.split(" ");
-        for (String match : split) {
-            if (match.toLowerCase().equals(context.getString(R.string.action_call).toLowerCase()))
-                return Costants.ACTION_CALL;
-            if (match.toLowerCase().equals(context.getString(R.string.action_sms_c).toLowerCase()))
-                return Costants.ACTION_SMS;
-            if (match.toLowerCase().equals(context.getString(R.string.action_mail_c).toLowerCase()))
-                return Costants.ACTION_MAIL;
+            if (Patterns.WEB_URL.matcher(match).matches())
+                return match;
         }
         return "";
+    }
+
+    public static String[] checkAction(String s) {
+        String[] split = s.split(" ");
+        for (String match : split) {
+            String m = match.replace("/","").replace("-","");
+            if (Patterns.PHONE.matcher(m).matches())
+                return new String[] {Costants.ACTION_CALL, m};
+            if (Patterns.EMAIL_ADDRESS.matcher(m).matches())
+                return new String[] {Costants.ACTION_MAIL, m};
+        }
+        return new String[] {""};
     }
 
     public static void updateWidget(Context context) {
@@ -458,5 +455,27 @@ public class Utils {
             }
             return text.trim();
         }
+    }
+
+    public static Address getLocationFromAddress(Context context, String strAddress) {
+
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+
+        int i = 0;
+        while (i<10) {
+            try {
+                address = coder.getFromLocationName(strAddress, 5);
+                Log.i("address", address.get(0).toString());
+                return address.get(0);
+
+            } catch (Exception ex) {
+                Log.i("errore_address", ex.toString());
+            }
+            i++;
+        }
+
+        return  null;
+
     }
 }

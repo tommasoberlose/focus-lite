@@ -38,6 +38,7 @@ public class Costants {
     public static final String KEY_DIALOG_ACTION_INFO = "KEY_DIALOG_ACTION_INFO";
     public static final String KEY_DIALOG_ALARM = "KEY_DIALOG_ALARM";
     public static final String KEY_DIALOG_ALARM_REPEAT = "KEY_DIALOG_ALARM_REPEAT";
+    public static final String KEY_DIALOG_ADDRESS = "KEY_DIALOG_ADDRESS";
     public static final String KEY_DIALOG_PRIORITY = "KEY_DIALOG_PRIORITY";
 
     public static final String ACTION_HIDE_ALL = "android.intent.action.ACTION_HIDE_ALL";
@@ -67,6 +68,7 @@ public class Costants {
     public static final String PREFERENCE_ORDER_NOTIFICATIONS = "PREFERENCE_ORDER_NOTIFICATIONS";
     public static final String PREFERENCE_BUTTON_SHARE = "PREFERENCE_BUTTON_SHARE";
     public static final String PREFERENCE_BUTTON_DELETE = "PREFERENCE_BUTTON_DELETE";
+    public static final String PREFERENCE_BUTTON_DELETE_NOT_ONGOING = "PREFERENCE_BUTTON_DELETE_NOT_ONGOING";
     public static final String PREFERENCE_ONGOING_NOTIFICATIONS = "PREFERENCE_ONGOING_NOTIFICATIONS";
     public static final String PREFERENCE_SHOW_ADD_NOTIFICATION = "PREFERENCE_SHOW_ADD_NOTIFICATION";
     public static final String PREFERENCE_TWELVE_HOUR_FORMAT = "PREFERENCE_TWELVE_HOUR_FORMAT";

@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.location.Address;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,6 +73,7 @@ public class MyDialog extends AppCompatActivity {
     private Reminder r_snooze;
     private Snackbar snackbar_attach;
     private Snackbar snackbar_reminders;
+    private Snackbar snackbar_suggestions;
 
     private Reminder r;
     private boolean edit = false;
@@ -83,6 +85,7 @@ public class MyDialog extends AppCompatActivity {
     public String alarm_repeat = "";
     public int priority = 0;
     private String tmpImgNameFile = "";
+    private String address = "";
 
     public EditText title;
     public EditText content;
@@ -97,6 +100,7 @@ public class MyDialog extends AppCompatActivity {
     private RecyclerView content_list;
     private ImageView action_priority;
     private CardView url_card;
+    private CardView address_card;
 
     private MyAdapter mAdapter;
 
@@ -196,6 +200,7 @@ public class MyDialog extends AppCompatActivity {
                 content_list = (RecyclerView) findViewById(R.id.content_list);
                 action_priority = (ImageView) findViewById(R.id.action_priority);
                 url_card = (CardView) findViewById(R.id.card_browser);
+                address_card = (CardView) findViewById(R.id.card_address);
 
                 // TODO fix list
                 action_list.setVisibility(View.GONE);
@@ -218,6 +223,8 @@ public class MyDialog extends AppCompatActivity {
                     img = r.getImg();
                     checkImg();
                     setPriority(r.getPriority());
+
+                    updateAddress(r.getAddress());
 
                     save_button.setAlpha(1f);
 
@@ -265,6 +272,7 @@ public class MyDialog extends AppCompatActivity {
                     action = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION);
                     action_info = savedInstanceState.getString(Costants.KEY_DIALOG_ACTION_INFO);
                     setContact();
+                    updateAddress(savedInstanceState.getString(Costants.KEY_DIALOG_ADDRESS));
                     setPriority(savedInstanceState.getInt(Costants.KEY_DIALOG_PRIORITY));
 
                     if (savedInstanceState.getString(Costants.KEY_DIALOG_ALARM) != null)
@@ -449,6 +457,7 @@ public class MyDialog extends AppCompatActivity {
             outState.putString(Costants.KEY_DIALOG_ACTION_INFO, action_info);
             outState.putString(Costants.KEY_DIALOG_ALARM, "" + alarm);
             outState.putString(Costants.KEY_DIALOG_ALARM_REPEAT, alarm_repeat);
+            outState.putString(Costants.KEY_DIALOG_ADDRESS, address);
             outState.putInt(Costants.KEY_DIALOG_PRIORITY, priority);
         }
     }
@@ -470,10 +479,17 @@ public class MyDialog extends AppCompatActivity {
         String titleN = title.getText().toString();
         titleN = titleN.replace(Costants.LIST_COSTANT, "").replace(Costants.LIST_ORDER_SEPARATOR, "").replace(Costants.LIST_ITEM_SEPARATOR, "").trim();
         String contentT = getContent();
+        if (action.equals("")) {
+            String[] action_result = Utils.checkAction(titleN + " " + Utils.getBigContentList(this, contentT));
+            if (!action_result[0].equals("")) {
+                action = action_result[0];
+                action_info = action_result[1];
+            }
+        }
         if (!edit) {
             Calendar c = Calendar.getInstance();
             long dateC = c.getTimeInMillis();
-            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, 0, 0, alarm, alarm_repeat, priority);
+            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, 0, 0, alarm, alarm_repeat, address, priority);
         } else {
             r.setTitle(titleN);
             r.setContent(contentT);
@@ -484,6 +500,7 @@ public class MyDialog extends AppCompatActivity {
             r.setLast_changed(Calendar.getInstance().getTimeInMillis());
             r.setAlarm(alarm);
             r.setAlarm_repeat(alarm_repeat);
+            r.setAddress(address);
             r.setPriority(priority);
         }
     }
@@ -667,6 +684,7 @@ public class MyDialog extends AppCompatActivity {
         LinearLayout action_camera = (LinearLayout) attachView.findViewById(R.id.action_camera);
         LinearLayout action_gallery = (LinearLayout) attachView.findViewById(R.id.action_gallery);
         LinearLayout action_contact = (LinearLayout) attachView.findViewById(R.id.action_contact);
+        LinearLayout action_address = (LinearLayout) attachView.findViewById(R.id.action_place);
 
         snackbar_attach = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_attach.getView();
@@ -765,11 +783,60 @@ public class MyDialog extends AppCompatActivity {
             }
         });
 
+        action_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editAddress();
+                snackbar_attach.dismiss();
+            }
+        });
+
         layout.addView(attachView, 0);
         snackbar_attach.show();
     }
 
     public void setRemindersSnackbar() {
+        final View remindersView = LayoutInflater.from(this).inflate(R.layout.reminder_types_dialog, null);
+        LinearLayout action_date = (LinearLayout) remindersView.findViewById(R.id.action_date);
+        LinearLayout action_wifi = (LinearLayout) remindersView.findViewById(R.id.action_wifi);
+        LinearLayout action_bluetooth = (LinearLayout) remindersView.findViewById(R.id.action_bluetooth);
+        TextView actual_reminder = (TextView) remindersView.findViewById(R.id.actual_reminder);
+
+        if (alarm != 0) {
+            actual_reminder.setText(Utils.getDateAlarm(this, alarm));
+            actual_reminder.setVisibility(View.VISIBLE);
+        } else {
+            actual_reminder.setVisibility(View.GONE);
+        }
+
+        snackbar_reminders = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_reminders.getView();
+        layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
+        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setVisibility(View.INVISIBLE);
+
+        remindersView.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar_reminders.dismiss();
+            }
+        });
+
+        action_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar_reminders.dismiss();
+                ReminderDialog r_dialog = new ReminderDialog(MyDialog.this, alarm, alarm_repeat);
+                r_dialog.show();
+            }
+        });
+
+
+        layout.addView(remindersView, 0);
+        snackbar_reminders.show();
+    }
+
+    public void setSuggestionsSnackbar() { //TODO snackbar suggestions
         final View attachView = LayoutInflater.from(this).inflate(R.layout.reminder_types_dialog, null);
         LinearLayout action_date = (LinearLayout) attachView.findViewById(R.id.action_date);
         LinearLayout action_wifi = (LinearLayout) attachView.findViewById(R.id.action_wifi);
@@ -1085,6 +1152,90 @@ public class MyDialog extends AppCompatActivity {
         } else {
             collapse(url_card);
         }
+    }
+
+    public void updateAddress(String new_add) {
+        address = new_add;
+        if (!address.equals("")) {
+            ((TextView) findViewById(R.id.title_address)).setText(address);
+            address_card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent address_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + address));
+                    startActivity(address_intent);
+                }
+            });
+            findViewById(R.id.edit_address).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editAddress();
+                }
+            });
+            expand(address_card);
+        } else {
+            collapse(address_card);
+        }
+    }
+
+    public void editAddress() {
+        final Dialog addressDialog = new Dialog(this, R.style.mDialog);
+        final View addressView = LayoutInflater.from(this).inflate(R.layout.address_dialog, null);
+        final EditText address_text = (EditText) addressView.findViewById(R.id.address);
+        final TextView action_remove = (TextView) addressView.findViewById(R.id.action_remove);
+        final TextView action_save = (TextView) addressView.findViewById(R.id.action_save);
+        address_text.setText(address);
+
+        action_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Handler mHandler = new Handler();
+
+                new Thread(new Runnable() {
+                    public void run() {
+                        final Address postal_address = Utils.getLocationFromAddress(MyDialog.this, address_text.getText().toString());
+                        mHandler.post(new Runnable() {
+                            public void run() {
+                                try {
+                                    if (postal_address == null) {
+                                        Utils.SnackbarC(MyDialog.this, getString(R.string.error_invalid_address), address_text);
+                                    } else {
+                                        updateAddress(postal_address.getAddressLine(0) + ", " + postal_address.getAddressLine(1) + ", " + postal_address.getAddressLine(2));
+                                        addressDialog.dismiss();
+                                    }
+                                } catch (Exception e) {
+                                    Utils.SnackbarC(MyDialog.this, getString(R.string.error), address_text);
+                                }
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
+
+        if (!address.equals("")) {
+            action_remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(MyDialog.this)
+                            .setTitle(getResources().getString(R.string.attention))
+                            .setMessage(getResources().getString(R.string.ask_remove_address) + "?")
+                            .setPositiveButton(R.string.action_remove, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    updateAddress("");
+                                    addressDialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show();
+                }
+            });
+            action_remove.setVisibility(View.VISIBLE);
+        } else {
+            action_remove.setVisibility(View.GONE);
+        }
+
+        addressDialog.setContentView(addressView);
+        addressDialog.show();
     }
 
     public static void expand(final View v) {

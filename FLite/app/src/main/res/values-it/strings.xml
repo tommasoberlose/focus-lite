@@ -177,4 +177,11 @@
     <string name="text_date_and_time">Data e Ora</string>
     <string name="text_bluetooth">Bluetooth</string>
     <string name="text_wifi">Wi-fi</string>
+    <string name="action_start_navigation">Avvia navigatore</string>
+    <string name="action_edit_location">Modifica Indirizzo</string>
+    <string name="error_invalid_address">Indirizzo non valido</string>
+    <string name="ask_remove_address">Vuoi rimuovere l\'indirizzo inserito</string>
+    <string name="subtitle_enter_address">Inserisci un indirizzo valido per avviare il navigatore più velocemente o per ricordarti i tuoi luoghi di interesse</string>
+    <string name="action_navigate">Naviga</string>
+    <string name="title_delete_button_not_ongoing_preferences">Pulsante Elimina</string>
 </resources>

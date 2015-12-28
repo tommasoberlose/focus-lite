@@ -177,4 +177,11 @@
     <string name="text_date_and_time"><![CDATA[Date & Time]]></string>
     <string name="text_wifi">Wi-fi</string>
     <string name="text_bluetooth">Bluetooth</string>
+    <string name="action_start_navigation">Start navigation</string>
+    <string name="action_edit_location">Edit Location</string>
+    <string name="error_invalid_address">Invalid address</string>
+    <string name="ask_remove_address">Do you want to remove the address</string>
+    <string name="subtitle_enter_address">Please enter a valid address to start the navigator quickly or to remind your interesting places</string>
+    <string name="action_navigate">Navigate</string>
+    <string name="title_delete_button_not_ongoing_preferences">Delete Button</string>
 </resources>

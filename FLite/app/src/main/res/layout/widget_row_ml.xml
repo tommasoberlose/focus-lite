@@ -87,6 +87,12 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:id="@+id/action_address"
+                android:tint="@color/third_text"
+                android:src="@drawable/ic_action_maps_directions"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:padding="1dp"
                 android:id="@+id/action_password"
                 android:tint="@color/third_text"

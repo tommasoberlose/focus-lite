@@ -82,6 +82,10 @@ public class NotificationF {
             n.setDeleteIntent(pi_delete);
         }
 
+        if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_NOT_ONGOING, false)) {
+            n.addAction(R.drawable.ic_action_delete, context.getString(R.string.action_delete), pi_delete);
+        }
+
         if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_SOUND, true)) {
             n.setSound(Uri.parse(SP.getString(Costants.PREFERENCES_NOTIFICATION_RINGTONE, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString())));
         }
@@ -108,6 +112,12 @@ public class NotificationF {
                     e.printStackTrace();
                 }
             }
+        }
+
+        if (!r.getAddress().equals("")) {
+            Intent address_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + r.getAddress()));
+            PendingIntent address_pi = PendingIntent.getActivity(context, r.getId(), address_intent, 0);
+            n.addAction(R.drawable.ic_action_maps_directions, context.getString(R.string.action_navigate), address_pi);
         }
 
         if (!r.getAction_type().equals("")) {
@@ -245,6 +255,10 @@ public class NotificationF {
             n.setDeleteIntent(pi_delete);
         }
 
+        if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_NOT_ONGOING, false)) {
+            n.addAction(R.drawable.ic_action_delete, context.getString(R.string.action_delete), pi_delete);
+        }
+
         if (SP.getBoolean(Costants.PREFERENCE_ONGOING_NOTIFICATIONS, true)) {
             n.setOngoing(true);
         } else {
@@ -266,6 +280,12 @@ public class NotificationF {
                     e.printStackTrace();
                 }
             }
+        }
+
+        if (!r.getAddress().equals("")) {
+            Intent address_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + r.getAddress()));
+            PendingIntent address_pi = PendingIntent.getActivity(context, r.getId(), address_intent, 0);
+            n.addAction(R.drawable.ic_action_maps_directions, context.getString(R.string.action_navigate), address_pi);
         }
 
         if (!r.getAction_type().equals("")) {

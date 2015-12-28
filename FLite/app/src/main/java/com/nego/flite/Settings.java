@@ -332,11 +332,11 @@ public class Settings extends AppCompatActivity {
         findViewById(R.id.action_notification_preference).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean[] actual_not_pref = new boolean[]{SP.getBoolean(Costants.PREFERENCE_BUTTON_SHARE, true), SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true), SP.getBoolean(Costants.PREFERENCE_ONGOING_NOTIFICATIONS, true)};
+                boolean[] actual_not_pref = new boolean[]{SP.getBoolean(Costants.PREFERENCE_BUTTON_SHARE, true), SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true), SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_NOT_ONGOING, false), SP.getBoolean(Costants.PREFERENCE_ONGOING_NOTIFICATIONS, true)};
                 selected_not_pref = actual_not_pref;
                 new AlertDialog.Builder(Settings.this, R.style.mDialog)
                         .setTitle(getString(R.string.title_notification_preference))
-                        .setMultiChoiceItems(new String[]{getString(R.string.title_preferences_share), getString(R.string.title_delete_button_preferences), getString(R.string.title_preferences_ongoing)},
+                        .setMultiChoiceItems(new String[]{getString(R.string.title_preferences_share), getString(R.string.title_delete_button_preferences), getString(R.string.title_delete_button_not_ongoing_preferences), getString(R.string.title_preferences_ongoing)},
                                 actual_not_pref, new DialogInterface.OnMultiChoiceClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -348,7 +348,8 @@ public class Settings extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 SP.edit().putBoolean(Costants.PREFERENCE_BUTTON_SHARE, selected_not_pref[0]).apply();
                                 SP.edit().putBoolean(Costants.PREFERENCE_BUTTON_DELETE, selected_not_pref[1]).apply();
-                                SP.edit().putBoolean(Costants.PREFERENCE_ONGOING_NOTIFICATIONS, selected_not_pref[2]).apply();
+                                SP.edit().putBoolean(Costants.PREFERENCE_BUTTON_DELETE_NOT_ONGOING, selected_not_pref[2]).apply();
+                                SP.edit().putBoolean(Costants.PREFERENCE_ONGOING_NOTIFICATIONS, selected_not_pref[3]).apply();
                                 Utils.notification_add_update(Settings.this);
                                 dialog.dismiss();
                             }
