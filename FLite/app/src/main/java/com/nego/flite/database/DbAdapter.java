@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.nego.flite.Costants;
 import com.nego.flite.Reminder;
 
 import java.util.zip.InflaterOutputStream;
@@ -124,11 +125,22 @@ public class DbAdapter {
                 KEY_ID + " == '" + id + "'", null, null, null, null, null);
     }
 
-    //fetch reminder filter by id
     public Cursor fetchAllAlarm() {
         return database.query(true, DATABASE_TABLE, new String[]{
                         KEY_ID, KEY_TITLE, KEY_CONTENT, KEY_ACTION_TYPE, KEY_ACTION_INFO, KEY_IMG, KEY_PASW, KEY_DATE_CREATE, KEY_DATE_REMINDED, KEY_LAST_CHANGED, KEY_ALARM, KEY_ALARM_REPEAT, KEY_ADDRESS, KEY_PRIORITY},
-                KEY_ALARM + " != '0'", null, null, null, KEY_DATE_CREATE + " DESC", null);
+                KEY_ALARM + " > '0'", null, null, null, KEY_DATE_CREATE + " DESC", null);
+    }
+
+    public Cursor fetchRemindersByFilterWifi() {
+        return database.query(true, DATABASE_TABLE, new String[]{
+                        KEY_ID, KEY_TITLE, KEY_CONTENT, KEY_ACTION_TYPE, KEY_ACTION_INFO, KEY_IMG, KEY_PASW, KEY_DATE_CREATE, KEY_DATE_REMINDED, KEY_LAST_CHANGED, KEY_ALARM, KEY_ALARM_REPEAT, KEY_ADDRESS, KEY_PRIORITY},
+                KEY_ALARM + " == '" + Costants.ALARM_TYPE_WIFI + "'", null, null, null, KEY_DATE_CREATE + " DESC", null);
+    }
+
+    public Cursor fetchRemindersByFilterBluetooth() {
+        return database.query(true, DATABASE_TABLE, new String[]{
+                        KEY_ID, KEY_TITLE, KEY_CONTENT, KEY_ACTION_TYPE, KEY_ACTION_INFO, KEY_IMG, KEY_PASW, KEY_DATE_CREATE, KEY_DATE_REMINDED, KEY_LAST_CHANGED, KEY_ALARM, KEY_ALARM_REPEAT, KEY_ADDRESS, KEY_PRIORITY},
+                KEY_ALARM + " == '" + Costants.ALARM_TYPE_BLUETOOTH + "'", null, null, null, KEY_DATE_CREATE + " DESC", null);
     }
 
     public int getRemindersN() {

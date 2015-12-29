@@ -70,10 +70,11 @@ public class ReminderDialog extends Dialog {
         alarm_repeat = alarm_repeat_i;
 
         final Calendar c = Calendar.getInstance();
-        if (alarm != 0) {
+        if (alarm > 0) {
             c.setTimeInMillis(alarm);
         } else {
             alarm = c.getTimeInMillis();
+            alarm_repeat = "";
         }
 
         title_day.setText(Utils.getDay(context, alarm));
@@ -158,16 +159,7 @@ public class ReminderDialog extends Dialog {
         delete_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(mContext)
-                        .setTitle(mContext.getResources().getString(R.string.attention))
-                        .setMessage(mContext.getResources().getString(R.string.ask_delete_alarm) + "?")
-                        .setPositiveButton(R.string.action_remove, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                ((MyDialog) mContext).setAlarm(0, "");
-                                dismiss();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, null).show();
+                dismiss();
             }
         });
 

@@ -184,4 +184,17 @@
     <string name="subtitle_enter_address">Please enter a valid address to start the navigator quickly or to remind your interesting places</string>
     <string name="action_navigate">Navigate</string>
     <string name="title_delete_button_not_ongoing_preferences">Delete Button</string>
+    <string name="action_choose_device">Choose Bluetooth Device</string>
+    <string name="error_no_activated_device">No activated devices</string>
+    <string name="error_no_paired_devices">No paired devices</string>
+    <string name="error_bluetooth_off">Turn on bluetooth</string>
+    <string name="action_choose_wifi">Choose Wi-fi connections</string>
+    <string name="error_wifi_off">Turn on Wi-fi</string>
+    <string name="error_no_wifi_saved">No Wi-fi connections saved</string>
+    <string name="error_no_activated_wifi">No activated Wi-fi connections</string>
+    <string name="title_activity_active_device">Choose Active Bluetooth Device</string>
+    <string name="text_active_device">Active Bluetooth Devices</string>
+    <string name="text_active_connection">Active Wi-fi Connections</string>
+    <string name="subtitle_action_choose_device">Select the Bluetooth device displayed in the choice for the reminder</string>
+    <string name="subtitle_action_choose_wifi">Select the Wi-fi connections displayed in the choice for the reminder</string>
 </resources>

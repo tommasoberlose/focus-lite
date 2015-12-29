@@ -71,6 +71,26 @@ public class Settings extends AppCompatActivity {
 
         SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
 
+        // DEVICE & WIFI PREFERENCES
+
+        findViewById(R.id.action_choose_wifi).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Settings.this, ActiveDevice.class);
+                i.putExtra(Costants.EXTRA_ACTION_TYPE, Costants.ALARM_TYPE_WIFI);
+                startActivity(i);
+            }
+        });
+
+        findViewById(R.id.action_choose_device).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Settings.this, ActiveDevice.class);
+                i.putExtra(Costants.EXTRA_ACTION_TYPE, Costants.ALARM_TYPE_BLUETOOTH);
+                startActivity(i);
+            }
+        });
+
         // POPUP STYLE
 
         switch (SP.getString(Costants.PREFERENCE_STYLE_POPUP, Costants.PREFERENCE_STYLE_POPUP_DEFAULT)) {

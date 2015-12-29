@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +18,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.net.Uri;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -67,6 +71,8 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public class MyDialog extends AppCompatActivity {
     private boolean from_notifications = false;
@@ -150,7 +156,10 @@ public class MyDialog extends AppCompatActivity {
                 int id = ((Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER)).getId();
                 r_snooze = Utils.getReminder(this, id);
                 if (intent.getAction().equals(Costants.ACTION_SNOOZE_WEAR)) {
-                    AlarmF.addAlarm(MyDialog.this, r_snooze.getId(), r_snooze.getAlarm() + 10 * 60 * 1000, r_snooze.getAlarm_repeat());
+                    if (r_snooze.getAlarm() > 0)
+                        AlarmF.addAlarm(MyDialog.this, r_snooze.getId(), r_snooze.getAlarm() + 10 * 60 * 1000, "");
+                    else
+                        AlarmF.addAlarm(MyDialog.this, r_snooze.getId(), Calendar.getInstance().getTimeInMillis() + 10 * 60 * 1000, "");
                     NotificationF.CancelNotification(MyDialog.this, "" + r_snooze.getId());
                     finish();
                 } else {
@@ -801,12 +810,29 @@ public class MyDialog extends AppCompatActivity {
         LinearLayout action_wifi = (LinearLayout) remindersView.findViewById(R.id.action_wifi);
         LinearLayout action_bluetooth = (LinearLayout) remindersView.findViewById(R.id.action_bluetooth);
         TextView actual_reminder = (TextView) remindersView.findViewById(R.id.actual_reminder);
+        ImageView action_remove = (ImageView) remindersView.findViewById(R.id.action_remove);
+        LinearLayout container_actual_reminder = (LinearLayout) remindersView.findViewById(R.id.container_actual_reminder);
 
         if (alarm != 0) {
-            actual_reminder.setText(Utils.getDateAlarm(this, alarm));
-            actual_reminder.setVisibility(View.VISIBLE);
+            actual_reminder.setText(Utils.getAlarm(this, alarm, alarm_repeat, 0));
+            action_remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(MyDialog.this)
+                            .setTitle(getResources().getString(R.string.attention))
+                            .setMessage(getResources().getString(R.string.ask_delete_alarm) + "?")
+                            .setPositiveButton(R.string.action_remove, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    setAlarm(0, "");
+                                    snackbar_reminders.dismiss();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, null).show();
+                }
+            });
+            container_actual_reminder.setVisibility(View.VISIBLE);
         } else {
-            actual_reminder.setVisibility(View.GONE);
+            container_actual_reminder.setVisibility(View.GONE);
         }
 
         snackbar_reminders = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
@@ -831,16 +857,30 @@ public class MyDialog extends AppCompatActivity {
             }
         });
 
+        action_bluetooth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar_reminders.dismiss();
+                bluetoothReminder();
+            }
+        });
+
+        action_wifi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar_reminders.dismiss();
+                wifiReminder();
+            }
+        });
+
 
         layout.addView(remindersView, 0);
         snackbar_reminders.show();
     }
 
-    public void setSuggestionsSnackbar() { //TODO snackbar suggestions
+    /* TODO snackbar suggestions
+    public void setSuggestionsSnackbar() {
         final View attachView = LayoutInflater.from(this).inflate(R.layout.reminder_types_dialog, null);
-        LinearLayout action_date = (LinearLayout) attachView.findViewById(R.id.action_date);
-        LinearLayout action_wifi = (LinearLayout) attachView.findViewById(R.id.action_wifi);
-        LinearLayout action_bluetooth = (LinearLayout) attachView.findViewById(R.id.action_bluetooth);
 
         snackbar_reminders = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_reminders.getView();
@@ -848,26 +888,10 @@ public class MyDialog extends AppCompatActivity {
         TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
         textView.setVisibility(View.INVISIBLE);
 
-        attachView.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snackbar_reminders.dismiss();
-            }
-        });
-
-        action_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snackbar_reminders.dismiss();
-                ReminderDialog r_dialog = new ReminderDialog(MyDialog.this, alarm, alarm_repeat);
-                r_dialog.show();
-            }
-        });
-
 
         layout.addView(attachView, 0);
         snackbar_reminders.show();
-    }
+    }*/
 
     public void showInfo() {
         final View infoView = LayoutInflater.from(this).inflate(R.layout.info_dialog, null);
@@ -1291,6 +1315,153 @@ public class MyDialog extends AppCompatActivity {
             a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density) * 2);
             a.setInterpolator(new AccelerateDecelerateInterpolator());
             v.startAnimation(a);
+        }
+    }
+
+    public void bluetoothReminder() {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()) {
+            AlertDialog.Builder choose_B = new AlertDialog.Builder(this, R.style.mDialog);
+            choose_B.setTitle(getResources().getString(R.string.action_choose_device));
+            Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+
+            if (pairedDevices.size() > 0) {
+                SharedPreferences SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
+                if (!SP.contains(Costants.PREFERENCES_DEVICE_ACTIVE_BLUETOOTH)) {
+                    SharedPreferences.Editor editor = SP.edit();
+                    String toPut = "";
+                    for (BluetoothDevice device : pairedDevices) {
+                        if (toPut.equals(""))
+                            toPut = device.getAddress();
+                        else
+                            toPut = toPut + Costants.LIST_ITEM_SEPARATOR + device.getAddress();
+                    }
+                    editor.putString(Costants.PREFERENCES_DEVICE_ACTIVE_BLUETOOTH, toPut);
+                    editor.apply();
+                }
+
+                try {
+                    String[] deviceAct = SP.getString(Costants.PREFERENCES_DEVICE_ACTIVE_BLUETOOTH, "").split(Costants.LIST_ITEM_SEPARATOR);
+                    if (deviceAct.length > 0) {
+
+                        final String[] blDv = new String[deviceAct.length];
+                        final String[] blDvMAC = new String[deviceAct.length];
+                        int f = 0;
+                        for (BluetoothDevice device : pairedDevices) {
+
+                            for (String s : deviceAct) {
+                                if (device.getAddress().equals(s)) {
+                                    blDv[f] = device.getName();
+                                    blDvMAC[f] = device.getAddress();
+                                    f++;
+                                }
+                            }
+                        }
+
+                        if (blDv.length == 1) {
+                            setAlarm(Costants.ALARM_TYPE_BLUETOOTH, alarm_repeat = blDvMAC[0] + Costants.LIST_ITEM_SEPARATOR + blDv[0]);
+                        } else {
+
+                            choose_B.setSingleChoiceItems(blDv, 0, null)
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            dialog.dismiss();
+                                            int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                            setAlarm(Costants.ALARM_TYPE_BLUETOOTH, alarm_repeat = blDvMAC[selectedPosition] + Costants.LIST_ITEM_SEPARATOR + blDv[selectedPosition]);
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            choose_B.show();
+                        }
+                    } else {
+                        Toast.makeText(this, getResources().getString(R.string.error_no_activated_device), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (NullPointerException ex) {
+                    Toast.makeText(this, getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.error_no_paired_devices), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.error_bluetooth_off), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void wifiReminder() {
+        WifiManager wifiM = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+
+        if (wifiM != null && wifiM.isWifiEnabled()) {
+            AlertDialog.Builder choose_W = new AlertDialog.Builder(this, R.style.mDialog);
+            choose_W.setTitle(getResources().getString(R.string.action_choose_wifi));
+            List<WifiConfiguration> wifiList = wifiM.getConfiguredNetworks();
+
+            if (wifiList.size() > 0) {
+                SharedPreferences SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
+                if (!SP.contains(Costants.PREFERENCES_DEVICE_ACTIVE_WIFI)) {
+                    SharedPreferences.Editor editor = SP.edit();
+                    String toPut = "";
+                    for (WifiConfiguration connection : wifiList) {
+                        if (toPut.equals(""))
+                            toPut = "" + connection.networkId;
+                        else
+                            toPut = toPut + Costants.LIST_ITEM_SEPARATOR + connection.networkId;
+                    }
+                    editor.putString(Costants.PREFERENCES_DEVICE_ACTIVE_WIFI, toPut);
+                    editor.apply();
+                }
+
+                try {
+                    String[] wifiAct = SP.getString(Costants.PREFERENCES_DEVICE_ACTIVE_WIFI, "").split(Costants.LIST_ITEM_SEPARATOR);
+                    if (wifiAct.length > 0) {
+                        final String[] wifiDv = new String[wifiAct.length];
+                        final String[] wifiMAC = new String[wifiAct.length];
+                        int f = 0;
+                        for (WifiConfiguration connection : wifiList) {
+
+                            for (String s : wifiAct) {
+                                if (("" + connection.networkId).equals(s)) {
+                                    wifiDv[f] = connection.SSID.replace("\"", "");
+                                    wifiMAC[f] = "" + connection.networkId;
+                                    f++;
+                                }
+                            }
+                        }
+
+                        if (wifiDv.length == 1) {
+                            setAlarm(Costants.ALARM_TYPE_WIFI, wifiMAC[0] + Costants.LIST_ITEM_SEPARATOR + wifiDv[0]);
+                        } else {
+                            choose_W.setSingleChoiceItems(wifiDv, 0, null)
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            dialog.dismiss();
+                                            int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                            setAlarm(Costants.ALARM_TYPE_WIFI, alarm_repeat = wifiMAC[selectedPosition] + Costants.LIST_ITEM_SEPARATOR + wifiDv[selectedPosition]);
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            choose_W.show();
+                        }
+                    } else  {
+                        Toast.makeText(this, getResources().getString(R.string.error_no_activated_wifi), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (NullPointerException ex) {
+                    Toast.makeText(this, getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.error_no_wifi_saved), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.error_wifi_off), Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -106,7 +106,7 @@ public class WidgetViewsFactory implements
                     if (mWidgetItems.get(position).getAlarm() == 0) {
                         rv.setTextViewText(R.id.subtitle, Utils.getDate(mContext, mWidgetItems.get(position).getDate_create()));
                     } else {
-                        rv.setTextViewText(R.id.subtitle, Utils.getDateAlarm(mContext, mWidgetItems.get(position).getAlarm()));
+                        rv.setTextViewText(R.id.subtitle, Utils.getAlarm(mContext, mWidgetItems.get(position).getAlarm(), mWidgetItems.get(position).getAlarm_repeat(), mWidgetItems.get(position).getDate_reminded()));
                     }
                 } else {
                     rv.setTextViewText(R.id.subtitle, Utils.getContentList(mContext, mWidgetItems.get(position).getContent()));

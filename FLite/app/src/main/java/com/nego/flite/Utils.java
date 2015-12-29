@@ -145,11 +145,20 @@ public class Utils {
         }
     }
 
-    public static String getDateAlarm(Context context, long date) {
+    public static String getAlarm(Context context, long alarm, String alarm_repeat, long date_reminded) {
+        if (alarm > 0) {
+            return getDateAlarm(context, alarm, alarm_repeat, date_reminded);
+        } else {
+            return context.getString(R.string.text_snoozed_to) + ": " + alarm_repeat.split(Costants.LIST_ITEM_SEPARATOR)[1];
+        }
+    }
+
+    public static String getDateAlarm(Context context, long alarm, String alarm_repeat, long date_reminded) {
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         Calendar today = Calendar.getInstance();
         Calendar byR = Calendar.getInstance();
-        byR.setTimeInMillis(date);
+        byR.setTimeInMillis(alarm);
+
         SimpleDateFormat HM = new SimpleDateFormat("HH:mm");
         SimpleDateFormat DM = new SimpleDateFormat("MMM d, HH:mm");
         SimpleDateFormat MY = new SimpleDateFormat("MMM d y, HH:mm");
@@ -158,7 +167,7 @@ public class Utils {
             DM = new SimpleDateFormat("MMM d, hh:mm a");
             MY = new SimpleDateFormat("MMM d y, hh:mm a");
         }
-        if (date > today.getTimeInMillis()) {
+        if (date_reminded == 0) {
             if (today.get(Calendar.YEAR) == byR.get(Calendar.YEAR) &&
                     today.get(Calendar.MONTH) == byR.get(Calendar.MONTH) &&
                     today.get(Calendar.DAY_OF_MONTH) == byR.get(Calendar.DAY_OF_MONTH)) {
@@ -169,14 +178,16 @@ public class Utils {
                 return context.getString(R.string.text_snoozed_to) + " " + MY.format(new Date(byR.getTimeInMillis()));
             }
         } else {
-            if (today.get(Calendar.YEAR) == byR.get(Calendar.YEAR) &&
-                    today.get(Calendar.MONTH) == byR.get(Calendar.MONTH) &&
-                    today.get(Calendar.DAY_OF_MONTH) == byR.get(Calendar.DAY_OF_MONTH)) {
-                return context.getString(R.string.text_reminded_at) + " " + HM.format(new Date(byR.getTimeInMillis()));
-            } else if (today.get(Calendar.YEAR) == byR.get(Calendar.YEAR)) {
-                return context.getString(R.string.text_reminded_on) + " " + DM.format(new Date(byR.getTimeInMillis()));
+            Calendar dateReminded = Calendar.getInstance();
+            dateReminded.setTimeInMillis(date_reminded);
+            if (today.get(Calendar.YEAR) == dateReminded.get(Calendar.YEAR) &&
+                    today.get(Calendar.MONTH) == dateReminded.get(Calendar.MONTH) &&
+                    today.get(Calendar.DAY_OF_MONTH) == dateReminded.get(Calendar.DAY_OF_MONTH)) {
+                return context.getString(R.string.text_reminded_at) + " " + HM.format(new Date(dateReminded.getTimeInMillis()));
+            } else if (today.get(Calendar.YEAR) == dateReminded.get(Calendar.YEAR)) {
+                return context.getString(R.string.text_reminded_on) + " " + DM.format(new Date(dateReminded.getTimeInMillis()));
             } else {
-                return context.getString(R.string.text_reminded_on) + " " + MY.format(new Date(byR.getTimeInMillis()));
+                return context.getString(R.string.text_reminded_on) + " " + MY.format(new Date(dateReminded.getTimeInMillis()));
             }
         }
     }

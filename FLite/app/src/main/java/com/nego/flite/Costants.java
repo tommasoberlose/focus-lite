@@ -83,6 +83,10 @@ public class Costants {
     public static final String ALARM_REPEAT_MONTH = "ALARM_REPEAT_MONTH";
     public static final String ALARM_REPEAT_YEAR = "ALARM_REPEAT_YEAR";
 
+    public static final int ALARM_TYPE_WIFI = -1;
+    public static final int ALARM_TYPE_BLUETOOTH = -2;
+    public static final String PREFERENCES_DEVICE_ACTIVE_BLUETOOTH = "PREFERENCES_DEVICE_ACTIVE_BLUETOOTH";
+    public static final String PREFERENCES_DEVICE_ACTIVE_WIFI = "PREFERENCES_DEVICE_ACTIVE_WIFI";
 
     public static final String LIST_COSTANT = "LIST@@@";
     public static final String LIST_ORDER_SEPARATOR = "ORDER@@@";

@@ -66,7 +66,7 @@ public class NotificationF {
                 if (r.getAlarm() == 0) {
                     n.setContentText(Utils.getDate(context, r.getDate_create()));
                 } else {
-                    n.setContentText(Utils.getDateAlarm(context, r.getAlarm()));
+                    n.setContentText(Utils.getAlarm(context, r.getAlarm(), r.getAlarm_repeat(), r.getDate_reminded()));
                 }
             } else {
                 n.setContentText(Utils.getContentList(context, r.getContent()));
@@ -239,7 +239,7 @@ public class NotificationF {
                 if (r.getAlarm() == 0) {
                     n.setContentText(Utils.getDate(context, r.getDate_create()));
                 } else {
-                    n.setContentText(Utils.getDateAlarm(context, r.getAlarm()));
+                    n.setContentText(Utils.getAlarm(context, r.getAlarm(), r.getAlarm_repeat(), r.getDate_reminded()));
                 }
             } else {
                 n.setContentText(Utils.getContentList(context, r.getContent()));

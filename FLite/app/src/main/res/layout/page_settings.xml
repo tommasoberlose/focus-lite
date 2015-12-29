@@ -133,7 +133,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/show_add_notification_check"
                         android:checked="true"
-                        app:theme="@style/mDialog_Dark_light"
+                        app:theme="@style/CheckBox.Colored"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
@@ -200,6 +200,64 @@
                         android:id="@+id/custom_sound_subtitle"
                         android:text="@string/subtitle_custom_sound"
                         android:layout_below="@+id/custom_sound_title"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/black"
+                    android:alpha="0.1"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/action_choose_device">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
+                        android:text="@string/text_active_device"
+                        android:id="@+id/choose_device_title" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white_back"
+                        android:id="@+id/choose_device_subtitle"
+                        android:text="@string/subtitle_action_choose_device"
+                        android:layout_below="@+id/choose_device_title"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/black"
+                    android:alpha="0.1"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/action_choose_wifi">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
+                        android:text="@string/text_active_connection"
+                        android:id="@+id/choose_wifi_title" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white_back"
+                        android:id="@+id/choose_wifi_subtitle"
+                        android:text="@string/subtitle_action_choose_wifi"
+                        android:layout_below="@+id/choose_wifi_title"/>
                 </RelativeLayout>
 
             </LinearLayout>
@@ -329,7 +387,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/twelve_hour_check"
                         android:checked="true"
-                        app:theme="@style/mDialog_Dark_light"
+                        app:theme="@style/CheckBox.Colored"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"

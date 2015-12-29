@@ -184,4 +184,17 @@
     <string name="subtitle_enter_address">Inserisci un indirizzo valido per avviare il navigatore più velocemente o per ricordarti i tuoi luoghi di interesse</string>
     <string name="action_navigate">Naviga</string>
     <string name="title_delete_button_not_ongoing_preferences">Pulsante Elimina</string>
+    <string name="action_choose_device">Scegli il Dispositivo Bluetooth</string>
+    <string name="error_bluetooth_off">Accendi il Bluetooth</string>
+    <string name="action_choose_wifi">Scegli la Connessione Wi-fi</string>
+    <string name="error_no_activated_device">Non ci sono device attivi</string>
+    <string name="error_wifi_off">Accendi il Wi-fi</string>
+    <string name="error_no_wifi_saved">Non ci sono connessioni Wi-fi salvate</string>
+    <string name="error_no_paired_devices">Non ci sono device collegati</string>
+    <string name="error_no_activated_wifi">Non ci sono connessioni Wi-fi attive</string>
+    <string name="text_active_connection">Connessioni Wi-fi attive</string>
+    <string name="title_activity_active_device">Scegli i device bluetooth attivi</string>
+    <string name="text_active_device">Device Bluetooth attivi</string>
+    <string name="subtitle_action_choose_device">Scegli i Device bluetooth visualizzati nella scelta per i promemoria</string>
+    <string name="subtitle_action_choose_wifi">Scegli le connessioni Wi-fi visualizzate nella scelta per i promemoria</string>
 </resources>
