@@ -197,4 +197,6 @@
     <string name="text_active_connection">Active Wi-fi Connections</string>
     <string name="subtitle_action_choose_device">Select the Bluetooth device displayed in the choice for the reminder</string>
     <string name="subtitle_action_choose_wifi">Select the Wi-fi connections displayed in the choice for the reminder</string>
+    <string name="title_close_note_after_actions">Automatic Close</string>
+    <string name="subtitle_close_note_after_actions">Close notes automatically after click on navigation, contact and url actions</string>
 </resources>

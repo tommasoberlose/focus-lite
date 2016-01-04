@@ -310,8 +310,14 @@ public class Utils {
     public static String checkURL(String s) {
         String[] split = s.split(" ");
         for (String match : split) {
-            if (Patterns.WEB_URL.matcher(match).matches())
-                return match;
+            if (Patterns.WEB_URL.matcher(match).matches()) {
+                try {
+                    URL url_tocheck = new URL(match);
+                    return url_tocheck.toString();
+                } catch (MalformedURLException e) {
+                    return "";
+                }
+            }
         }
         return "";
     }
@@ -419,7 +425,7 @@ public class Utils {
                 contact_id = cursor.getString(cursor.getColumnIndex( _ID ));
                 photo = cursor.getString(cursor.getColumnIndex( PHOTO_URI ));
 
-                if (name.toLowerCase().equals(query.toLowerCase()) || contact_id.equals(query)) {
+                if ((name != null && name.toLowerCase().equals(query.toLowerCase())) || (contact_id != null && contact_id.equals(query))) {
                     found = true;
                     break;
                 }

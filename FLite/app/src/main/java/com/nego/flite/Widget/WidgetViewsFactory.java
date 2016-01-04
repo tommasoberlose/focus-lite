@@ -188,7 +188,7 @@ public class WidgetViewsFactory implements
                 boolean address;
                 if (!mWidgetItems.get(position).getAddress().equals("")) {
                     rv.setViewVisibility(R.id.action_address, View.VISIBLE);
-                    Intent address_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + mWidgetItems.get(position).getAddress()));
+                    Intent address_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "google.navigation:q=" + mWidgetItems.get(position).getAddress());
                     rv.setOnClickFillInIntent(R.id.action_address, address_intent);
                     address = true;
                 } else {

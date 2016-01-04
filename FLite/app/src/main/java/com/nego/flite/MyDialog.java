@@ -80,6 +80,7 @@ public class MyDialog extends AppCompatActivity {
     private Snackbar snackbar_attach;
     private Snackbar snackbar_reminders;
     private Snackbar snackbar_suggestions;
+    private SharedPreferences SP;
 
     private Reminder r;
     private boolean edit = false;
@@ -116,6 +117,7 @@ public class MyDialog extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         final Intent intent = getIntent();
+        SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
 
         if (intent.getAction() != null) {
             if (intent.getAction().equals(Intent.ACTION_VIEW) || intent.getAction().equals(Intent.ACTION_DIAL)) {
@@ -927,6 +929,8 @@ public class MyDialog extends AppCompatActivity {
                             public void onClick(View v) {
                                 Intent call_intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + action_info));
                                 startActivity(call_intent);
+                                if (SP.getBoolean(Costants.PREFERENCE_CLOSE_NOTE_AFTER_ACTIONS, true))
+                                    finish();
                             }
                         });
                         break;
@@ -938,6 +942,8 @@ public class MyDialog extends AppCompatActivity {
                             public void onClick(View v) {
                                 Intent sms_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + action_info));
                                 startActivity(sms_intent);
+                                if (SP.getBoolean(Costants.PREFERENCE_CLOSE_NOTE_AFTER_ACTIONS, true))
+                                    finish();
                             }
                         });
                         break;
@@ -949,6 +955,8 @@ public class MyDialog extends AppCompatActivity {
                             public void onClick(View v) {
                                 Intent mail_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + action_info));
                                 startActivity(mail_intent);
+                                if (SP.getBoolean(Costants.PREFERENCE_CLOSE_NOTE_AFTER_ACTIONS, true))
+                                    finish();
                             }
                         });
                         break;
@@ -970,6 +978,8 @@ public class MyDialog extends AppCompatActivity {
                                     Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(action_info));
                                     intent.setData(uri);
                                     startActivity(intent);
+                                    if (SP.getBoolean(Costants.PREFERENCE_CLOSE_NOTE_AFTER_ACTIONS, true))
+                                        finish();
                                 }
                             });
                         } catch (Exception e) {
@@ -1171,6 +1181,8 @@ public class MyDialog extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent url_intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url_toGo));
                     startActivity(url_intent);
+                    if (SP.getBoolean(Costants.PREFERENCE_CLOSE_NOTE_AFTER_ACTIONS, true))
+                        finish();
                 }
             });
         } else {
@@ -1187,6 +1199,8 @@ public class MyDialog extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent address_intent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + address));
                     startActivity(address_intent);
+                    if (SP.getBoolean(Costants.PREFERENCE_CLOSE_NOTE_AFTER_ACTIONS, true))
+                        finish();
                 }
             });
             findViewById(R.id.edit_address).setOnClickListener(new View.OnClickListener() {
@@ -1326,7 +1340,6 @@ public class MyDialog extends AppCompatActivity {
             Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 
             if (pairedDevices.size() > 0) {
-                SharedPreferences SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
                 if (!SP.contains(Costants.PREFERENCES_DEVICE_ACTIVE_BLUETOOTH)) {
                     SharedPreferences.Editor editor = SP.edit();
                     String toPut = "";

@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.nego.flite.ActiveDevice;
 import com.nego.flite.Costants;
 import com.nego.flite.R;
 
@@ -112,67 +114,85 @@ public class AdapterC extends RecyclerView.Adapter<AdapterC.ViewHolder> {
     public void generate_list() {
         if (what == Costants.ALARM_TYPE_BLUETOOTH) {
             BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()) {
                 Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-            SharedPreferences SP = mContext.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-            if (!SP.contains(Costants.PREFERENCES_DEVICE_ACTIVE_BLUETOOTH)) {
-                SharedPreferences.Editor editor = SP.edit();
-                String toPut = "";
-                for (BluetoothDevice device : pairedDevices) {
-                    if (toPut.equals(""))
-                        toPut = device.getAddress();
-                    else
-                        toPut = toPut + Costants.LIST_ITEM_SEPARATOR + device.getAddress();
-                }
-                editor.putString(Costants.PREFERENCES_DEVICE_ACTIVE_BLUETOOTH, toPut);
-                editor.apply();
-            }
-
-            String[] deviceAct = SP.getString(Costants.PREFERENCES_DEVICE_ACTIVE_BLUETOOTH, "").split(Costants.LIST_ITEM_SEPARATOR);
-            for (BluetoothDevice device : pairedDevices) {
-                mDatasetB.add(device);
-                int k;
-                for (k = 0; k < deviceAct.length; k++) {
-                    if (device.getAddress().equals(deviceAct[k])) {
-                        mDatasetC.add(true);
-                        break;
+                if (pairedDevices.size() > 0) {
+                    SharedPreferences SP = mContext.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
+                    if (!SP.contains(Costants.PREFERENCES_DEVICE_ACTIVE_BLUETOOTH)) {
+                        SharedPreferences.Editor editor = SP.edit();
+                        String toPut = "";
+                        for (BluetoothDevice device : pairedDevices) {
+                            if (toPut.equals(""))
+                                toPut = device.getAddress();
+                            else
+                                toPut = toPut + Costants.LIST_ITEM_SEPARATOR + device.getAddress();
+                        }
+                        editor.putString(Costants.PREFERENCES_DEVICE_ACTIVE_BLUETOOTH, toPut);
+                        editor.apply();
                     }
+
+                    String[] deviceAct = SP.getString(Costants.PREFERENCES_DEVICE_ACTIVE_BLUETOOTH, "").split(Costants.LIST_ITEM_SEPARATOR);
+                    for (BluetoothDevice device : pairedDevices) {
+                        mDatasetB.add(device);
+                        int k;
+                        for (k = 0; k < deviceAct.length; k++) {
+                            if (device.getAddress().equals(deviceAct[k])) {
+                                mDatasetC.add(true);
+                                break;
+                            }
+                        }
+                        if (k == deviceAct.length)
+                            mDatasetC.add(false);
+                    }
+                } else {
+                    Toast.makeText(mContext, mContext.getString(R.string.error_no_paired_devices), Toast.LENGTH_SHORT).show();
+                    ((ActiveDevice) mContext).finish();
                 }
-                if (k == deviceAct.length)
-                    mDatasetC.add(false);
+            } else {
+                Toast.makeText(mContext, mContext.getString(R.string.error_bluetooth_off), Toast.LENGTH_SHORT).show();
+                ((ActiveDevice) mContext).finish();
             }
 
         } else {
-
             WifiManager wifiM = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-            List<WifiConfiguration> wifiList = wifiM.getConfiguredNetworks();
-            SharedPreferences SP = mContext.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-            if (!SP.contains(Costants.PREFERENCES_DEVICE_ACTIVE_WIFI)) {
-                SharedPreferences.Editor editor = SP.edit();
-                String toPut = "";
-                for (WifiConfiguration connection : wifiList) {
-                    if (toPut.equals(""))
-                        toPut = "" + connection.networkId;
-                    else
-                        toPut = toPut + Costants.LIST_ITEM_SEPARATOR + connection.networkId;
-                }
-                editor.putString(Costants.PREFERENCES_DEVICE_ACTIVE_WIFI, toPut);
-                editor.apply();
-            }
-
-            String[] wifiAct = SP.getString(Costants.PREFERENCES_DEVICE_ACTIVE_WIFI, "").split(Costants.LIST_ITEM_SEPARATOR);
-            for (WifiConfiguration connection : wifiList) {
-                mDatasetW.add(connection);
-                int k;
-                for (k = 0; k < wifiAct.length; k++) {
-                    if (("" + connection.networkId).equals(wifiAct[k])) {
-                        mDatasetC.add(true);
-                        break;
+                    if (wifiM != null && wifiM.isWifiEnabled()) {
+                List<WifiConfiguration> wifiList = wifiM.getConfiguredNetworks();
+                if (wifiList.size() > 0) {
+                    SharedPreferences SP = mContext.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
+                    if (!SP.contains(Costants.PREFERENCES_DEVICE_ACTIVE_WIFI)) {
+                        SharedPreferences.Editor editor = SP.edit();
+                        String toPut = "";
+                        for (WifiConfiguration connection : wifiList) {
+                            if (toPut.equals(""))
+                                toPut = "" + connection.networkId;
+                            else
+                                toPut = toPut + Costants.LIST_ITEM_SEPARATOR + connection.networkId;
+                        }
+                        editor.putString(Costants.PREFERENCES_DEVICE_ACTIVE_WIFI, toPut);
+                        editor.apply();
                     }
-                }
-                if (k == wifiAct.length)
-                    mDatasetC.add(false);
-            }
 
+                    String[] wifiAct = SP.getString(Costants.PREFERENCES_DEVICE_ACTIVE_WIFI, "").split(Costants.LIST_ITEM_SEPARATOR);
+                    for (WifiConfiguration connection : wifiList) {
+                        mDatasetW.add(connection);
+                        int k;
+                        for (k = 0; k < wifiAct.length; k++) {
+                            if (("" + connection.networkId).equals(wifiAct[k])) {
+                                mDatasetC.add(true);
+                                break;
+                            }
+                        }
+                        if (k == wifiAct.length)
+                            mDatasetC.add(false);
+                    }
+                } else {
+                    Toast.makeText(mContext, mContext.getString(R.string.error_no_wifi_saved), Toast.LENGTH_SHORT).show();
+                    ((ActiveDevice) mContext).finish();
+                }
+            } else {
+                Toast.makeText(mContext, mContext.getString(R.string.error_wifi_off), Toast.LENGTH_SHORT).show();
+                ((ActiveDevice) mContext).finish();
+            }
         }
     }
 

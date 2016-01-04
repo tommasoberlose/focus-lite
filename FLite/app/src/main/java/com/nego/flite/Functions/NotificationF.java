@@ -78,7 +78,7 @@ public class NotificationF {
         }
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-        if (r.getAlarm_repeat().equals("") && SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
+        if ((r.getAlarm_repeat().equals("") || r.getAlarm() == Costants.ALARM_TYPE_BLUETOOTH || r.getAlarm() == Costants.ALARM_TYPE_WIFI) && SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
             n.setDeleteIntent(pi_delete);
         }
 

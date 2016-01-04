@@ -394,8 +394,51 @@
                         android:layout_marginLeft="16dp"
                         android:layout_marginStart="16dp"/>
                 </RelativeLayout>
-            </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/black"
+                    android:alpha="0.1"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/action_close_note_after_actions">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
+                        android:text="@string/title_close_note_after_actions"
+                        android:id="@+id/close_note_after_actions_title"
+                        android:layout_toLeftOf="@+id/close_note_after_actions_check"
+                        android:layout_toStartOf="@+id/close_note_after_actions_check" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white_back"
+                        android:id="@+id/close_note_after_actions_subtitle"
+                        android:text="@string/subtitle_close_note_after_actions"
+                        android:layout_below="@+id/close_note_after_actions_title"
+                        android:layout_toLeftOf="@+id/close_note_after_actions_check"
+                        android:layout_toStartOf="@+id/close_note_after_actions_check" />
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/close_note_after_actions_check"
+                        android:checked="true"
+                        app:theme="@style/CheckBox.Colored"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginStart="16dp"/>
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

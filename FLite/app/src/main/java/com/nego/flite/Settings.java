@@ -478,6 +478,22 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        // CLOSE NOTES AFTER ACTIONS
+        final AppCompatCheckBox close_notes__check = (AppCompatCheckBox) findViewById(R.id.close_note_after_actions_check);
+        close_notes__check.setChecked(SP.getBoolean(Costants.PREFERENCE_CLOSE_NOTE_AFTER_ACTIONS, true));
+        close_notes__check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SP.edit().putBoolean(Costants.PREFERENCE_CLOSE_NOTE_AFTER_ACTIONS, isChecked).apply();
+            }
+        });
+        findViewById(R.id.action_close_note_after_actions).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                close_notes__check.setChecked(!close_notes__check.isChecked());
+            }
+        });
+
     }
 
 

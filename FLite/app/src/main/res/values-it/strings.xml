@@ -197,4 +197,6 @@
     <string name="text_active_device">Device Bluetooth attivi</string>
     <string name="subtitle_action_choose_device">Scegli i Device bluetooth visualizzati nella scelta per i promemoria</string>
     <string name="subtitle_action_choose_wifi">Scegli le connessioni Wi-fi visualizzate nella scelta per i promemoria</string>
+    <string name="title_close_note_after_actions">Chiusura Automatica</string>
+    <string name="subtitle_close_note_after_actions">Chiudi automaticamente le note dopo aver cliccato sulle azioni navigatore, contatto e url</string>
 </resources>
