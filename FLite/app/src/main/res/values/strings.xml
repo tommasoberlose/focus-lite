@@ -199,4 +199,8 @@
     <string name="subtitle_action_choose_wifi">Select the Wi-fi connections displayed in the choice for the reminder</string>
     <string name="title_close_note_after_actions">Automatic Close</string>
     <string name="subtitle_close_note_after_actions">Close notes automatically after click on navigation, contact and url actions</string>
+    <string name="title_activity_main_list">Main List</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

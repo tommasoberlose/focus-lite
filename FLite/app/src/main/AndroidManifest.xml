@@ -149,6 +149,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nego.flite.Settings" />
         </activity>
+        <activity
+            android:name=".MainList"
+            android:label="@string/title_activity_main_list"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
