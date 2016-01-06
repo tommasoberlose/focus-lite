@@ -19,17 +19,18 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:background="@color/background_dark_lighter"
+        android:background="@android:color/white"
         app:headerLayout="@layout/nav_header_main_list" >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             android:layout_marginTop="@dimen/nav_header_height">
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -39,46 +40,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:id="@+id/section_main_list"
-                            android:background="?attr/selectableItemBackground">
-                            <TextView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="8dp"
-                                android:background="@drawable/circle_back_light"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="@android:color/white"
-                                android:text="@string/title_activity_main_list"
-                                android:textSize="14sp"
-                                android:fontFamily="sans-serif-medium"
-                                android:layout_marginLeft="16dp"
-                                android:layout_marginRight="16dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@android:color/black"
-                        android:alpha="0.2"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/title_activity_settings"
-                            android:textColor="@color/background_dark_light_text_header"
+                            android:text="@string/text_categories"
+                            android:textColor="@android:color/black"
+                            android:alpha="0.54"
+                            android:textSize="14sp"
                             android:textStyle="bold"
                             android:paddingLeft="16dp"
                             android:paddingRight="16dp"
@@ -89,21 +57,157 @@
                             android:layout_height="48dp"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
-                            android:id="@+id/section_notification_settings"
+                            android:id="@+id/section_main_list"
+                            android:clickable="true"
                             android:background="?attr/selectableItemBackground">
-                            <ImageView
-                                android:layout_width="28dp"
-                                android:layout_height="28dp"
+                            <android.support.v7.widget.AppCompatCheckBox
+                                android:layout_width="32dp"
+                                android:layout_height="48dp"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="8dp"
-                                android:tint="@color/background_dark_light_text_header"
-                                android:src="@drawable/ic_action_action_view_day"/>
+                                android:checked="true"
+                                android:id="@+id/check_main_list"
+                                app:theme="@style/CheckBox.Colored.Blue" />
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@android:color/white"
-                                android:text="@string/title_notification_settings"
-                                android:textSize="14sp"
+                                android:textColor="@android:color/black"
+                                android:alpha="0.84"
+                                android:text="@string/category_standard_notes"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif-medium"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:id="@+id/section_reminded"
+                            android:background="?attr/selectableItemBackground">
+                            <android.support.v7.widget.AppCompatCheckBox
+                                android:layout_width="32dp"
+                                android:layout_height="48dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="8dp"
+                                android:id="@+id/check_reminders"
+                                android:checked="true"
+                                app:theme="@style/CheckBox.Colored.BlueDark"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/black"
+                                android:alpha="0.84"
+                                android:text="@string/category_snoozed_notes"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif-medium"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:id="@+id/section_starred"
+                            android:background="?attr/selectableItemBackground">
+                            <android.support.v7.widget.AppCompatCheckBox
+                                android:layout_width="32dp"
+                                android:layout_height="48dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="8dp"
+                                android:id="@+id/starred_check"
+                                android:checked="true"
+                                app:theme="@style/CheckBox.Colored.Starred" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/black"
+                                android:alpha="0.84"
+                                android:text="@string/category_starred_notes"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif-medium"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@color/back_select"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:id="@+id/action_settings"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground">
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="8dp"
+                                android:tint="@android:color/black"
+                                android:alpha="0.54"
+                                android:src="@drawable/ic_action_settings"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.8"
+                                android:textColor="@android:color/black"
+                                android:alpha="0.84"
+                                android:text="@string/title_activity_settings"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif-medium"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp" />
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:tint="@android:color/black"
+                                android:alpha="0.54"
+                                android:id="@+id/arrow_settings"
+                                android:src="@drawable/ic_action_hardware_keyboard_arrow_down"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/container_menu_settings"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:id="@+id/section_notification_settings"
+                            android:background="?attr/selectableItemBackground">
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="8dp"
+                                android:tint="@android:color/black"
+                                android:alpha="0.54"
+                                android:src="@drawable/ic_action_bookmark_icon"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/black"
+                                android:alpha="0.84"
+                                android:text="@string/title_menu_notifications"
+                                android:textSize="15sp"
                                 android:fontFamily="sans-serif-medium"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp" />
@@ -116,18 +220,20 @@
                             android:id="@+id/section_alarm_settings"
                             android:background="?attr/selectableItemBackground">
                             <ImageView
-                                android:layout_width="28dp"
-                                android:layout_height="28dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="8dp"
-                                android:tint="@color/background_dark_light_text_header"
+                                android:tint="@android:color/black"
+                                android:alpha="0.54"
                                 android:src="@drawable/ic_action_social_notifications"/>
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@android:color/white"
-                                android:text="@string/title_section_alarm"
-                                android:textSize="14sp"
+                                android:textColor="@android:color/black"
+                                android:alpha="0.84"
+                                android:text="@string/title_menu_alarms"
+                                android:textSize="15sp"
                                 android:fontFamily="sans-serif-medium"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp" />
@@ -140,18 +246,20 @@
                             android:id="@+id/section_style_settings"
                             android:background="?attr/selectableItemBackground">
                             <ImageView
-                                android:layout_width="28dp"
-                                android:layout_height="28dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="8dp"
-                                android:tint="@color/background_dark_light_text_header"
+                                android:tint="@android:color/black"
+                                android:alpha="0.54"
                                 android:src="@drawable/ic_action_image_color_lens"/>
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@android:color/white"
-                                android:text="@string/title_customize_settings"
-                                android:textSize="14sp"
+                                android:textColor="@android:color/black"
+                                android:alpha="0.84"
+                                android:text="@string/title_menu_style"
+                                android:textSize="15sp"
                                 android:fontFamily="sans-serif-medium"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp" />
@@ -164,60 +272,88 @@
                             android:id="@+id/section_application_settings"
                             android:background="?attr/selectableItemBackground">
                             <ImageView
-                                android:layout_width="28dp"
-                                android:layout_height="28dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="8dp"
-                                android:tint="@color/background_dark_light_text_header"
+                                android:tint="@android:color/black"
+                                android:alpha="0.54"
                                 android:src="@drawable/ic_action_settings"/>
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textSize="14sp"
+                                android:textSize="15sp"
                                 android:fontFamily="sans-serif-medium"
-                                android:textColor="@android:color/white"
-                                android:text="@string/title_app_settings"
+                                android:textColor="@android:color/black"
+                                android:alpha="0.84"
+                                android:text="@string/title_menu_app"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp" />
                         </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:background="@color/back_selected_item"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@android:color/black"
-                        android:alpha="0.2"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
+                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp">
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="48dp"
-                            android:text="@string/help_feedback"
-                            android:id="@+id/action_feedback"
-                            android:textColor="@android:color/white"
-                            android:background="?attr/selectableItemBackground"
-                            android:textSize="14sp"
-                            android:fontFamily="sans-serif-medium"
-                            android:paddingLeft="16dp"
-                            android:paddingRight="16dp"
-                            android:paddingTop="12dp"
-                            android:paddingBottom="12dp"/>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:text="@string/title_tab_developer"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
                             android:id="@+id/action_about"
-                            android:textColor="@android:color/white"
-                            android:background="?attr/selectableItemBackground"
-                            android:textSize="14sp"
-                            android:fontFamily="sans-serif-medium"
-                            android:paddingLeft="16dp"
-                            android:paddingRight="16dp"
-                            android:paddingTop="12dp"
-                            android:paddingBottom="12dp"/>
+                            android:background="?attr/selectableItemBackground">
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="8dp"
+                                android:tint="@android:color/black"
+                                android:alpha="0.54"
+                                android:src="@drawable/ic_action_info_outline"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif-medium"
+                                android:textColor="@android:color/black"
+                                android:alpha="0.84"
+                                android:text="@string/title_tab_developer"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:id="@+id/action_feedback"
+                            android:background="?attr/selectableItemBackground">
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="8dp"
+                                android:tint="@android:color/black"
+                                android:alpha="0.54"
+                                android:src="@drawable/ic_action_feedback"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif-medium"
+                                android:textColor="@android:color/black"
+                                android:alpha="0.84"
+                                android:text="@string/help_feedback"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>

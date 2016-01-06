@@ -71,8 +71,23 @@
     </style>
 
     <style name="CheckBox.Colored" parent="Widget.AppCompat.CompoundButton.CheckBox">
-        <item name="android:colorControlActivated">@color/primary</item>
+        <item name="colorControlActivated">@color/primary</item>
         <item name="android:textColorSecondary">@color/black_500</item>
+    </style>
+
+    <style name="CheckBox.Colored.Blue" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="colorControlActivated">@color/primary</item>
+        <item name="android:textColorSecondary">@color/primary</item>
+    </style>
+
+    <style name="CheckBox.Colored.BlueDark" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="colorControlActivated">@color/primary_dark</item>
+        <item name="android:textColorSecondary">@color/primary_dark</item>
+    </style>
+
+    <style name="CheckBox.Colored.Starred" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="colorControlActivated">@color/icon.do</item>
+        <item name="android:textColorSecondary">@color/icon.do</item>
     </style>
 
 </resources>

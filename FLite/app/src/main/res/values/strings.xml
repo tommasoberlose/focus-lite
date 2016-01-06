@@ -66,7 +66,7 @@
     <string name="title_widget_style">Widget Style</string>
     <string name="add_widget">Add Widget</string>
     <string name="title_customize_settings">Style Settings</string>
-    <string name="title_notification_settings">Notification Settings</string>
+    <string name="title_notification_settings">Notifications Settings</string>
     <string name="title_notification_preferences">Alarm Notification Preferences</string>
     <string name="text_vibrate">Vibrate</string>
     <string name="text_led">LED</string>
@@ -156,7 +156,7 @@
     <string name="title_custom_sound">Custom Notification Sound</string>
     <string name="title_show_add_notification">"New note" Notification Visibility</string>
     <string name="subtitle_show_add_notification">Show always "new note" notification also when there\'re no notes</string>
-    <string name="title_section_alarm">Alarm Settings</string>
+    <string name="title_section_alarm">Alarms Settings</string>
     <string name="title_persistent_sound">Persistent Reminder Notification</string>
     <string name="subtitle_persistent_sound">Make reminder notifications persistent and use them like alarms</string>
     <string name="title_twelve_hour">Use 12-hour Format</string>
@@ -203,4 +203,13 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="text_filter">Filter Notes</string>
+    <string name="text_categories">Categories</string>
+    <string name="category_starred_notes">Starred</string>
+    <string name="category_snoozed_notes">Reminders</string>
+    <string name="category_standard_notes">Notes</string>
+    <string name="title_menu_notifications">Notifications</string>
+    <string name="title_menu_alarms">Alarms</string>
+    <string name="title_menu_style">Style</string>
+    <string name="title_menu_app">Application</string>
 </resources>

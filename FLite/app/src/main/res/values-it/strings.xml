@@ -199,4 +199,16 @@
     <string name="subtitle_action_choose_wifi">Scegli le connessioni Wi-fi visualizzate nella scelta per i promemoria</string>
     <string name="title_close_note_after_actions">Chiusura Automatica</string>
     <string name="subtitle_close_note_after_actions">Chiudi automaticamente le note dopo aver cliccato sulle azioni navigatore, contatto e url</string>
+    <string name="navigation_drawer_close">Chiudi il Navigation drawer</string>
+    <string name="navigation_drawer_open">Apri il Navigation Drawer</string>
+    <string name="title_activity_main_list">Lista Note</string>
+    <string name="text_filter">Filtra Note</string>
+    <string name="text_categories">Categorie</string>
+    <string name="category_starred_notes">Importanti</string>
+    <string name="category_snoozed_notes">Promemoria</string>
+    <string name="category_standard_notes">Note</string>
+    <string name="title_menu_alarms">Allarmi</string>
+    <string name="title_menu_notifications">Notifiche</string>
+    <string name="title_menu_app">Applicazione</string>
+    <string name="title_menu_style">Stile</string>
 </resources>

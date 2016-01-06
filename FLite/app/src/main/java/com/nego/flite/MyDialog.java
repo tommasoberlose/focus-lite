@@ -915,7 +915,7 @@ public class MyDialog extends AppCompatActivity {
         if (action.equals("")) {
             ((ImageView) findViewById(R.id.contact_img_replace)).setImageResource(R.drawable.ic_action_account_circle);
             findViewById(R.id.contact_img).setVisibility(View.GONE);
-            collapse(contact_card);
+            Utils.collapse(contact_card);
         } else {
             findViewById(R.id.contact_img).setVisibility(View.GONE);
             if (ContextCompat.checkSelfPermission(this,
@@ -1005,7 +1005,7 @@ public class MyDialog extends AppCompatActivity {
                         setContact();
                     }
                 });
-                expand(contact_card);
+                Utils.expand(contact_card);
             } else {
                 requestPermission(Manifest.permission.READ_CONTACTS);
             }
@@ -1174,7 +1174,7 @@ public class MyDialog extends AppCompatActivity {
 
         final String url_toGo = toGo;
         if (!url_toGo.equals("")) {
-            expand(url_card);
+            Utils.expand(url_card);
             ((TextView) findViewById(R.id.title_url_to_open)).setText(url_toGo);
             url_card.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1186,7 +1186,7 @@ public class MyDialog extends AppCompatActivity {
                 }
             });
         } else {
-            collapse(url_card);
+            Utils.collapse(url_card);
         }
     }
 
@@ -1209,9 +1209,9 @@ public class MyDialog extends AppCompatActivity {
                     editAddress();
                 }
             });
-            expand(address_card);
+            Utils.expand(address_card);
         } else {
-            collapse(address_card);
+            Utils.collapse(address_card);
         }
     }
 
@@ -1274,62 +1274,6 @@ public class MyDialog extends AppCompatActivity {
 
         addressDialog.setContentView(addressView);
         addressDialog.show();
-    }
-
-    public static void expand(final View v) {
-        if (v.getVisibility() != View.VISIBLE) {
-            v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            final int targetHeight = v.getMeasuredHeight();
-
-            // Older versions of android (pre API 21) cancel animations for views with a height of 0.
-            v.getLayoutParams().height = 1;
-            v.setVisibility(View.VISIBLE);
-            Animation a = new Animation() {
-                @Override
-                protected void applyTransformation(float interpolatedTime, Transformation t) {
-                    v.getLayoutParams().height = interpolatedTime == 1
-                            ? ViewGroup.LayoutParams.WRAP_CONTENT
-                            : (int) (targetHeight * interpolatedTime);
-                    v.requestLayout();
-                }
-
-                @Override
-                public boolean willChangeBounds() {
-                    return true;
-                }
-            };
-
-            a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density) * 2);
-            a.setInterpolator(new AccelerateDecelerateInterpolator());
-            v.startAnimation(a);
-        }
-    }
-
-    public static void collapse(final View v) {
-        if (v.getVisibility() == View.VISIBLE) {
-            final int initialHeight = v.getMeasuredHeight();
-
-            Animation a = new Animation() {
-                @Override
-                protected void applyTransformation(float interpolatedTime, Transformation t) {
-                    if (interpolatedTime == 1) {
-                        v.setVisibility(View.GONE);
-                    } else {
-                        v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
-                        v.requestLayout();
-                    }
-                }
-
-                @Override
-                public boolean willChangeBounds() {
-                    return true;
-                }
-            };
-
-            a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density) * 2);
-            a.setInterpolator(new AccelerateDecelerateInterpolator());
-            v.startAnimation(a);
-        }
     }
 
     public void bluetoothReminder() {

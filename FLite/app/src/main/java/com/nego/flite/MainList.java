@@ -1,9 +1,12 @@
 package com.nego.flite;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 
-public class MainList extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainList extends AppCompatActivity {
+
+    private SharedPreferences SP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,23 +38,35 @@ public class MainList extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
 
+        // SETTINGS
 
-
+        findViewById(R.id.action_settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View container = findViewById(R.id.container_menu_settings);
+                if (container.getVisibility() == View.VISIBLE) {
+                    Utils.collapse(container);
+                } else {
+                    Utils.expand(container);
+                }
+                findViewById(R.id.arrow_settings).animate().rotation(findViewById(R.id.arrow_settings).getRotation() + 180).start();
+            }
+        });
 
         findViewById(R.id.section_notification_settings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainList.this, Settings.class);
                 i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_NOTIFICATION_SETTINGS);
+                drawer.closeDrawer(GravityCompat.START);
                 startActivity(i);
             }
         });
@@ -59,6 +76,7 @@ public class MainList extends AppCompatActivity
             public void onClick(View v) {
                 Intent i = new Intent(MainList.this, Settings.class);
                 i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_ALARM_SETTINGS);
+                drawer.closeDrawer(GravityCompat.START);
                 startActivity(i);
             }
         });
@@ -68,6 +86,7 @@ public class MainList extends AppCompatActivity
             public void onClick(View v) {
                 Intent i = new Intent(MainList.this, Settings.class);
                 i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_STYLE_SETTINGS);
+                drawer.closeDrawer(GravityCompat.START);
                 startActivity(i);
             }
         });
@@ -77,9 +96,12 @@ public class MainList extends AppCompatActivity
             public void onClick(View v) {
                 Intent i = new Intent(MainList.this, Settings.class);
                 i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_APPLICATION_SETTINGS);
+                drawer.closeDrawer(GravityCompat.START);
                 startActivity(i);
             }
         });
+
+        // FEEDBACK AND HELP
 
         findViewById(R.id.action_feedback).setVisibility(View.GONE);
         /* TODO HELP
@@ -88,6 +110,7 @@ public class MainList extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
+                drawer.closeDrawer(GravityCompat.START);
             }
         });
 
@@ -97,6 +120,54 @@ public class MainList extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainList.this, About.class));
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        // CATEGORIES
+
+        final AppCompatCheckBox notes_check = (AppCompatCheckBox) findViewById(R.id.check_main_list);
+        notes_check.setChecked(SP.getBoolean(Costants.PREFERENCES_LIST_NOTE, true));
+        notes_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SP.edit().putBoolean(Costants.PREFERENCES_LIST_NOTE, isChecked).apply();
+            }
+        });
+        findViewById(R.id.section_main_list).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notes_check.setChecked(!notes_check.isChecked());
+            }
+        });
+
+        final AppCompatCheckBox reminders_check = (AppCompatCheckBox) findViewById(R.id.check_reminders);
+        reminders_check.setChecked(SP.getBoolean(Costants.PREFERENCES_LIST_REMINDERS, true));
+        reminders_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SP.edit().putBoolean(Costants.PREFERENCES_LIST_REMINDERS, isChecked).apply();
+            }
+        });
+        findViewById(R.id.section_reminded).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reminders_check.setChecked(!reminders_check.isChecked());
+            }
+        });
+
+        final AppCompatCheckBox starred_check = (AppCompatCheckBox) findViewById(R.id.starred_check);
+        starred_check.setChecked(SP.getBoolean(Costants.PREFERENCES_LIST_STARRED, true));
+        starred_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SP.edit().putBoolean(Costants.PREFERENCES_LIST_STARRED, isChecked).apply();
+            }
+        });
+        findViewById(R.id.section_starred).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                starred_check.setChecked(!starred_check.isChecked());
             }
         });
     }
@@ -122,39 +193,5 @@ public class MainList extends AppCompatActivity
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        Intent i_settings = new Intent(MainList.this, Settings.class);
-
-        switch (id) {
-            case R.id.section_notification_settings:
-                i_settings.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_NOTIFICATION_SETTINGS);
-                startActivity(i_settings);
-                break;
-            case R.id.section_alarm_settings:
-                i_settings.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_NOTIFICATION_SETTINGS);
-                startActivity(i_settings);
-                break;
-            case R.id.section_style_settings:
-                i_settings.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_NOTIFICATION_SETTINGS);
-                startActivity(i_settings);
-                break;
-            case R.id.section_application_settings:
-                i_settings.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_NOTIFICATION_SETTINGS);
-                startActivity(i_settings);
-                break;
-            case R.id.action_about:
-                startActivity(new Intent(MainList.this, About.class));
-                break;
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 }

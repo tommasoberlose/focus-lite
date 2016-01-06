@@ -64,6 +64,10 @@ public class Costants {
     public static final String PREFERENCE_STYLE_WIDGET_MD = "PREFERENCE_STYLE_WIDGET_MD";
     public static final String PREFERENCE_STYLE_WIDGET_ML = "PREFERENCE_STYLE_WIDGET_ML";
 
+    public static final String PREFERENCES_LIST_NOTE = "PREFERENCES_LIST_NOTE";
+    public static final String PREFERENCES_LIST_REMINDERS = "PREFERENCES_LIST_REMINDERS";
+    public static final String PREFERENCES_LIST_STARRED = "PREFERENCES_LIST_STARRED";
+
     public static final String PREFERENCE_INTRO = "PREFERENCE_INTRO";
     public static final String PREFERENCE_ORDER_NOTIFICATIONS = "PREFERENCE_ORDER_NOTIFICATIONS";
     public static final String PREFERENCE_BUTTON_SHARE = "PREFERENCE_BUTTON_SHARE";

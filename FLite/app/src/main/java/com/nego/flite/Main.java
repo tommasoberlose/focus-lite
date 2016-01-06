@@ -85,12 +85,12 @@ public class Main extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent new_note = new Intent(Main.this, MyDialog.class);
+                Intent new_note = new Intent(Main.this, MyDialog.class);
                 new_note.setAction(Costants.ACTION_ADD_ITEM);
-                startActivity(new_note);*/
-                startActivity(new Intent(Main.this, MainList.class));
+                startActivity(new_note);
             }
         });
+        startActivity(new Intent(Main.this, MainList.class));
 
 
     }
