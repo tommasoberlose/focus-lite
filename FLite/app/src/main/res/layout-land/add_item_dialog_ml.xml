@@ -11,7 +11,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <android.support.v4.view.ViewPager
                 android:layout_width="0dp"
@@ -249,6 +249,7 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="3dp"
                     app:cardElevation="4dp"
+                    android:transitionName="action_button"
                     android:background="@android:color/white"
                     app:cardBackgroundColor="@android:color/white"
                     app:cardPreventCornerOverlap="true"

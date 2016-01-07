@@ -1,12 +1,21 @@
 package com.nego.flite;
 
+import android.animation.Animator;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,11 +25,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewAnimationUtils;
 import android.widget.CompoundButton;
+
+import com.nego.flite.Adapter.AdapterList;
+import com.nego.flite.database.DbAdapter;
 
 public class MainList extends AppCompatActivity {
 
     private SharedPreferences SP;
+    private RecyclerView recList;
+    private FloatingActionButton fab;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private String query = "";
+    private AdapterList mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +47,55 @@ public class MainList extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setAllowEnterTransitionOverlap(true);
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, android.R.color.transparent));
+        }
+
+        recList = (RecyclerView) findViewById(R.id.listView);
+        recList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent new_note = new Intent(MainList.this, MyDialog.class);
+                new_note.setAction(Costants.ACTION_ADD_ITEM);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainList.this,
+                            Pair.create((View) fab, "action_button"));
+                    startActivity(new_note, options.toBundle());
+                } else {
+                    startActivity(new_note);
+                }
             }
         });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            recList.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if (scrollY > 0)
+                        fab.hide();
+                    else
+                        fab.show();
+                }
+            });
+        }
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateList(query);
+            }
+        });
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary);
+
+        updateList(query);
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -193,5 +252,35 @@ public class MainList extends AppCompatActivity {
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void updateList(final String q) {
+
+        mSwipeRefreshLayout.setRefreshing(true);
+
+        query = q;
+        final Handler mHandler = new Handler();
+
+        new Thread(new Runnable() {
+            public void run() {
+                DbAdapter dbHelper = new DbAdapter(MainList.this);
+                dbHelper.open();
+
+                final AdapterList adapter;
+                adapter = new AdapterList(dbHelper, query, MainList.this);
+
+                dbHelper.close();
+
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        recList.setAdapter(adapter);
+                        mAdapter = adapter;
+                        // TODO mAdapter.clearSelections();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        fab.show();
+                    }
+                });
+            }
+        }).start();
     }
 }
