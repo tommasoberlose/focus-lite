@@ -2,9 +2,11 @@ package com.nego.flite.Adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,6 +25,7 @@ import com.nego.flite.Costants;
 import com.nego.flite.MyDialog;
 import com.nego.flite.R;
 import com.nego.flite.Reminder;
+import com.nego.flite.Utils;
 import com.nego.flite.database.DbAdapter;
 
 import java.util.ArrayList;
@@ -41,19 +44,17 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
             mView = v;
         }
 
-        public CheckBox checkBox;
-        public ImageView img;
-        public ImageView add_icon;
-        public EditText text;
-        public ImageView action_remove;
-        public ViewHolder(View v, CheckBox checkBox, ImageView img, ImageView add_icon, EditText text, ImageView action_remove) {
+        public View top_divider;
+        public CardView card_reminder;
+        public TextView reminder_title;
+        public TextView reminder_subtitle;
+        public ViewHolder(View v, View top_divider, CardView card_reminder, TextView reminder_title, TextView reminder_subtitle) {
             super(v);
             mView = v;
-            this.checkBox = checkBox;
-            this.img = img;
-            this.add_icon = add_icon;
-            this.text = text;
-            this.action_remove = action_remove;
+            this.top_divider = top_divider;
+            this.card_reminder = card_reminder;
+            this.reminder_title = reminder_title;
+            this.reminder_subtitle = reminder_subtitle;
         }
 
     }
@@ -72,13 +73,11 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
         View v;
 
         v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item, parent, false); // TODO creare layout item con cardview per elevation e per farlo scorrere poi
-        vh = new ViewHolder(v,
-                (CheckBox) v.findViewById(R.id.checkbox),
-                (ImageView) v.findViewById(R.id.action_drag),
-                (ImageView) v.findViewById(R.id.add_icon),
-                (EditText) v.findViewById(R.id.text),
-                (ImageView) v.findViewById(R.id.action_remove));
+                .inflate(R.layout.mainlist_item, parent, false); // TODO creare layout item con cardview per elevation e per farlo scorrere poi
+        vh = new ViewHolder(v, v.findViewById(R.id.top_divider),
+                (CardView) v.findViewById(R.id.card_reminder),
+                (TextView) v.findViewById(R.id.reminder_title),
+                (TextView) v.findViewById(R.id.reminder_subtitle));
 
         return vh;
     }
@@ -86,7 +85,56 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
+        final Reminder r = mDataset.get(position);
 
+        // Top divider visibility first element
+        holder.top_divider.setVisibility(position == 0 ? View.GONE : View.VISIBLE);
+
+        holder.card_reminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mContext, MyDialog.class);
+                i.setAction(Costants.ACTION_EDIT_ITEM);
+                i.putExtra(Costants.EXTRA_REMINDER, r);
+                mContext.startActivity(i);
+            }
+        });
+
+        // Title
+        holder.reminder_title.setText(mDataset.get(position).getTitle());
+
+        // Subtitle
+        if (r.getPasw().equals("")) {
+            if (r.getContent().equals("")) {
+                if (r.getAlarm() == 0) {
+                    holder.reminder_subtitle.setText(Utils.getDate(mContext, r.getDate_create()));
+                } else {
+                    holder.reminder_subtitle.setText(Utils.getAlarm(mContext, r.getAlarm(), r.getAlarm_repeat(), r.getDate_reminded()));
+                }
+            } else {
+                holder.reminder_subtitle.setText(Utils.getContentList(mContext, r.getContent()));
+            }
+        } else {
+            holder.reminder_subtitle.setText(mContext.getString(R.string.text_locked_note));
+        }
+
+        // Icon
+        /*if (r.getPriority() == 1) {
+            holder.reminder_icon.setImageResource(R.drawable.ic_stat_action_bookmark_star);
+        } else {
+            if (!r.getAlarm_repeat().equals("")) {
+                holder.reminder_icon.setImageResource(R.drawable.ic_stat_action_bookmark_snoozed);
+            } else {
+                if (r.getAlarm() != 0) {
+                    if (r.getDate_reminded() != 0)
+                        holder.reminder_icon.setImageResource(R.drawable.ic_not_bookmark_check);
+                    else
+                        holder.reminder_icon.setImageResource(R.drawable.ic_stat_action_bookmark_snoozed);
+                } else {
+                    holder.reminder_icon.setImageResource(R.drawable.ic_not_action_bookmark);
+                }
+            }
+        }*/
 
     }
 

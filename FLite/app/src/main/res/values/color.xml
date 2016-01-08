@@ -40,6 +40,9 @@
     <color name="back_card">#424242</color>
     <color name="background_dialog">#bb000000</color>
     <color name="black_500">#80000000</color>
+    <color name="black_400">#64000000</color>
+    <color name="black_350">#56000000</color>
+    <color name="black_300">#48000000</color>
     <color name="black_200">#32000000</color>
     
     <color name="background_dark_lighter">#3d404b</color>
