@@ -179,6 +179,7 @@ public class MainList extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SP.edit().putBoolean(Costants.PREFERENCES_LIST_NOTE, isChecked).apply();
+                updateList(query);
             }
         });
         findViewById(R.id.section_main_list).setOnClickListener(new View.OnClickListener() {
@@ -194,6 +195,7 @@ public class MainList extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SP.edit().putBoolean(Costants.PREFERENCES_LIST_REMINDERS, isChecked).apply();
+                updateList(query);
             }
         });
         findViewById(R.id.section_reminded).setOnClickListener(new View.OnClickListener() {
@@ -209,6 +211,7 @@ public class MainList extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SP.edit().putBoolean(Costants.PREFERENCES_LIST_STARRED, isChecked).apply();
+                updateList(query);
             }
         });
         findViewById(R.id.section_starred).setOnClickListener(new View.OnClickListener() {
@@ -227,6 +230,12 @@ public class MainList extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateList(query);
     }
 
     @Override

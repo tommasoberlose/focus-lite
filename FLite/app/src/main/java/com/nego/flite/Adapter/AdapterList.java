@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nego.flite.Costants;
@@ -48,13 +51,25 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
         public CardView card_reminder;
         public TextView reminder_title;
         public TextView reminder_subtitle;
-        public ViewHolder(View v, View top_divider, CardView card_reminder, TextView reminder_title, TextView reminder_subtitle) {
+        public LinearLayout reminder_icon;
+        public CardView container_option;
+        public ImageView action_contact;
+        public ImageView action_attach;
+        public ImageView action_browser;
+        public ImageView action_address;
+        public ViewHolder(View v, View top_divider, CardView card_reminder, TextView reminder_title, TextView reminder_subtitle, LinearLayout reminder_icon, CardView container_option, ImageView action_contact, ImageView action_attach, ImageView action_browser, ImageView action_address) {
             super(v);
             mView = v;
             this.top_divider = top_divider;
             this.card_reminder = card_reminder;
             this.reminder_title = reminder_title;
             this.reminder_subtitle = reminder_subtitle;
+            this.reminder_icon = reminder_icon;
+            this.container_option = container_option;
+            this.action_contact = action_contact;
+            this.action_attach = action_attach;
+            this.action_browser = action_browser;
+            this.action_address = action_address;
         }
 
     }
@@ -77,7 +92,13 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
         vh = new ViewHolder(v, v.findViewById(R.id.top_divider),
                 (CardView) v.findViewById(R.id.card_reminder),
                 (TextView) v.findViewById(R.id.reminder_title),
-                (TextView) v.findViewById(R.id.reminder_subtitle));
+                (TextView) v.findViewById(R.id.reminder_subtitle),
+                (LinearLayout) v.findViewById(R.id.reminder_icon),
+                (CardView) v.findViewById(R.id.container_options),
+                (ImageView) v.findViewById(R.id.action_contact),
+                (ImageView) v.findViewById(R.id.action_attach),
+                (ImageView) v.findViewById(R.id.action_browser),
+                (ImageView) v.findViewById(R.id.action_address));
 
         return vh;
     }
@@ -89,13 +110,13 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
 
         // Top divider visibility first element
         holder.top_divider.setVisibility(position == 0 ? View.GONE : View.VISIBLE);
+        final Intent i = new Intent(mContext, MyDialog.class);
+        i.setAction(Costants.ACTION_EDIT_ITEM);
+        i.putExtra(Costants.EXTRA_REMINDER, r);
 
         holder.card_reminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(mContext, MyDialog.class);
-                i.setAction(Costants.ACTION_EDIT_ITEM);
-                i.putExtra(Costants.EXTRA_REMINDER, r);
                 mContext.startActivity(i);
             }
         });
@@ -119,23 +140,136 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
         }
 
         // Icon
-        /*if (r.getPriority() == 1) {
-            holder.reminder_icon.setImageResource(R.drawable.ic_stat_action_bookmark_star);
+        if (r.getPriority() == 1) {
+            holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_starred));
         } else {
-            if (!r.getAlarm_repeat().equals("")) {
-                holder.reminder_icon.setImageResource(R.drawable.ic_stat_action_bookmark_snoozed);
+            if (r.getAlarm() != 0 && r.getDate_reminded() == 0) {
+                holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_primary_dark));
             } else {
-                if (r.getAlarm() != 0) {
-                    if (r.getDate_reminded() != 0)
-                        holder.reminder_icon.setImageResource(R.drawable.ic_not_bookmark_check);
-                    else
-                        holder.reminder_icon.setImageResource(R.drawable.ic_stat_action_bookmark_snoozed);
-                } else {
-                    holder.reminder_icon.setImageResource(R.drawable.ic_not_action_bookmark);
-                }
+                holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_light));
             }
-        }*/
+        }
 
+        // Shortcuts
+        boolean link_browser;
+        String url = Utils.checkURL(r.getTitle());
+        if (url.equals(""))
+            url = Utils.checkURL(Utils.getBigContentList(mContext, r.getContent()));
+        if (!url.equals("")) {
+            holder.action_browser.setVisibility(View.VISIBLE);
+            final Intent url_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, url);
+            holder.action_browser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(url_intent);
+                }
+            });
+            link_browser = true;
+        } else {
+            holder.action_browser.setVisibility(View.GONE);
+            link_browser = false;
+        }
+
+        boolean contact;
+        if (!r.getAction_info().equals("")) {
+            holder.action_contact.setVisibility(View.VISIBLE);
+            switch (r.getAction_type()) {
+                case Costants.ACTION_CALL:
+                    final Intent call_intent = new Intent(Intent.ACTION_DIAL).putExtra(Costants.EXTRA_ACTION_TYPE, "tel:" + r.getAction_info());
+                    rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_call);
+                    holder.action_contact.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mContext.startActivity(call_intent);
+                        }
+                    });
+                    break;
+                case Costants.ACTION_SMS:
+                    final Intent sms_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "sms:" + r.getAction_info());
+                    rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_messenger);
+                    holder.action_contact.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mContext.startActivity(sms_intent);
+                        }
+                    });
+                    break;
+                case Costants.ACTION_MAIL:
+                    final Intent mail_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "mailto:" + r.getAction_info());
+                    rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_email);
+                    holder.action_contact.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mContext.startActivity(mail_intent);
+                        }
+                    });
+                    break;
+                case Costants.ACTION_CONTACT:
+                    Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(r.getAction_info()));
+                    final Intent contact_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, uri.toString());
+                    rv.setImageViewResource(R.id.action_contact, R.drawable.ic_person);
+                    holder.action_contact.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mContext.startActivity(contact_intent);
+                        }
+                    });
+                    break;
+            }
+            contact = true;
+        } else {
+            holder.action_contact.setVisibility(View.GONE);
+            contact = false;
+        }
+
+        boolean attach;
+        if (!r.getImg().equals("")) {
+            holder.action_attach.setVisibility(View.VISIBLE);
+
+            String[] imgs = r.getImg().split(Costants.LIST_IMG_SEPARATOR);
+            if (imgs.length == 1) {
+                final Intent img_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, imgs[0]);
+                img_intent.putExtra(Costants.EXTRA_IS_PHOTO, true);
+                holder.action_attach.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mContext.startActivity(img_intent);
+                    }
+                });
+            } else {
+                holder.action_attach.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mContext.startActivity(i);
+                    }
+                });
+            }
+            attach = true;
+        } else {
+            holder.action_attach.setVisibility(View.GONE);
+            attach = false;
+        }
+
+        boolean address;
+        if (!r.getAddress().equals("")) {
+            holder.action_address.setVisibility(View.VISIBLE);
+            final Intent address_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "google.navigation:q=" + r.getAddress());
+            holder.action_address.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(address_intent);
+                }
+            });
+            address = true;
+        } else {
+            holder.action_address.setVisibility(View.GONE);
+            address = false;
+        }
+
+        if (!attach && !contact && !link_browser && !address)
+            holder.container_option.setVisibility(View.GONE);
+        else
+            holder.container_option.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -146,10 +280,13 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
     // GENERATE LIST
     public void generate_list(DbAdapter dbAdapter, String query) {
         mDataset.clear();
-        // TODO search, filter from side nav e fare gli header??
-        Cursor c = dbAdapter.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, true));
+        Cursor c = dbAdapter.fetchAllRemindersFilterbyTitle(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, true), query);
         while (c.moveToNext()) {
-            mDataset.add(new Reminder(c));
+            Reminder r = new Reminder(c);
+            if (!((!SP.getBoolean(Costants.PREFERENCES_LIST_STARRED, true) && r.getPriority() == 1) ||
+                    (!SP.getBoolean(Costants.PREFERENCES_LIST_REMINDERS, true) && r.getAlarm() != 0) ||
+                    (!SP.getBoolean(Costants.PREFERENCES_LIST_NOTE, true) && r.getAlarm() == 0 && r.getPriority() == 0)))
+                mDataset.add(r);
         }
     }
 
