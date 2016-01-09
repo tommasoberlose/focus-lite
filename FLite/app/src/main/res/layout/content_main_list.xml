@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_material_light"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.nego.flite.MainList"
+    tools:context="com.nego.flite.Main"
     tools:showIn="@layout/app_bar_main_list">
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -22,4 +22,36 @@
             android:background="@color/background_material_light"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="@dimen/fab_elevation"
+        android:background="@color/black_opacity"
+        android:id="@+id/first_use"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="24dp"
+            android:layout_centerInParent="true">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:text="@string/text_first_use"
+                android:layout_marginBottom="16dp" />
+            <Button
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:text="@android:string/ok"
+                android:layout_gravity="end"
+                android:id="@+id/button_first_use"
+                android:background="@drawable/item_background"
+                android:textColor="@android:color/white"
+                android:layout_margin="16dp" />
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

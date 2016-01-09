@@ -212,4 +212,9 @@
     <string name="title_menu_alarms">Alarms</string>
     <string name="title_menu_style">Style</string>
     <string name="title_menu_app">Application</string>
+    <string name="action_search">Search</string>
+    <string name="section_devices_and_connections">Devices and Connections</string>
+    <string name="title_show_notify">Show Focus Notify</string>
+    <string name="subtitle_show_notify">Enter your notes between notifications and keep everything under control!</string>
+    <string name="text_no_items">Damn, no notes founded!\nAdd a new one and save what you want.</string>
 </resources>

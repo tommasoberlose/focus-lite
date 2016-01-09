@@ -68,6 +68,7 @@ public class Costants {
     public static final String PREFERENCES_LIST_REMINDERS = "PREFERENCES_LIST_REMINDERS";
     public static final String PREFERENCES_LIST_STARRED = "PREFERENCES_LIST_STARRED";
 
+    public static final String PREFERENCE_SHOW_NOTIFY = "PREFERENCE_SHOW_NOTIFY";
     public static final String PREFERENCE_INTRO = "PREFERENCE_INTRO";
     public static final String PREFERENCE_ORDER_NOTIFICATIONS = "PREFERENCE_ORDER_NOTIFICATIONS";
     public static final String PREFERENCE_BUTTON_SHARE = "PREFERENCE_BUTTON_SHARE";

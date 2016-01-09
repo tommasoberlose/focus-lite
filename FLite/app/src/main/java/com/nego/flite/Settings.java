@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -227,6 +228,24 @@ public class Settings extends AppCompatActivity {
                         .show();
             }
         });
+
+        // FOCUS NOTIFY TOOGLE
+        final AppCompatCheckBox show_notify_check = (AppCompatCheckBox) findViewById(R.id.show_notify_check);
+        show_notify_check.setChecked(SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true));
+        show_notify_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SP.edit().putBoolean(Costants.PREFERENCE_SHOW_NOTIFY, isChecked).apply();
+                Utils.notification_add_update(Settings.this);
+            }
+        });
+        findViewById(R.id.action_show_notify).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_notify_check.setChecked(!show_notify_check.isChecked());
+            }
+        });
+
 
         // NOTIFICATION PREFERENCES
 
@@ -496,6 +515,15 @@ public class Settings extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home)
+            onBackPressed();
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onSaveInstanceState (Bundle outState) {

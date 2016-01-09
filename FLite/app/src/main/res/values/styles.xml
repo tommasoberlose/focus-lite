@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- MAIN THEME -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
         <item name="colorControlActivated">@color/primary_light</item>
         <item name="colorSwitchThumbNormal">@color/primary_dark</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/primary</item>
 
         <item name="windowActionModeOverlay">true</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
@@ -12,7 +15,7 @@
 
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
-        <item name="color">@color/black_350</item>
+        <item name="color">@color/black_400</item>
     </style>
 
 
@@ -23,7 +26,7 @@
     </style>
 
 
-    <style name="MyDialog_theme" parent="Theme.AppCompat.NoActionBar">
+    <style name="MyDialog_theme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -33,7 +36,7 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="Dialog_Pop" parent="Theme.AppCompat.Dialog">
+    <style name="Dialog_Pop" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
         <item name="colorControlActivated">@color/primary_dark</item>
         <item name="colorSwitchThumbNormal">@color/back_selected_item</item>
@@ -42,7 +45,14 @@
 
     <style name="mDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
-        <item name="colorControlActivated">@color/accent_material_light</item>
+        <item name="colorControlActivated">@color/primary</item>
+        <item name="colorSwitchThumbNormal">@color/back_selected_item</item>
+
+    </style>
+
+    <style name="mAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+        <item name="colorControlActivated">@color/primary</item>
         <item name="colorSwitchThumbNormal">@color/back_selected_item</item>
 
     </style>

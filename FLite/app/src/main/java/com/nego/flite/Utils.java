@@ -100,12 +100,14 @@ public class Utils {
         NotificationF.CancelAllNotification(context);
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-        if (!SP.getBoolean(Costants.PREFERENCE_ORDER_NOTIFICATIONS, true)) {
-            NotificationF.NotificationAdd(context);
-            oldReminder(context);
-        } else {
-            oldReminder(context);
-            NotificationF.NotificationAdd(context);
+        if (SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true)) {
+            if (!SP.getBoolean(Costants.PREFERENCE_ORDER_NOTIFICATIONS, true)) {
+                NotificationF.NotificationAdd(context);
+                oldReminder(context);
+            } else {
+                oldReminder(context);
+                NotificationF.NotificationAdd(context);
+            }
         }
         updateWidget(context);
     }
@@ -116,13 +118,15 @@ public class Utils {
         AlarmF.updateAlarm(context, r.getId(), r.getAlarm(), r.getAlarm_repeat());
         updateWidget(context);
 
-        if (!action.equals(Costants.ACTION_DELETE)) {
-            if (SP.getBoolean(Costants.PREFERENCES_VIEW_ALL, true)) {
-                NotificationF.NotificationFixed(context, r);
+        if (SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true)) {
+            if (!action.equals(Costants.ACTION_DELETE)) {
+                if (SP.getBoolean(Costants.PREFERENCES_VIEW_ALL, true)) {
+                    NotificationF.NotificationFixed(context, r);
+                }
             }
-        }
 
-        NotificationF.NotificationAdd(context);
+            NotificationF.NotificationAdd(context);
+        }
     }
 
     public static String getDate(Context context, long date) {
@@ -554,5 +558,16 @@ public class Utils {
             a.setInterpolator(new AccelerateDecelerateInterpolator());
             v.startAnimation(a);
         }
+    }
+
+    public static String getOwnerName(Context context) {
+        Cursor c = context.getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
+        if (c.moveToFirst()) {
+            String name = c.getString(c.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
+            if (name != null && !name.equals(""))
+                return name;
+        }
+        c.close();
+        return context.getString(R.string.name_unset);
     }
 }

@@ -24,6 +24,9 @@ public class ReminderService extends IntentService {
     private void sendResponse(String s, Reminder r) {
         if (!s.equals(Costants.ACTION_UPDATE_DATE))
             Utils.notification_update(this, s, r);
+
+        Intent i = new Intent(Costants.ACTION_UPDATE_LIST);
+        sendBroadcast(i);
     }
 
     public ReminderService() {

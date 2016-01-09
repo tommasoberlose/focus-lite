@@ -109,7 +109,11 @@
             android:name=".About"
             android:label="@string/title_tab_developer"
             android:parentActivityName=".Main"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nego.flite.Main" />
+        </activity>
         <activity
             android:name=".Settings"
             android:label="@string/title_activity_settings"
@@ -149,10 +153,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nego.flite.Settings" />
         </activity>
-        <activity
-            android:name=".MainList"
-            android:label="@string/title_activity_main_list"
-            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
