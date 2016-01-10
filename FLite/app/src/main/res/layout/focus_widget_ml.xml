@@ -47,7 +47,7 @@
             android:padding="8dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:id="@+id/imageView2" />
+            android:id="@+id/action_new" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"

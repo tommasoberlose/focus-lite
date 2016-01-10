@@ -53,7 +53,11 @@ public class FocusWidget extends AppWidgetProvider {
             Intent new_item =new Intent(context,MyDialog.class);
             new_item.setAction(Costants.ACTION_ADD_ITEM);
             PendingIntent pi= PendingIntent.getActivity(context, -1, new_item, PendingIntent.FLAG_UPDATE_CURRENT);
-            rv.setOnClickPendingIntent(R.id.toolbar, pi);
+            rv.setOnClickPendingIntent(R.id.action_new, pi);
+
+            Intent open_main =new Intent(context,Main.class);
+            PendingIntent pi_open_main = PendingIntent.getActivity(context, -1, open_main, PendingIntent.FLAG_UPDATE_CURRENT);
+            rv.setOnClickPendingIntent(R.id.toolbar, pi_open_main);
 
             PendingIntent clickPI = PendingIntent.getActivity(context, 0, new Intent(context, MyDialog.class), PendingIntent.FLAG_UPDATE_CURRENT);
             rv.setPendingIntentTemplate(R.id.list, clickPI);
