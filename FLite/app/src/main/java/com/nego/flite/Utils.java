@@ -108,6 +108,17 @@ public class Utils {
                 oldReminder(context);
                 NotificationF.NotificationAdd(context);
             }
+        } else if (SP.getBoolean(Costants.PREFERENCE_SHOW_STARRED, true)) {
+            DbAdapter dbHelper = new DbAdapter(context);
+            dbHelper.open();
+            Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
+            for (c.moveToLast(); !c.isBeforeFirst(); c.moveToPrevious()) {
+                Reminder r = new Reminder(c);
+                if (r.getPriority() == 1)
+                    NotificationF.NotificationFixed(context, r);
+            }
+            c.close();
+            dbHelper.close();
         }
         updateWidget(context);
     }
@@ -126,6 +137,8 @@ public class Utils {
             }
 
             NotificationF.NotificationAdd(context);
+        } else if (SP.getBoolean(Costants.PREFERENCE_SHOW_STARRED, true) && r.getPriority() == 1) {
+            NotificationF.NotificationFixed(context, r);
         }
     }
 
