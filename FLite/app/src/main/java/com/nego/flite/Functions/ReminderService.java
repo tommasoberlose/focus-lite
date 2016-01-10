@@ -26,6 +26,8 @@ public class ReminderService extends IntentService {
             Utils.notification_update(this, s, r);
 
         Intent i = new Intent(Costants.ACTION_UPDATE_LIST);
+        i.putExtra(Costants.EXTRA_ACTION_TYPE, s);
+        i.putExtra(Costants.EXTRA_REMINDER, r);
         sendBroadcast(i);
     }
 

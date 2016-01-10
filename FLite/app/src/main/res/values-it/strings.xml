@@ -215,5 +215,5 @@
     <string name="section_devices_and_connections">Dispositivi e Connessioni</string>
     <string name="subtitle_show_notify">Inserisci le tue note tra le notifiche e tieni tutto sotto controllo!</string>
     <string name="title_show_notify">Mostra Focus Notify</string>
-    <string name="text_no_items">Accidenti, nessuna nota trovata!\nAggiungine una nuova e salva tutto ciò che vuoi.</string>
+    <string name="text_no_items">Complimenti!\nHai concluso tutte le tue note!</string>
 </resources>

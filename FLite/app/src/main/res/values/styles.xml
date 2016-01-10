@@ -2,7 +2,6 @@
 <resources>
     <!-- MAIN THEME -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-
         <item name="colorControlActivated">@color/primary_light</item>
         <item name="colorSwitchThumbNormal">@color/primary_dark</item>
         <item name="colorPrimary">@color/primary</item>
@@ -27,6 +26,13 @@
 
 
     <style name="MyDialog_theme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/primary</item>
+
+        <item name="colorControlActivated">@color/primary_light</item>
+        <item name="colorSwitchThumbNormal">@color/primary_dark</item>
+
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>

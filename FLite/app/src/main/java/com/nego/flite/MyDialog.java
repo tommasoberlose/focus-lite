@@ -226,6 +226,12 @@ public class MyDialog extends AppCompatActivity {
                     int id = ((Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER)).getId();
                     r = Utils.getReminder(this, id);
 
+                    if (r == null) {
+                        sendBroadcast(new Intent(Costants.ACTION_UPDATE_LIST));
+                        Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+
                     pasw = r.getPasw();
                     controlPasw();
 

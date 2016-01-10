@@ -97,7 +97,7 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
         View v;
 
         v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.mainlist_item, parent, false); // TODO creare layout item con cardview per elevation e per farlo scorrere poi
+                .inflate(R.layout.mainlist_item, parent, false);
         vh = new ViewHolder(v,
                 v.findViewById(R.id.top_divider),
                 v.findViewById(R.id.bottom_divider),
@@ -326,8 +326,6 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         deletedElement = true;
                         ReminderService.startAction(mContext, Costants.ACTION_DELETE, mDataset.get(position));
-                        mDataset.remove(position);
-                        notifyItemRemoved(position);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
@@ -343,5 +341,43 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
                 .show();
     }
 
-    // TODO mancano anche tutte le operazione di selezione e manca la gestione del menu
+    public void update(String action, Reminder r) {
+        int pos = 0;
+        switch (action) {
+            case Costants.ACTION_CREATE:
+                mDataset.add(0, r);
+                notifyItemInserted(0);
+                break;
+            case Costants.ACTION_DELETE:
+                for (Reminder reminder : mDataset) {
+                    if (reminder.getId() == r.getId())
+                        break;
+                    else
+                        pos++;
+                }
+                mDataset.remove(pos);
+                notifyItemRemoved(pos);
+                break;
+            case Costants.ACTION_UPDATE:
+                for (Reminder reminder : mDataset) {
+                    if (reminder.getId() == r.getId())
+                        break;
+                    else
+                        pos++;
+                }
+                mDataset.set(pos, r);
+                notifyItemChanged(pos);
+                break;
+            case Costants.ACTION_UPDATE_DATE:
+                for (Reminder reminder : mDataset) {
+                    if (reminder.getId() == r.getId())
+                        break;
+                    else
+                        pos++;
+                }
+                mDataset.set(pos, r);
+                notifyItemChanged(pos);
+                break;
+        }
+    }
 }

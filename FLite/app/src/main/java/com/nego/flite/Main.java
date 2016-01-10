@@ -248,7 +248,6 @@ public class Main extends AppCompatActivity {
 
         // HEADER
         ((TextView) findViewById(R.id.header_name)).setText(Utils.getOwnerName(this));
-        setCount();
     }
 
     @Override
@@ -271,7 +270,14 @@ public class Main extends AppCompatActivity {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                updateList(query);
+                String action = intent.getStringExtra(Costants.EXTRA_ACTION_TYPE);
+                Reminder r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
+                if (action != null && r != null && mAdapter != null) {
+                    mAdapter.update(action, r);
+                    setCount();
+                } else {
+                    updateList(query);
+                }
             }
         };
         registerReceiver(mReceiver, intentFilter);
@@ -363,8 +369,8 @@ public class Main extends AppCompatActivity {
                     public void run() {
                         recList.setAdapter(adapter);
                         mAdapter = adapter;
+                        setCount();
                         mSwipeRefreshLayout.setRefreshing(false);
-                        fab.show();
                     }
                 });
             }
@@ -372,6 +378,14 @@ public class Main extends AppCompatActivity {
     }
 
     public void setCount() {
-        ((TextView) findViewById(R.id.items_todo)).setText(getString(R.string.num_items_todo, Utils.itemsToDo(this)) + ".");
+        int c = Utils.itemsToDo(this);
+        if (c == 0) {
+            ((TextView) findViewById(R.id.items_todo)).setText(getString(R.string.no_items));
+        } else {
+            ((TextView) findViewById(R.id.items_todo)).setText(getString(R.string.num_items_todo, c) + ".");
+        }
+
+        if (mAdapter != null)
+            findViewById(R.id.no_notes).setVisibility(mAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
     }
 }
