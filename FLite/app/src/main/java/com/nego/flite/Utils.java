@@ -574,13 +574,18 @@ public class Utils {
     }
 
     public static String getOwnerName(Context context) {
-        Cursor c = context.getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
-        if (c.moveToFirst()) {
-            String name = c.getString(c.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
-            if (name != null && !name.equals(""))
-                return name;
+        try {
+            Cursor c = context.getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
+            if (c.moveToFirst()) {
+                String name = c.getString(c.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
+                if (name != null && !name.equals(""))
+                    return name;
+            }
+            c.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return context.getString(R.string.name_unset);
         }
-        c.close();
         return context.getString(R.string.name_unset);
     }
 }
