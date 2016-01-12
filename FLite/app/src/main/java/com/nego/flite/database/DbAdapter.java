@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.nego.flite.Costants;
 import com.nego.flite.Reminder;
+import com.nego.flite.User;
 
 import java.util.zip.InflaterOutputStream;
 

@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_PROFILE" />
 
     <application
         android:allowBackup="true"
@@ -154,6 +154,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nego.flite.Settings" />
         </activity>
+        <activity android:name=".SignInActivity"></activity>
     </application>
 
 </manifest>

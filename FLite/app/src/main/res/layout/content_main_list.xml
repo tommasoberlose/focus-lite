@@ -29,6 +29,42 @@
         android:orientation="vertical"
         android:weightSum="1"
         android:padding="16dp"
+        android:id="@+id/no_notes_founded"
+        android:background="@color/back_card"
+        android:visibility="visible">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.7"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/text_no_items_founded"
+                android:src="@drawable/no_notes_founded_img"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
+            android:gravity="center_horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                android:text="@string/text_no_items_founded" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:padding="16dp"
         android:id="@+id/no_notes"
         android:background="@color/back_card"
         android:visibility="visible">

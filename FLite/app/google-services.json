@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_id": "focus-notify",
+    "project_number": "155214422673",
+    "name": "Focus Notify"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155214422673:android:f24322fa4a10c75f",
+        "client_id": "android:com.nego.flite",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.nego.flite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "155214422673-hj8al43u0qqpggdkr7c70scuv0o9842l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nego.flite",
+            "certificate_hash": "BF5906C99FF70C3485E4842D29B5D39CBFDB4F8F"
+          }
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

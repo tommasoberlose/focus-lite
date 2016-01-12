@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "reminderdb";
-    public static final int DATABASE_VERSION = 9;
+    public static final int DATABASE_VERSION = 10;
 
     private static final String DATABASE_CREATE = "create table IF NOT EXISTS reminders (id integer primary key autoincrement, title text not null, content text default '', action_type text default '', action_info text default '', img text default '', pasw default '', date_create long default 0, date_reminded long default 0, last_changed long default 0, alarm long default 0, alarm_repeat text default '', address text default '', priority int default 0);";
 
@@ -49,7 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             database.execSQL("ALTER TABLE reminders ADD COLUMN address text default ''");
             onUpgrade(database, 9, DATABASE_VERSION);
         }
-        //database.execSQL("DROP TABLE IF EXISTS reminders");
+        //database.execSQL("DROP TABLE IF EXISTS user");
         onCreate(database);
 
     }

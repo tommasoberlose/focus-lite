@@ -55,7 +55,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_show_notify"
                         android:id="@+id/show_notify_title"
@@ -64,7 +64,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@drawable/text_color_settings_subtitle"
                         android:id="@+id/show_notify_subtitle"
                         android:text="@string/subtitle_show_notify"
                         android:layout_below="@+id/show_notify_title"
@@ -94,18 +94,61 @@
                     android:padding="16dp"
                     android:foreground="?attr/selectableItemBackground"
                     android:clickable="true"
+                    android:id="@+id/action_show_add_notification">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@drawable/text_color_settings"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
+                        android:text="@string/title_show_add_notification"
+                        android:id="@+id/show_add_notification_title"
+                        android:layout_toLeftOf="@+id/show_add_notification_check"
+                        android:layout_toStartOf="@+id/show_add_notification_check" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@drawable/text_color_settings_subtitle"
+                        android:id="@+id/show_add_notification_subtitle"
+                        android:text="@string/subtitle_show_add_notification"
+                        android:layout_below="@+id/show_add_notification_title"
+                        android:layout_toLeftOf="@+id/show_add_notification_check"
+                        android:layout_toStartOf="@+id/show_add_notification_check" />
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/show_add_notification_check"
+                        android:checked="true"
+                        app:theme="@style/CheckBox.Colored"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginStart="16dp"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/back_selected_item"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
                     android:id="@+id/action_order">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_order"
                         android:id="@+id/order_title" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@drawable/text_color_settings_subtitle"
                         android:id="@+id/order_subtitle"
                         android:text="@string/subtitle_order"
                         android:layout_below="@+id/order_title"/>
@@ -126,14 +169,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_notification_preference"
                         android:id="@+id/notification_preference_title" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@drawable/text_color_settings_subtitle"
                         android:id="@+id/notification_preference_subtitle"
                         android:text="@string/subtitle_notification_preference"
                         android:layout_below="@+id/notification_preference_title" />
@@ -150,29 +193,29 @@
                     android:padding="16dp"
                     android:foreground="?attr/selectableItemBackground"
                     android:clickable="true"
-                    android:id="@+id/action_show_add_notification">
+                    android:id="@+id/action_show_starred">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
-                        android:text="@string/title_show_add_notification"
-                        android:id="@+id/show_add_notification_title"
-                        android:layout_toLeftOf="@+id/show_add_notification_check"
-                        android:layout_toStartOf="@+id/show_add_notification_check" />
+                        android:text="@string/title_show_starred"
+                        android:id="@+id/show_starred_title"
+                        android:layout_toLeftOf="@+id/show_starred_check"
+                        android:layout_toStartOf="@+id/show_starred_check" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
-                        android:id="@+id/show_add_notification_subtitle"
-                        android:text="@string/subtitle_show_add_notification"
-                        android:layout_below="@+id/show_add_notification_title"
-                        android:layout_toLeftOf="@+id/show_add_notification_check"
-                        android:layout_toStartOf="@+id/show_add_notification_check" />
+                        android:textColor="@drawable/text_color_settings_subtitle"
+                        android:id="@+id/show_starred_subtitle"
+                        android:text="@string/subtitle_show_starred"
+                        android:layout_below="@+id/show_starred_title"
+                        android:layout_toLeftOf="@+id/show_starred_check"
+                        android:layout_toStartOf="@+id/show_starred_check" />
                     <android.support.v7.widget.AppCompatCheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/show_add_notification_check"
+                        android:id="@+id/show_starred_check"
                         android:checked="true"
                         app:theme="@style/CheckBox.Colored"
                         android:layout_centerVertical="true"
@@ -202,14 +245,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_notification_preferences"
                         android:id="@+id/notification_title" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@drawable/text_color_settings_subtitle"
                         android:id="@+id/notification_subtitle"
                         android:layout_below="@+id/notification_title"/>
                 </RelativeLayout>
@@ -229,14 +272,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_custom_sound"
                         android:id="@+id/custom_sound_title" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@drawable/text_color_settings_subtitle"
                         android:id="@+id/custom_sound_subtitle"
                         android:text="@string/subtitle_custom_sound"
                         android:layout_below="@+id/custom_sound_title"/>
@@ -267,14 +310,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/text_active_device"
                         android:id="@+id/choose_device_title" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@drawable/text_color_settings_subtitle"
                         android:id="@+id/choose_device_subtitle"
                         android:text="@string/subtitle_action_choose_device"
                         android:layout_below="@+id/choose_device_title"/>
@@ -295,14 +338,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/text_active_connection"
                         android:id="@+id/choose_wifi_title" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@drawable/text_color_settings_subtitle"
                         android:id="@+id/choose_wifi_subtitle"
                         android:text="@string/subtitle_action_choose_wifi"
                         android:layout_below="@+id/choose_wifi_title"/>
@@ -327,14 +370,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_popup_style"
                         android:id="@+id/popup_style_title" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@drawable/text_color_settings_subtitle"
                         android:text="@string/style_deafult"
                         android:id="@+id/popup_style_subtitle"
                         android:layout_below="@+id/popup_style_title"/>
@@ -354,14 +397,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_widget_style"
                         android:id="@+id/widget_style_title"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@drawable/text_color_settings_subtitle"
                         android:text="@string/style_material_dark"
                         android:layout_below="@+id/widget_style_title"
                         android:id="@+id/widget_style_subtitle"/>
@@ -385,14 +428,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_view_intro"
                         android:id="@+id/view_intro_title" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@drawable/text_color_settings_subtitle"
                         android:text="@string/subtitle_view_intro"
                         android:id="@+id/view_intro_subtitle"
                         android:layout_below="@+id/view_intro_title"/>
@@ -413,7 +456,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_twelve_hour"
                         android:id="@+id/twelve_hour_title"
@@ -422,7 +465,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@drawable/text_color_settings_subtitle"
                         android:id="@+id/twelve_hour_subtitle"
                         android:text="@string/subtitle_twelve_hour"
                         android:layout_below="@+id/twelve_hour_title"
@@ -456,7 +499,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@drawable/text_color_settings"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:text="@string/title_close_note_after_actions"
                         android:id="@+id/close_note_after_actions_title"
@@ -465,7 +508,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@drawable/text_color_settings_subtitle"
                         android:id="@+id/close_note_after_actions_subtitle"
                         android:text="@string/subtitle_close_note_after_actions"
                         android:layout_below="@+id/close_note_after_actions_title"

@@ -31,7 +31,7 @@ public class WiFiReceiver extends BroadcastReceiver {
             while (cursor.moveToNext()) {
                 Reminder actual = new Reminder(cursor);
                 if (actual.getAlarm() == Costants.ALARM_TYPE_WIFI) {
-                    if (actual.getAlarm_repeat().split(Costants.LIST_ITEM_SEPARATOR)[0].equals("" + wifiM.getConnectionInfo().getNetworkId())) {
+                    if (actual.getAlarm_repeat().split(Costants.LIST_ITEM_SEPARATOR)[0].equals("" + wifiM.getConnectionInfo().getNetworkId()) && actual.getDate_reminded() == 0) {
                         NotificationF.Notification(context, actual);
                     }
                 }

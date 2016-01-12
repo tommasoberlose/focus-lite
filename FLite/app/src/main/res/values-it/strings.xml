@@ -216,4 +216,8 @@
     <string name="subtitle_show_notify">Inserisci le tue note tra le notifiche e tieni tutto sotto controllo!</string>
     <string name="title_show_notify">Mostra Focus Notify</string>
     <string name="text_no_items">Complimenti!\nHai concluso tutte le tue note!</string>
+    <string name="title_show_starred">Mostra Note con Priorità</string>
+    <string name="subtitle_show_starred">Mostra comunque la note con priorità, anche quando le altre note sono disabilitate</string>
+    <string name="text_no_items_founded">Nessun elemento trovato!</string>
+    <string name="text_sign_out">Sign Out</string>
 </resources>

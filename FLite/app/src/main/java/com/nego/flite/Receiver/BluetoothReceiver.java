@@ -27,7 +27,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
             while (cursor.moveToNext()) {
                 Reminder actual = new Reminder(cursor);
                 if (actual.getAlarm() == Costants.ALARM_TYPE_BLUETOOTH) {
-                    if (actual.getAlarm_repeat().split(Costants.LIST_ITEM_SEPARATOR)[0].equals(((BluetoothDevice) intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)).getAddress())) {
+                    if (actual.getAlarm_repeat().split(Costants.LIST_ITEM_SEPARATOR)[0].equals(((BluetoothDevice) intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)).getAddress()) && actual.getDate_reminded() == 0) {
                         NotificationF.Notification(context, actual);
                     }
                 }

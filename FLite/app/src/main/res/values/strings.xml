@@ -217,4 +217,8 @@
     <string name="title_show_notify">Show Focus Notify</string>
     <string name="subtitle_show_notify">Enter your notes between notifications and keep everything under control!</string>
     <string name="text_no_items">Congratulations!\nYou have completed all your notes!</string>
+    <string name="subtitle_show_starred">Still shows the notes with priority, even when other notes are disabled</string>
+    <string name="title_show_starred">Show Starred Notes</string>
+    <string name="text_no_items_founded">No items founded!</string>
+    <string name="text_sign_out">Sign Out</string>
 </resources>

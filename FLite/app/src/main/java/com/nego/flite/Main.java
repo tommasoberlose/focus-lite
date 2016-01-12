@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,10 +33,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nego.flite.Adapter.AdapterList;
 import com.nego.flite.database.DbAdapter;
+
+import java.net.URL;
 
 
 public class Main extends AppCompatActivity {
@@ -45,6 +51,7 @@ public class Main extends AppCompatActivity {
     private String query = "";
     private AdapterList mAdapter;
     private BroadcastReceiver mReceiver;
+    private User accountUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,7 +254,7 @@ public class Main extends AppCompatActivity {
         });
 
         // HEADER
-        ((TextView) findViewById(R.id.header_name)).setText(Utils.getOwnerName(this));
+        updateHeader();
     }
 
     @Override
@@ -281,6 +288,8 @@ public class Main extends AppCompatActivity {
             }
         };
         registerReceiver(mReceiver, intentFilter);
+        setCount();
+        updateHeader();
     }
 
     @Override
@@ -379,13 +388,100 @@ public class Main extends AppCompatActivity {
 
     public void setCount() {
         int c = Utils.itemsToDo(this);
-        if (c == 0) {
-            ((TextView) findViewById(R.id.items_todo)).setText(getString(R.string.no_items));
+        ((TextView) findViewById(R.id.count_item)).setText("" + c);
+        if (accountUser == null || accountUser.getEmail().equals("")) {
+            if (c == 0) {
+                ((TextView) findViewById(R.id.items_todo)).setText(getString(R.string.no_items));
+            } else {
+                ((TextView) findViewById(R.id.items_todo)).setText(getString(R.string.num_items_todo, c) + ".");
+            }
+            findViewById(R.id.count_item).setVisibility(View.GONE);
         } else {
-            ((TextView) findViewById(R.id.items_todo)).setText(getString(R.string.num_items_todo, c) + ".");
+            findViewById(R.id.count_item).setVisibility(View.VISIBLE);
         }
 
-        if (mAdapter != null)
-            findViewById(R.id.no_notes).setVisibility(mAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
+        if (mAdapter != null) {
+            if (mAdapter.getItemCount() == 0) {
+                if (query.equals("")) {
+                    findViewById(R.id.no_notes).setVisibility(View.VISIBLE);
+                    findViewById(R.id.no_notes_founded).setVisibility(View.GONE);
+                } else {
+                    findViewById(R.id.no_notes).setVisibility(View.GONE);
+                    findViewById(R.id.no_notes_founded).setVisibility(View.VISIBLE);
+                }
+            } else {
+                findViewById(R.id.no_notes).setVisibility(View.GONE);
+                findViewById(R.id.no_notes_founded).setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void updateHeader() {
+        accountUser = new User(this);
+
+        if (!accountUser.getName().equals("")) {
+            // NAME
+            ((TextView) findViewById(R.id.header_name)).setText(accountUser.getName());
+
+            // PHOTO
+            if (!accountUser.getPhoto().equals("")) {
+                updatePhoto();
+            } else {
+                findViewById(R.id.account_photo).setVisibility(View.GONE);
+            }
+
+            // EMAIL
+            ((TextView) findViewById(R.id.items_todo)).setText(accountUser.getEmail());
+
+            // IMG LOGOUT
+            ((ImageView) findViewById(R.id.action_signin)).setImageResource(R.drawable.ic_action_person_remove);
+            findViewById(R.id.action_signin).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent logout = new Intent(Main.this, SignInActivity.class);
+                    logout.putExtra(Costants.EXTRA_ACTION_TYPE, Costants.ACTION_DELETE);
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
+                    startActivity(logout);
+                    }
+            });
+        } else {
+            // NAME
+            ((TextView) findViewById(R.id.header_name)).setText(Utils.getOwnerName(this));
+
+            // PHOTO
+            findViewById(R.id.account_photo).setVisibility(View.GONE);
+
+            // IMG LOGIN
+            ((ImageView) findViewById(R.id.action_signin)).setImageResource(R.drawable.ic_action_person_add);
+            findViewById(R.id.action_signin).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent login = new Intent(Main.this, SignInActivity.class);
+                    login.putExtra(Costants.EXTRA_ACTION_TYPE, Costants.ACTION_CREATE);
+                    startActivity(login);
+                }
+            });
+        }
+    }
+
+    public void updatePhoto() {
+        final Handler mHandler = new Handler();
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    final Bitmap image = BitmapFactory.decodeStream(new URL(accountUser.getPhoto()).openStream());
+                    mHandler.post(new Runnable() {
+                        public void run() {
+                            ((ImageView) findViewById(R.id.account_photo)).setImageBitmap(image);
+                            findViewById(R.id.account_photo).setVisibility(View.VISIBLE);
+                        }
+                    });
+                } catch (Exception e) {
+                    findViewById(R.id.account_photo).setVisibility(View.GONE);
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

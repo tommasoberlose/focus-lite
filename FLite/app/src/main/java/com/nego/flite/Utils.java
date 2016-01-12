@@ -1,5 +1,6 @@
 package com.nego.flite;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
@@ -16,6 +18,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.Patterns;
@@ -65,6 +68,13 @@ public class Utils {
             c.close();
         }
 
+        dbHelper.close();
+    }
+
+    public static void oldAlarms(Context context) {
+        DbAdapter dbHelper = new DbAdapter(context);
+        dbHelper.open();
+
         Cursor a = dbHelper.fetchAllAlarm();
         while (a.moveToNext()) {
             Reminder reminder = new Reminder(a);
@@ -78,6 +88,19 @@ public class Utils {
         }
         a.close();
 
+        dbHelper.close();
+    }
+
+    public static void showOldStarred(Context context, SharedPreferences SP) {
+        DbAdapter dbHelper = new DbAdapter(context);
+        dbHelper.open();
+        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
+        for (c.moveToLast(); !c.isBeforeFirst(); c.moveToPrevious()) {
+            Reminder r = new Reminder(c);
+            if (r.getPriority() == 1)
+                NotificationF.NotificationFixed(context, r);
+        }
+        c.close();
         dbHelper.close();
     }
 
@@ -109,17 +132,9 @@ public class Utils {
                 NotificationF.NotificationAdd(context);
             }
         } else if (SP.getBoolean(Costants.PREFERENCE_SHOW_STARRED, true)) {
-            DbAdapter dbHelper = new DbAdapter(context);
-            dbHelper.open();
-            Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
-            for (c.moveToLast(); !c.isBeforeFirst(); c.moveToPrevious()) {
-                Reminder r = new Reminder(c);
-                if (r.getPriority() == 1)
-                    NotificationF.NotificationFixed(context, r);
-            }
-            c.close();
-            dbHelper.close();
+            showOldStarred(context, SP);
         }
+        oldAlarms(context);
         updateWidget(context);
     }
 
@@ -129,16 +144,16 @@ public class Utils {
         AlarmF.updateAlarm(context, r.getId(), r.getAlarm(), r.getAlarm_repeat());
         updateWidget(context);
 
-        if (SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true)) {
-            if (!action.equals(Costants.ACTION_DELETE)) {
+        if (!action.equals(Costants.ACTION_DELETE)) {
+            if (SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true)) {
                 if (SP.getBoolean(Costants.PREFERENCES_VIEW_ALL, true)) {
                     NotificationF.NotificationFixed(context, r);
                 }
-            }
 
-            NotificationF.NotificationAdd(context);
-        } else if (SP.getBoolean(Costants.PREFERENCE_SHOW_STARRED, true) && r.getPriority() == 1) {
-            NotificationF.NotificationFixed(context, r);
+                NotificationF.NotificationAdd(context);
+            } else if (SP.getBoolean(Costants.PREFERENCE_SHOW_STARRED, true) && r.getPriority() == 1) {
+                NotificationF.NotificationFixed(context, r);
+            }
         }
     }
 
@@ -574,7 +589,8 @@ public class Utils {
     }
 
     public static String getOwnerName(Context context) {
-        try {
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             Cursor c = context.getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
             if (c.moveToFirst()) {
                 String name = c.getString(c.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
@@ -582,8 +598,7 @@ public class Utils {
                     return name;
             }
             c.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
             return context.getString(R.string.name_unset);
         }
         return context.getString(R.string.name_unset);

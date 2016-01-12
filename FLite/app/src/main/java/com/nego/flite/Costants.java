@@ -99,4 +99,9 @@ public class Costants {
     public static final String LIST_ORDER_SEPARATOR = "ORDER@@@";
     public static final String LIST_ITEM_SEPARATOR = "ITEM@@@";
     public static final String LIST_IMG_SEPARATOR = "IMG@@@";
+
+    public static final String KEY_USER_ID = "KEY_USER_ID";
+    public static final String KEY_USER_NAME = "KEY_USER_NAME";
+    public static final String KEY_USER_EMAIL = "KEY_USER_EMAIL";
+    public static final String KEY_USER_PHOTO = "KEY_USER_PHOTO";
 }

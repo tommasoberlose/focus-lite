@@ -237,6 +237,7 @@ public class Settings extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SP.edit().putBoolean(Costants.PREFERENCE_SHOW_NOTIFY, isChecked).apply();
                 Utils.notification_add_update(Settings.this);
+                updateUi();
             }
         });
         findViewById(R.id.action_show_notify).setOnClickListener(new View.OnClickListener() {
@@ -246,9 +247,24 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        // STARRED NOTES TOOGLE
+        final AppCompatCheckBox show_starred_check = (AppCompatCheckBox) findViewById(R.id.show_starred_check);
+        show_starred_check.setChecked(SP.getBoolean(Costants.PREFERENCE_SHOW_STARRED, true));
+        show_starred_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SP.edit().putBoolean(Costants.PREFERENCE_SHOW_STARRED, isChecked).apply();
+                Utils.notification_add_update(Settings.this);
+            }
+        });
+        findViewById(R.id.action_show_starred).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_starred_check.setChecked(!show_starred_check.isChecked());
+            }
+        });
 
         // NOTIFICATION PREFERENCES
-
         String text_not = getString(R.string.text_no_preferences);
         if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_VIBRATE, true)) {
             text_not = getString(R.string.text_vibrate);
@@ -513,6 +529,8 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        updateUi();
+
     }
 
     @Override
@@ -576,6 +594,19 @@ public class Settings extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    public void updateUi() {
+        findViewById(R.id.show_add_notification_title).setEnabled(SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true));
+        findViewById(R.id.show_add_notification_subtitle).setEnabled(SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true));
+        findViewById(R.id.show_add_notification_check).setEnabled(SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true));
+        findViewById(R.id.order_title).setEnabled(SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true));
+        findViewById(R.id.order_subtitle).setEnabled(SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true));
+        findViewById(R.id.notification_preference_title).setEnabled(SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true));
+        findViewById(R.id.notification_preference_subtitle).setEnabled(SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true));
+        findViewById(R.id.show_starred_title).setEnabled(!SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true));
+        findViewById(R.id.show_starred_subtitle).setEnabled(!SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true));
+        findViewById(R.id.show_starred_check).setEnabled(!SP.getBoolean(Costants.PREFERENCE_SHOW_NOTIFY, true));
     }
 
 }
