@@ -97,7 +97,6 @@ public class SignInActivity extends AppCompatActivity implements
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-                        showProgressBar(false);
                         finish();
                     }
                 });
@@ -109,7 +108,6 @@ public class SignInActivity extends AppCompatActivity implements
                     @Override
                     public void onResult(Status status) {
                         deleteUserInfo();
-                        showProgressBar(false);
                         finish();
                     }
                 });
@@ -142,7 +140,6 @@ public class SignInActivity extends AppCompatActivity implements
     public void setUserInfo(GoogleSignInAccount account) {
         User user = new User(account.getId(), account.getDisplayName(), account.getEmail(), account.getPhotoUrl().toString());
         user.createUser(this);
-        showProgressBar(false);
         finish();
     }
 

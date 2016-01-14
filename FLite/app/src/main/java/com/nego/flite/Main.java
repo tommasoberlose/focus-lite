@@ -388,16 +388,23 @@ public class Main extends AppCompatActivity {
 
     public void setCount() {
         int c = Utils.itemsToDo(this);
-        ((TextView) findViewById(R.id.count_item)).setText("" + c);
+        int[] cs = Utils.itemsToDoMultiple(this);
+        ((TextView) findViewById(R.id.count_item_notes)).setText("" + cs[0]);
+        ((TextView) findViewById(R.id.count_item_reminders)).setText("" + cs[1]);
+        ((TextView) findViewById(R.id.count_item_starred)).setText("" + cs[2]);
         if (accountUser == null || accountUser.getEmail().equals("")) {
             if (c == 0) {
                 ((TextView) findViewById(R.id.items_todo)).setText(getString(R.string.no_items));
             } else {
                 ((TextView) findViewById(R.id.items_todo)).setText(getString(R.string.num_items_todo, c) + ".");
             }
-            findViewById(R.id.count_item).setVisibility(View.GONE);
+            findViewById(R.id.count_item_notes).setVisibility(View.GONE);
+            findViewById(R.id.count_item_reminders).setVisibility(View.GONE);
+            findViewById(R.id.count_item_starred).setVisibility(View.GONE);
         } else {
-            findViewById(R.id.count_item).setVisibility(View.VISIBLE);
+            findViewById(R.id.count_item_notes).setVisibility(View.VISIBLE);
+            findViewById(R.id.count_item_reminders).setVisibility(View.VISIBLE);
+            findViewById(R.id.count_item_starred).setVisibility(View.VISIBLE);
         }
 
         if (mAdapter != null) {

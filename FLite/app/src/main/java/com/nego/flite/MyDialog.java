@@ -214,7 +214,7 @@ public class MyDialog extends AppCompatActivity {
                 address_card = (CardView) findViewById(R.id.card_address);
 
                 // TODO fix list
-                action_list.setVisibility(View.GONE);
+                //action_list.setVisibility(View.GONE);
 
                 content_list.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -575,6 +575,7 @@ public class MyDialog extends AppCompatActivity {
 
     public void setAlarm(long alarm, String alarm_repeat) {
         if (from_notifications) {
+            r_snooze.setDate_reminded(0);
             r_snooze.setAlarm(alarm);
             r_snooze.setAlarm_repeat(alarm_repeat);
             ReminderService.startAction(this, Costants.ACTION_UPDATE, r_snooze);
@@ -584,6 +585,8 @@ public class MyDialog extends AppCompatActivity {
             this.alarm_repeat = alarm_repeat;
             if (alarm != 0) {
                 action_reminder.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_notifications_on));
+                if (r != null)
+                    r.setDate_reminded(0);
             } else {
                 action_reminder.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_social_notifications));
             }

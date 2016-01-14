@@ -6,17 +6,22 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -29,6 +34,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +44,9 @@ import com.nego.flite.Functions.ReminderService;
 import com.nego.flite.Widget.FocusWidget;
 import com.nego.flite.database.DbAdapter;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -104,11 +113,18 @@ public class Utils {
         dbHelper.close();
     }
 
-
     public static int itemsToDo(Context context) {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
         int count = dbHelper.getRemindersN();
+        dbHelper.close();
+        return count;
+    }
+
+    public static int[] itemsToDoMultiple(Context context) {
+        DbAdapter dbHelper = new DbAdapter(context);
+        dbHelper.open();
+        int[] count = {dbHelper.getRemindersNNotes(), dbHelper.getRemindersNReminders(), dbHelper.getRemindersNStarred()};
         dbHelper.close();
         return count;
     }

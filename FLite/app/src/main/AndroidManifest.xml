@@ -155,6 +155,11 @@
                 android:value="com.nego.flite.Settings" />
         </activity>
         <activity android:name=".SignInActivity"></activity>
+
+        <!--
+        <meta-data android:name="com.google.android.backup.api_key" android:value="AEdPqrEAAAAITU3EZpffM4_zXlko0scUPEz3lCgRYicqK21Ing" />
+        -->
+
     </application>
 
 </manifest>

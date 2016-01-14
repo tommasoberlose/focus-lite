@@ -157,6 +157,18 @@ public class DbAdapter {
         return (database.query(DATABASE_TABLE, new String[]{KEY_ID}, null, null, null, null, null)).getCount();
     }
 
+    public int getRemindersNNotes() {
+        return (database.query(DATABASE_TABLE, new String[]{KEY_ID}, KEY_ALARM + " == 0 AND " + KEY_PRIORITY + " == 0", null, null, null, null)).getCount();
+    }
+
+    public int getRemindersNReminders() {
+        return (database.query(DATABASE_TABLE, new String[]{KEY_ID}, KEY_ALARM + " != 0 AND " + KEY_PRIORITY + " == 0", null, null, null, null)).getCount();
+    }
+
+    public int getRemindersNStarred() {
+        return (database.query(DATABASE_TABLE, new String[]{KEY_ID}, KEY_ALARM + " == 0 AND " + KEY_PRIORITY + " == 1", null, null, null, null)).getCount();
+    }
+
     public boolean deleteAllReminders() {
         return database.delete(DATABASE_TABLE, null, null) > 0;
     }

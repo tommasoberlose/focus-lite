@@ -142,12 +142,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_GO) {
-                        mDataset.add(position + 1, new String[]{"0", ""});
-                        newFromEnter = true;
-                        holder.text.clearFocus();
-                        notifyItemInserted(position + 1);
-                        notifyDataSetChanged();
-                        ((MyDialog) mContext).updateHeight();
+                        addNextElement(position, v);
                     }
                     return false;
                 }
@@ -159,10 +154,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             holder.action_remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mDataset.remove(position);
-                    notifyItemRemoved(position);
-                    notifyDataSetChanged();
-                    ((MyDialog) mContext).updateHeight();
+                    deleteElement(position);
                 }
             });
             // TODO img drag
@@ -182,10 +174,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_GO) {
-                        mDataset.add(mDataset.size() - 1, new String[]{"0", v.getText().toString().replace(Costants.LIST_COSTANT, "").replace(Costants.LIST_ORDER_SEPARATOR, "").replace(Costants.LIST_ITEM_SEPARATOR, "").trim()});
-                        notifyItemInserted(mDataset.size() - 2);
-                        ((MyDialog) mContext).updateHeight();
-                        v.setText("");
+                        addElement(v, position);
                     }
                     return false;
                 }
@@ -229,5 +218,29 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 n++;
         }
         return (n != 0);
+    }
+
+    public void addElement(TextView v, int pos) {
+        mDataset.add(pos, new String[]{"0", v.getText().toString().replace(Costants.LIST_COSTANT, "").replace(Costants.LIST_ORDER_SEPARATOR, "").replace(Costants.LIST_ITEM_SEPARATOR, "").trim()});
+        notifyItemInserted(pos);
+        notifyDataSetChanged();
+        ((MyDialog) mContext).updateHeight();
+        v.setText("");
+    }
+
+    public void deleteElement(int position) {
+        mDataset.remove(position);
+        notifyItemRemoved(position);
+        notifyDataSetChanged();
+        ((MyDialog) mContext).updateHeight();
+    }
+
+    public void addNextElement(int position, TextView text) {
+        mDataset.add(position + 1, new String[]{"0", ""});
+        newFromEnter = true;
+        text.clearFocus();
+        notifyItemInserted(position + 1);
+        notifyDataSetChanged();
+        ((MyDialog) mContext).updateHeight();
     }
 }
