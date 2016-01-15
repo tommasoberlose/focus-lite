@@ -220,4 +220,5 @@
     <string name="subtitle_show_starred">Mostra comunque la note con priorità, anche quando le altre note sono disabilitate</string>
     <string name="text_no_items_founded">Nessun elemento trovato!</string>
     <string name="text_sign_out">Sign Out</string>
+    <string name="action_voice_note">Nota Vocale</string>
 </resources>

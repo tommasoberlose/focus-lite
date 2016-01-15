@@ -73,6 +73,7 @@ import com.nego.flite.Functions.ReminderService;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -219,9 +220,6 @@ public class MyDialog extends AppCompatActivity {
                 address_card = (CardView) findViewById(R.id.card_address);
                 action_add_to_list = (RelativeLayout) findViewById(R.id.action_add_to_list);
 
-                // TODO fix list
-                //action_list.setVisibility(View.GONE);
-
                 content_list.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(this);
                 llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -231,13 +229,12 @@ public class MyDialog extends AppCompatActivity {
                 ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.DOWN | ItemTouchHelper.UP, 0) {
                     @Override
                     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                        Log.i("NEGO_LIST", "ID: " + target.getItemViewType());
+                        mAdapter.swapElement(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                         return true;
                     }
 
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                        Toast.makeText(MyDialog.this, "OK", Toast.LENGTH_SHORT).show();
                     }
                 };
 
@@ -338,19 +335,13 @@ public class MyDialog extends AppCompatActivity {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-
-                        SharedPreferences SP = getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
                         if (s.length() > 0) {
                             save_button.setAlpha(1f);
                         } else {
                             save_button.setAlpha(0.5f);
                         }
                         updateUrl();
-                        /* TODO rendere dinamico l'inserimento di un contatto
-                        String action_to_do = Utils.checkAction(MyDialog.this, s.toString());
-                        if (!action_to_do.equals("")) {
-                            action = action_to_do;
-                        }*/
+                        setSuggestionsSnackbar();
                     }
                 });
 
@@ -366,11 +357,7 @@ public class MyDialog extends AppCompatActivity {
                     @Override
                     public void afterTextChanged(Editable s) {
                         updateUrl();
-                        /* TODO rendere dinamico l'inserimento di un contatto
-                        String action_to_do = Utils.checkAction(MyDialog.this, s.toString());
-                        if (!action_to_do.equals("")) {
-                            action = action_to_do;
-                        }*/
+                        setSuggestionsSnackbar();
                     }
                 });
 
@@ -467,6 +454,8 @@ public class MyDialog extends AppCompatActivity {
             snackbar_attach.dismiss();
         } else if (snackbar_reminders != null && snackbar_reminders.isShown()) {
             snackbar_reminders.dismiss();
+        } else if (snackbar_suggestions != null && snackbar_suggestions.isShown()) {
+            snackbar_suggestions.dismiss();
         } else {
             if (from_notifications || (r == null && Utils.isEmpty(title) && img.equals("") && getContent().equals("")) || (r != null && r.getTitle().equals(title.getText().toString()) && r.getContent().equals(getContent()) && r.getImg().equals(img))) {
                 finish();
@@ -911,20 +900,93 @@ public class MyDialog extends AppCompatActivity {
         snackbar_reminders.show();
     }
 
-    /* TODO snackbar suggestions
     public void setSuggestionsSnackbar() {
-        final View attachView = LayoutInflater.from(this).inflate(R.layout.reminder_types_dialog, null);
+        final String t = title.getText().toString();
+        if (t.contains("@")) {
+            if (ContextCompat.checkSelfPermission(MyDialog.this,
+                    Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED && action.equals("")) {
+                final View attachView = LayoutInflater.from(this).inflate(R.layout.item_suggestion, null);
 
-        snackbar_reminders = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
-        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_reminders.getView();
-        layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
-        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setVisibility(View.INVISIBLE);
+                if (snackbar_suggestions != null && snackbar_suggestions.isShown()) {
+                    snackbar_suggestions.dismiss();
+                }
+
+                snackbar_suggestions = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
+                Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_suggestions.getView();
+                layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
+                TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setVisibility(View.INVISIBLE);
+
+                TextView name_one = (TextView) attachView.findViewById(R.id.name_one);
+                TextView name_two = (TextView) attachView.findViewById(R.id.name_two);
+                TextView name_three = (TextView) attachView.findViewById(R.id.name_three);
+
+                String toCheck = t.substring(t.lastIndexOf("@"), t.length());
+                final ArrayList<String[]> contactList = Utils.getContactsList(this, toCheck);
+                if (contactList.size() > 0) {
+                    name_one.setText(contactList.get(0)[1]);
+                    name_one.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            action = Costants.ACTION_CONTACT;
+                            action_info = contactList.get(0)[0];
+                            setContact();
+                            int ind = t.lastIndexOf("@");
+                            title.setText(new StringBuilder(t).replace(ind, ind + 1, "").toString());
+                            snackbar_suggestions.dismiss();
+                        }
+                    });
+
+                    if (contactList.size() > 1) {
+                        name_two.setText(contactList.get(1)[1]);
+                        name_two.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                action = Costants.ACTION_CONTACT;
+                                action_info = contactList.get(1)[0];
+                                setContact();
+                                int ind = t.lastIndexOf("@");
+                                title.setText(new StringBuilder(t).replace(ind, ind + 1, "").toString());
+                                snackbar_suggestions.dismiss();
+                            }
+                        });
+                        name_two.setVisibility(View.VISIBLE);
+                    } else {
+                        name_two.setVisibility(View.GONE);
+                    }
+
+                    if (contactList.size() > 2) {
+                        name_three.setText(contactList.get(2)[1]);
+                        name_three.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                action = Costants.ACTION_CONTACT;
+                                action_info = contactList.get(2)[0];
+                                setContact();
+                                int ind = t.lastIndexOf("@");
+                                title.setText(new StringBuilder(t).replace(ind, ind + 1, "").toString());
+                                snackbar_suggestions.dismiss();
+                            }
+                        });
+                        name_three.setVisibility(View.VISIBLE);
+                    } else {
+                        name_three.setVisibility(View.GONE);
+                    }
 
 
-        layout.addView(attachView, 0);
-        snackbar_reminders.show();
-    }*/
+                    layout.addView(attachView, 0);
+                    snackbar_suggestions.show();
+                } else {
+                    if (snackbar_suggestions.isShown())
+                        snackbar_suggestions.dismiss();
+                }
+            } else {
+                if (snackbar_suggestions != null && snackbar_suggestions.isShown()) {
+                    snackbar_suggestions.dismiss();
+                }
+            }
+        }
+    }
 
     public void showInfo() {
         final View infoView = LayoutInflater.from(this).inflate(R.layout.info_dialog, null);

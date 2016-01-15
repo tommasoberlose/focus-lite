@@ -20,7 +20,7 @@ public class DbAdapter {
     private DatabaseHelper dbHelper;
 
     // Database fields
-    private static final String DATABASE_TABLE = "reminders";
+    public static final String DATABASE_TABLE = "reminders";
 
     public static final String KEY_ID = "id";
     public static final String KEY_TITLE = "title";

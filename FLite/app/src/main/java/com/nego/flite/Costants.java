@@ -15,6 +15,7 @@ public class Costants {
     public static final String ACTION_UPDATE_LIST = "android.intent.action.flite.UPDATE_LIST";
 
     public static final String PREFERENCES_COSTANT = "preferences_costant";
+    public static final String PREFERENCES_COSTANT_BACKUP = "preferences_costant_backup";
     public static final String ACTION_ADD_ITEM = "android.intent.action.ADD_ITEM";
     public static final String ACTION_EDIT_ITEM = "android.intent.action.EDIT_ITEM";
 

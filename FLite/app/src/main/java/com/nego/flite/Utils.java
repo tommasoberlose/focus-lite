@@ -51,6 +51,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -618,5 +619,25 @@ public class Utils {
             return context.getString(R.string.name_unset);
         }
         return context.getString(R.string.name_unset);
+    }
+
+    public static ArrayList<String[]> getContactsList(Context context, String query) {
+        ArrayList<String[]> arrayList = new ArrayList<>();
+        if (query.startsWith("@") && query.length() > 1) {
+            ContentResolver cr = context.getContentResolver();
+            Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                    null, null, null, null);
+            if (cur.getCount() > 0) {
+                while (cur.moveToNext()) {
+                    String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                    String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                    if (name.toLowerCase().contains(query.replace("@", "").toLowerCase())) {
+                        arrayList.add(new String[]{id, name});
+                    }
+                }
+            }
+            cur.close();
+        }
+        return arrayList;
     }
 }

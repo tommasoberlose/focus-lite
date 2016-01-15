@@ -12,12 +12,14 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:backupAgent="MyBackupAgent">
         <activity
             android:name=".Main"
             android:label="@string/app_name">
@@ -156,9 +158,10 @@
         </activity>
         <activity android:name=".SignInActivity"></activity>
 
-        <!--
         <meta-data android:name="com.google.android.backup.api_key" android:value="AEdPqrEAAAAITU3EZpffM4_zXlko0scUPEz3lCgRYicqK21Ing" />
-        -->
+
+        <activity
+            android:name=".MyAudioRecord" />
 
     </application>
 

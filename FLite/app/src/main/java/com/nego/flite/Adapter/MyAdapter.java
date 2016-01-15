@@ -257,6 +257,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
 
+    public void swapElement(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            Item item = mDataset.remove(fromPosition);
+            mDataset.add(toPosition, item);
+        } else {
+            Item item = mDataset.remove(fromPosition);
+            mDataset.add(toPosition, item);
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
     public class Item {
 
         private String text;

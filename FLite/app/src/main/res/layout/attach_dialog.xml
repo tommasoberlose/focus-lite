@@ -189,28 +189,41 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:orientation="vertical"
-            android:id="@+id/action_5"
+            android:id="@+id/action_voice_note"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:paddingBottom="16dp"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
-            android:paddingLeft="12dp"
-            android:visibility="invisible">
-            <ImageView
+            android:paddingLeft="12dp">
+            <RelativeLayout
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:padding="10dp"
-                android:src="@drawable/ic_action_gallery"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/circle_back_light"
-                android:backgroundTint="@color/primary" />
+                android:layout_gravity="center_horizontal">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_action_voice"
+                    android:background="@drawable/circle_back_light"
+                    android:backgroundTint="@color/primary" />
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:padding="2dp"
+                    android:id="@+id/replace_voice_note"
+                    android:background="@drawable/circle_back_light"
+                    android:backgroundTint="@color/icon.r"
+                    android:src="@drawable/ic_action_navigation_close"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/text_gallery"
+                android:text="@string/action_voice_note"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/all_text"/>
         </LinearLayout>
