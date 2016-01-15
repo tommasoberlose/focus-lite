@@ -491,4 +491,8 @@ public class Main extends AppCompatActivity {
             }
         }).start();
     }
+
+    public void recyclerGoUp() {
+        recList.scrollToPosition(0);
+    }
 }

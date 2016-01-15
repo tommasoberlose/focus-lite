@@ -36,12 +36,14 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.Explode;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -53,10 +55,12 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -108,6 +112,7 @@ public class MyDialog extends AppCompatActivity {
     private ImageView action_priority;
     private CardView url_card;
     private CardView address_card;
+    private RelativeLayout action_add_to_list;
 
     private MyAdapter mAdapter;
 
@@ -212,6 +217,7 @@ public class MyDialog extends AppCompatActivity {
                 action_priority = (ImageView) findViewById(R.id.action_priority);
                 url_card = (CardView) findViewById(R.id.card_browser);
                 address_card = (CardView) findViewById(R.id.card_address);
+                action_add_to_list = (RelativeLayout) findViewById(R.id.action_add_to_list);
 
                 // TODO fix list
                 //action_list.setVisibility(View.GONE);
@@ -221,6 +227,22 @@ public class MyDialog extends AppCompatActivity {
                 llm.setOrientation(LinearLayoutManager.VERTICAL);
                 content_list.setLayoutManager(llm);
                 content_list.setNestedScrollingEnabled(false);
+
+                ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.DOWN | ItemTouchHelper.UP, 0) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                        Log.i("NEGO_LIST", "ID: " + target.getItemViewType());
+                        return true;
+                    }
+
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                        Toast.makeText(MyDialog.this, "OK", Toast.LENGTH_SHORT).show();
+                    }
+                };
+
+                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+                itemTouchHelper.attachToRecyclerView(content_list);
 
                 if (intent.getAction() != null && Costants.ACTION_EDIT_ITEM.equals(intent.getAction())) {
                     int id = ((Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER)).getId();
@@ -1035,6 +1057,18 @@ public class MyDialog extends AppCompatActivity {
                     mHandler.post(new Runnable() {
                         public void run() {
                             content_list.setAdapter(mAdapter);
+                            if (mAdapter != null) {
+                                ((EditText) findViewById(R.id.text_add_to_list)).setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                                    @Override
+                                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                                        if (actionId == EditorInfo.IME_ACTION_GO) {
+                                            mAdapter.addElement(v);
+                                            v.requestFocus();
+                                        }
+                                        return false;
+                                    }
+                                });
+                            }
                             updateHeight();
                         }
                     });
@@ -1044,6 +1078,7 @@ public class MyDialog extends AppCompatActivity {
 
         content.setVisibility(!list ? View.VISIBLE : View.GONE);
         content_list.setVisibility(list ? View.VISIBLE : View.GONE);
+        action_add_to_list.setVisibility(list ? View.VISIBLE : View.GONE);
         action_list.setImageResource(!list ? R.drawable.ic_action_ic_playlist_add_check_white_24dp : R.drawable.ic_action_ic_playlist_remove_white_48dp);
 
     }

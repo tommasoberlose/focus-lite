@@ -35,11 +35,12 @@ import java.util.List;
 
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    private List<String[]> mDataset = new ArrayList<>();
+    private List<Item> mDataset = new ArrayList<>();
     private Context mContext;
     private SharedPreferences SP;
+    private int max_id = 0;
 
-    private boolean newFromEnter = false;
+    private int newFromEnter = -1;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -51,15 +52,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public CheckBox checkBox;
         public ImageView img;
-        public ImageView add_icon;
         public EditText text;
         public ImageView action_remove;
-        public ViewHolder(View v, CheckBox checkBox, ImageView img, ImageView add_icon, EditText text, ImageView action_remove) {
+        public ViewHolder(View v, CheckBox checkBox, ImageView img, EditText text, ImageView action_remove) {
             super(v);
             mView = v;
             this.checkBox = checkBox;
             this.img = img;
-            this.add_icon = add_icon;
             this.text = text;
             this.action_remove = action_remove;
         }
@@ -84,7 +83,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         vh = new ViewHolder(v,
                 (CheckBox) v.findViewById(R.id.checkbox),
                 (ImageView) v.findViewById(R.id.action_drag),
-                (ImageView) v.findViewById(R.id.add_icon),
                 (EditText) v.findViewById(R.id.text),
                 (ImageView) v.findViewById(R.id.action_remove));
 
@@ -94,92 +92,73 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        if (!mDataset.get(position)[0].equals("")) {
+        final Item item = mDataset.get(position);
 
-            if (SP.getString(Costants.PREFERENCE_STYLE_POPUP, Costants.PREFERENCE_STYLE_POPUP_DEFAULT).equals(Costants.PREFERENCE_STYLE_POPUP_ML))
-                holder.text.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
-            else
-                holder.text.setTextColor(ContextCompat.getColor(mContext, android.R.color.white));
+        // THEME
+        if (SP.getString(Costants.PREFERENCE_STYLE_POPUP, Costants.PREFERENCE_STYLE_POPUP_DEFAULT).equals(Costants.PREFERENCE_STYLE_POPUP_ML))
+            holder.text.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
+        else
+            holder.text.setTextColor(ContextCompat.getColor(mContext, android.R.color.white));
 
-            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    mDataset.get(position)[0] = isChecked ? "1" : "0";
-                    if (mDataset.get(position)[0].equals("1"))
-                        holder.text.setAlpha(0.5f);
-                    else
-                        holder.text.setAlpha(1f);
-                    ((MyDialog) mContext).updateHeight();
-                }
-            });
+        holder.text.setText(item.getText());
+        if (item.getChecked())
+            holder.text.setAlpha(0.5f);
+        else
+            holder.text.setAlpha(1f);
 
-            holder.checkBox.setChecked(mDataset.get(position)[0].equals("1"));
-            holder.text.setText(mDataset.get(position)[1]);
-            if (mDataset.get(position)[0].equals("1"))
-                holder.text.setAlpha(0.5f);
-            else
-                holder.text.setAlpha(1f);
+        holder.text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            holder.text.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (mDataset.size() > position && !mDataset.get(position)[0].equals(""))
-                        mDataset.get(position)[1] = s.toString().replace(Costants.LIST_COSTANT, "").replace(Costants.LIST_ORDER_SEPARATOR, "").replace(Costants.LIST_ITEM_SEPARATOR, "").trim();
-                }
-            });
-
-            holder.text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_GO) {
-                        addNextElement(position, v);
-                    }
-                    return false;
-                }
-            });
-            if (newFromEnter || (mDataset.size() == 2 && mDataset.get(position)[1].equals(""))) {
-                newFromEnter = false;
-                holder.text.requestFocus();
             }
-            holder.action_remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    deleteElement(position);
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                saveText(s.toString().replace(Costants.LIST_COSTANT, "").replace(Costants.LIST_ORDER_SEPARATOR, "").replace(Costants.LIST_ITEM_SEPARATOR, "").trim(), item.getId());
+            }
+        });
+
+        holder.text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    addNextElement(v, item.getId());
                 }
-            });
-            // TODO img drag
-            holder.text.setHint("");
-            holder.action_remove.setVisibility(View.VISIBLE);
-            holder.img.setVisibility(View.VISIBLE);
-            holder.checkBox.setVisibility(View.VISIBLE);
-            holder.add_icon.setVisibility(View.GONE);
-        } else {
-            holder.action_remove.setVisibility(View.GONE);
-            holder.img.setVisibility(View.INVISIBLE);
-            holder.checkBox.setVisibility(View.GONE);
-            holder.add_icon.setVisibility(View.VISIBLE);
-            holder.text.setHint(mContext.getString(R.string.action_add_item));
-            holder.text.setText("");
-            holder.text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_GO) {
-                        addElement(v, position);
-                    }
-                    return false;
-                }
-            });
+                return false;
+            }
+        });
+        if (item.getId() == newFromEnter) {
+            newFromEnter = -1;
+            holder.text.requestFocus();
         }
+
+        // CHECKBOX
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                checkItem(isChecked, item.getId());
+                if (isChecked)
+                    holder.text.setAlpha(0.5f);
+                else
+                    holder.text.setAlpha(1f);
+                ((MyDialog) mContext).updateHeight();
+            }
+        });
+
+        holder.checkBox.setChecked(item.getChecked());
+
+        // ACTION REMOVE
+        holder.action_remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteElement(item.getId());
+            }
+        });
 
     }
 
@@ -190,22 +169,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     // GENERATE LIST
     public void generate_list(String list) {
+        int id = max_id;
         mDataset.clear();
         list = list.replace(Costants.LIST_COSTANT, "");
         String[] content_split = list.split(Costants.LIST_ITEM_SEPARATOR, -1);
         for (String i : content_split) {
-
-            mDataset.add(new String[] {i.split(Costants.LIST_ORDER_SEPARATOR, -1)[0], i.split(Costants.LIST_ORDER_SEPARATOR, -1)[1]});
-
+            mDataset.add(new Item(id, i.split(Costants.LIST_ORDER_SEPARATOR, -1)[1], i.split(Costants.LIST_ORDER_SEPARATOR, -1)[0].equals("1")));
+            id++;
         }
-        mDataset.add(new String[]{""});
+        max_id = id;
     }
 
     public String getData() {
         String text = Costants.LIST_COSTANT;
-        for (String[] s : mDataset) {
-            if (!s[0].equals(""))
-                text += s[0] + Costants.LIST_ORDER_SEPARATOR + s[1] + Costants.LIST_ITEM_SEPARATOR;
+        for (Item s : mDataset) {
+            text += s.getCheckedString() + Costants.LIST_ORDER_SEPARATOR + s.getText() + Costants.LIST_ITEM_SEPARATOR;
         }
         text = text.substring(0, text.length() - Costants.LIST_ITEM_SEPARATOR.length());
         return text;
@@ -213,34 +191,113 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public boolean doneSomeItems() {
         int n = 0;
-        for (String[] s : mDataset) {
-            if (s[0].equals("1"))
+        for (Item s : mDataset) {
+            if (s.getChecked())
                 n++;
         }
         return (n != 0);
     }
 
-    public void addElement(TextView v, int pos) {
-        mDataset.add(pos, new String[]{"0", v.getText().toString().replace(Costants.LIST_COSTANT, "").replace(Costants.LIST_ORDER_SEPARATOR, "").replace(Costants.LIST_ITEM_SEPARATOR, "").trim()});
-        notifyItemInserted(pos);
-        notifyDataSetChanged();
-        ((MyDialog) mContext).updateHeight();
+    public void addElement(TextView v) {
+        max_id++;
+        mDataset.add(new Item(max_id, v.getText().toString().replace(Costants.LIST_COSTANT, "").replace(Costants.LIST_ORDER_SEPARATOR, "").replace(Costants.LIST_ITEM_SEPARATOR, "").trim(), false));
+        notifyItemInserted(mDataset.size() - 1);
         v.setText("");
-    }
-
-    public void deleteElement(int position) {
-        mDataset.remove(position);
-        notifyItemRemoved(position);
-        notifyDataSetChanged();
         ((MyDialog) mContext).updateHeight();
     }
 
-    public void addNextElement(int position, TextView text) {
-        mDataset.add(position + 1, new String[]{"0", ""});
-        newFromEnter = true;
-        text.clearFocus();
-        notifyItemInserted(position + 1);
-        notifyDataSetChanged();
+    public void deleteElement(int id) {
+        int pos = 0;
+        for (Item strings : mDataset) {
+            if (strings.getId() == id) {
+                mDataset.remove(pos);
+                notifyItemRemoved(pos);
+                break;
+            }
+            pos++;
+        }
         ((MyDialog) mContext).updateHeight();
+    }
+
+    public void addNextElement(TextView text, int id) {
+        max_id++;
+        int pos = 0;
+        for (Item strings : mDataset) {
+            if (strings.getId() == id) {
+                mDataset.add(pos + 1, new Item(max_id, "", false));
+                notifyItemInserted(pos + 1);
+                text.clearFocus();
+                newFromEnter = max_id;
+                break;
+            }
+            pos++;
+        }
+        ((MyDialog) mContext).updateHeight();
+    }
+
+    public void saveText(String text, int id) {
+        int pos = 0;
+        for (Item strings : mDataset) {
+            if (strings.getId() == id) {
+                mDataset.get(pos).setText(text);
+                break;
+            }
+            pos++;
+        }
+    }
+
+    public void checkItem(boolean check, int id) {
+        int pos = 0;
+        for (Item strings : mDataset) {
+            if (strings.getId() == id) {
+                mDataset.get(pos).setChecked(check);
+                break;
+            }
+            pos++;
+        }
+    }
+
+    public class Item {
+
+        private String text;
+        private boolean checked;
+        private int id;
+
+        public Item(int id, String text, boolean checked) {
+            this.id = id;
+            this.text = text;
+            this.checked = checked;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public boolean getChecked() {
+            return checked;
+        }
+
+        public String getCheckedString() {
+            if (checked)
+                return "1";
+            else
+                return "0";
+        }
+
+        public void setChecked(boolean checked) {
+            this.checked = checked;
+        }
     }
 }

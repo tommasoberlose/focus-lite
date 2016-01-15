@@ -347,6 +347,7 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
             case Costants.ACTION_CREATE:
                 mDataset.add(0, r);
                 notifyItemInserted(0);
+                ((Main) mContext).recyclerGoUp();
                 break;
             case Costants.ACTION_DELETE:
                 for (Reminder reminder : mDataset) {
