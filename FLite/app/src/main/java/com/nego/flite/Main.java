@@ -507,7 +507,9 @@ public class Main extends AppCompatActivity {
                         }
                     });
                 } catch (Exception e) {
-                    findViewById(R.id.account_photo).setVisibility(View.GONE);
+                    try {
+                        findViewById(R.id.account_photo).setVisibility(View.GONE);
+                    } catch (Exception ex) {ex.printStackTrace();}
                     e.printStackTrace();
                 }
             }

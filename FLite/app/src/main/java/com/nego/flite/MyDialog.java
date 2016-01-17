@@ -36,6 +36,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -45,6 +46,7 @@ import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -181,6 +183,10 @@ public class MyDialog extends AppCompatActivity {
                         setContentView(R.layout.add_item_dialog);
                         break;
                 }
+
+                Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+                setSupportActionBar(toolbar);
+                setTitle("");
 
                 findViewById(R.id.back_to_dismiss).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -388,6 +394,21 @@ public class MyDialog extends AppCompatActivity {
                 });
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.dialog_menu, menu);
+
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

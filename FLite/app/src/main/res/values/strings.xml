@@ -225,4 +225,6 @@
     <string name="category_archived_notes">Archived</string>
     <string name="text_archived">Archived</string>
     <string name="text_user">User</string>
+    <string name="action_unarchive">Unarchive</string>
+    <string name="action_priority">Add to favorites</string>
 </resources>

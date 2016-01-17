@@ -224,4 +224,6 @@
     <string name="category_archived_notes">Archivio</string>
     <string name="text_archived">Archiviata</string>
     <string name="text_user">Utente</string>
+    <string name="action_unarchive">Ripristina</string>
+    <string name="action_priority">Aggiungi ai preferiti</string>
 </resources>
