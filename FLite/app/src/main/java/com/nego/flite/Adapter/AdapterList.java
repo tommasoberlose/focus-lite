@@ -33,10 +33,12 @@ import com.nego.flite.Main;
 import com.nego.flite.MyDialog;
 import com.nego.flite.R;
 import com.nego.flite.Reminder;
+import com.nego.flite.User;
 import com.nego.flite.Utils;
 import com.nego.flite.database.DbAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
@@ -153,14 +155,18 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
         }
 
         // Icon
-        if (r.getPriority() == 1) {
-            holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_starred));
-        } else {
-            if (r.getAlarm() != 0 && r.getDate_reminded() == 0) {
-                holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_primary_dark));
+        if (r.getDate_archived() == 0) {
+            if (r.getPriority() == 1) {
+                holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_starred));
             } else {
-                holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_light));
+                if (r.getAlarm() != 0 && r.getDate_reminded() == 0) {
+                    holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_primary_dark));
+                } else {
+                    holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_light));
+                }
             }
+        } else {
+            holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_grey));
         }
 
         // Shortcuts
@@ -307,38 +313,25 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
     // GENERATE LIST
     public void generate_list(DbAdapter dbAdapter, String query) {
         mDataset.clear();
-        Cursor c = dbAdapter.fetchAllRemindersFilterByTitle(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, true), query);
+        Cursor c = dbAdapter.fetchAllRemindersFilterByTitle(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, true), query, new User(mContext).getId());
         while (c.moveToNext()) {
             Reminder r = new Reminder(c);
-            if (!((!SP.getBoolean(Costants.PREFERENCES_LIST_STARRED, true) && r.getPriority() == 1) ||
-                    (!SP.getBoolean(Costants.PREFERENCES_LIST_REMINDERS, true) && r.getAlarm() != 0) ||
-                    (!SP.getBoolean(Costants.PREFERENCES_LIST_NOTE, true) && r.getAlarm() == 0 && r.getPriority() == 0)))
+            if (!((!SP.getBoolean(Costants.PREFERENCES_LIST_ARCHIVED, false) && r.getDate_archived() != 0) ||
+                    (!SP.getBoolean(Costants.PREFERENCES_LIST_STARRED, true) && r.getPriority() == 1 && r.getDate_archived() == 0) ||
+                    (!SP.getBoolean(Costants.PREFERENCES_LIST_REMINDERS, true) && r.getAlarm() != 0 && r.getDate_archived() == 0) ||
+                    (!SP.getBoolean(Costants.PREFERENCES_LIST_NOTE, true) && r.getAlarm() == 0 && r.getPriority() == 0 && r.getDate_archived() == 0)))
                 mDataset.add(r);
         }
     }
 
-    private boolean deletedElement = false;
-    public void deleteElement(final int position) {
-        new AlertDialog.Builder(mContext)
-                .setTitle(mContext.getResources().getString(R.string.attention))
-                .setMessage(mContext.getResources().getString(R.string.ask_delete_reminder) + "?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        deletedElement = true;
-                        ReminderService.startAction(mContext, Costants.ACTION_DELETE, mDataset.get(position));
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        if (!deletedElement)
-                            notifyItemChanged(position);
-                        else
-                            deletedElement = false;
-                    }
-                })
-                .show();
+    public void deleteElement(int position) {
+        ReminderService.startAction(mContext, Costants.ACTION_ARCHIVE, mDataset.get(position));
+        if (!SP.getBoolean(Costants.PREFERENCES_LIST_ARCHIVED, false)) {
+            update(Costants.ACTION_DELETE, mDataset.get(position));
+        } else {
+            mDataset.get(position).setDate_archived(Calendar.getInstance().getTimeInMillis());
+            notifyItemChanged(position);
+        }
     }
 
     public void update(String action, Reminder r) {

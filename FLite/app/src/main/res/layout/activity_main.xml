@@ -244,6 +244,49 @@
                                 android:layout_marginLeft="16dp"
                                 android:gravity="center" />
                         </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:id="@+id/section_archived"
+                            android:background="?attr/selectableItemBackground">
+                            <android.support.v7.widget.AppCompatCheckBox
+                                android:layout_width="32dp"
+                                android:layout_height="48dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="8dp"
+                                android:id="@+id/archived_check"
+                                android:checked="true"
+                                app:theme="@style/CheckBox.Colored.Archived" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.8"
+                                android:textColor="@android:color/black"
+                                android:alpha="0.84"
+                                android:text="@string/category_archived_notes"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif-medium"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="24dp"
+                                android:minWidth="24dp"
+                                android:paddingRight="8dp"
+                                android:paddingLeft="8dp"
+                                android:textColor="@android:color/black"
+                                android:alpha="0.54"
+                                android:textStyle="bold"
+                                android:text="9+"
+                                android:background="@drawable/list_item_background"
+                                android:backgroundTint="@color/back_selected_item"
+                                android:id="@+id/count_item_archived"
+                                android:layout_marginRight="16dp"
+                                android:layout_marginLeft="16dp"
+                                android:gravity="center" />
+                        </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"

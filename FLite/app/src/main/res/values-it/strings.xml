@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Focus Notify</string>
-    <string name="action_archive">Finito</string>
+    <string name="action_archive">Archivia</string>
     <string name="action_call">Chiama</string>
     <string name="action_delete">Elimina</string>
     <string name="action_exit_editor">Ignora</string>
@@ -163,7 +163,7 @@
     <string name="subtitle_twelve_hour">Utilizza il formato per l\'orario da 12h invece che quello da 24h</string>
     <string name="title_notification_preference">Preferenze Notifiche</string>
     <string name="subtitle_notification_preference">Azioni opzionali, notifiche fisse e altre preferenze riguardanti le notifiche fisse</string>
-    <string name="title_delete_button_preferences">Elimina quando Rimuovi</string>
+    <string name="title_delete_button_preferences">Archivia quando Rimuovi</string>
     <string name="preferences_addnote_first">Notifica Aggiungi Nota</string>
     <string name="preferences_alarm_first">Promemoria e Allarmi</string>
     <string name="text_reminded_date">Nota ricordata il</string>
@@ -183,7 +183,7 @@
     <string name="ask_remove_address">Vuoi rimuovere l\'indirizzo inserito</string>
     <string name="subtitle_enter_address">Inserisci un indirizzo valido per avviare il navigatore più velocemente o per ricordarti i tuoi luoghi di interesse</string>
     <string name="action_navigate">Naviga</string>
-    <string name="title_delete_button_not_ongoing_preferences">Pulsante Elimina</string>
+    <string name="title_delete_button_not_ongoing_preferences">Pulsante Archivia</string>
     <string name="action_choose_device">Scegli il Dispositivo Bluetooth</string>
     <string name="error_bluetooth_off">Accendi il Bluetooth</string>
     <string name="action_choose_wifi">Scegli la Connessione Wi-fi</string>
@@ -221,4 +221,7 @@
     <string name="text_no_items_founded">Nessun elemento trovato!</string>
     <string name="text_sign_out">Sign Out</string>
     <string name="action_voice_note">Nota Vocale</string>
+    <string name="category_archived_notes">Archivio</string>
+    <string name="text_archived">Archiviata</string>
+    <string name="text_user">Utente</string>
 </resources>

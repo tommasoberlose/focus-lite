@@ -3,7 +3,7 @@
     <string name="title_activity_add_item">Add Note</string>
     <string name="reminder_text">What do you want to remember?</string>
     <string name="help_feedback">Help &amp; FeedBack</string>
-    <string name="action_archive">Done</string>
+    <string name="action_archive">Archive</string>
     <string name="action_save">Save</string>
     <string name="action_delete">Delete</string>
     <string name="attention">Warning</string>
@@ -163,7 +163,7 @@
     <string name="subtitle_twelve_hour">Use 12-hour format instead of 24-hour format</string>
     <string name="title_notification_preference">Notification Preferences</string>
     <string name="subtitle_notification_preference">Optional buttons, ongoing notification and more preferences about fixed notification</string>
-    <string name="title_delete_button_preferences">Delete on Dismiss</string>
+    <string name="title_delete_button_preferences">Archive on Dismiss</string>
     <string name="preferences_addnote_first">Add Note Notification</string>
     <string name="preferences_alarm_first">Reminders and Alarms</string>
     <string name="text_reminded_date">Note reminded on</string>
@@ -183,7 +183,7 @@
     <string name="ask_remove_address">Do you want to remove the address</string>
     <string name="subtitle_enter_address">Please enter a valid address to start the navigator quickly or to remind your interesting places</string>
     <string name="action_navigate">Navigate</string>
-    <string name="title_delete_button_not_ongoing_preferences">Delete Button</string>
+    <string name="title_delete_button_not_ongoing_preferences">Archive Button</string>
     <string name="action_choose_device">Choose Bluetooth Device</string>
     <string name="error_no_activated_device">No activated devices</string>
     <string name="error_no_paired_devices">No paired devices</string>
@@ -222,4 +222,7 @@
     <string name="text_no_items_founded">No items founded!</string>
     <string name="text_sign_out">Sign Out</string>
     <string name="action_voice_note">Voice Note</string>
+    <string name="category_archived_notes">Archived</string>
+    <string name="text_archived">Archived</string>
+    <string name="text_user">User</string>
 </resources>

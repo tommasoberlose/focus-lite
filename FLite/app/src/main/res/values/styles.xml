@@ -112,4 +112,9 @@
         <item name="android:textColorSecondary">@color/icon.do</item>
     </style>
 
+    <style name="CheckBox.Colored.Archived" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="colorControlActivated">@color/third_text</item>
+        <item name="android:textColorSecondary">@color/third_text</item>
+    </style>
+
 </resources>

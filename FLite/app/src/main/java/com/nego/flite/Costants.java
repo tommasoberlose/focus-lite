@@ -7,6 +7,9 @@ public class Costants {
     public static final String ACTION_UPDATE_DATE = "android.intent.action.ACTION_UPDATE_DATE";
     public static final String ACTION_DELETE = "android.intent.action.ACTION_DELETE";
     public static final String ACTION_DELETE_WEAR = "android.intent.action.ACTION_DELETE_WEAR";
+    public static final String ACTION_ARCHIVE = "android.intent.action.ACTION_ARCHIVE";
+    public static final String ACTION_ARCHIVE_WEAR = "android.intent.action.ACTION_ARCHIVE_WEAR";
+    public static final String ACTION_UNARCHIVE = "android.intent.action.ACTION_UNARCHIVE";
 
     public static final String EXTRA_ACTION_TYPE = "android.intent.extra.ACTION_TYPE";
     public static final String EXTRA_REMINDER = "android.intent.extra.REMINDER";
@@ -68,6 +71,7 @@ public class Costants {
     public static final String PREFERENCES_LIST_NOTE = "PREFERENCES_LIST_NOTE";
     public static final String PREFERENCES_LIST_REMINDERS = "PREFERENCES_LIST_REMINDERS";
     public static final String PREFERENCES_LIST_STARRED = "PREFERENCES_LIST_STARRED";
+    public static final String PREFERENCES_LIST_ARCHIVED = "PREFERENCES_LIST_ARCHIVED";
 
     public static final String PREFERENCE_SHOW_NOTIFY = "PREFERENCE_SHOW_NOTIFY";
     public static final String PREFERENCE_INTRO = "PREFERENCE_INTRO";

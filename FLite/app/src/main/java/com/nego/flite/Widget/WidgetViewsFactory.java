@@ -23,6 +23,7 @@ import com.nego.flite.Main;
 import com.nego.flite.MyDialog;
 import com.nego.flite.R;
 import com.nego.flite.Reminder;
+import com.nego.flite.User;
 import com.nego.flite.Utils;
 import com.nego.flite.database.DbAdapter;
 
@@ -43,7 +44,7 @@ public class WidgetViewsFactory implements
 
         DbAdapter dbHelper = new DbAdapter(mContext);
         dbHelper.open();
-        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
+        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), new User(mContext).getId());
         while (c.moveToNext()) {
             mWidgetItems.add(new Reminder(c));
         }
@@ -62,7 +63,7 @@ public class WidgetViewsFactory implements
 
         DbAdapter dbHelper = new DbAdapter(mContext);
         dbHelper.open();
-        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
+        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), new User(mContext).getId());
         while (c.moveToNext()) {
             mWidgetItems.add(new Reminder(c));
         }

@@ -99,6 +99,27 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="2dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondary_text"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/text_archived"
+                android:fontFamily="sans-serif-light"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="2dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/archived"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="2dp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -12,6 +12,8 @@ import com.nego.flite.Reminder;
 import com.nego.flite.Utils;
 import com.nego.flite.database.DbAdapter;
 
+import java.util.Calendar;
+
 public class ReminderService extends IntentService {
 
     public static void startAction(Context context, String action, Reminder r) {
@@ -51,6 +53,12 @@ public class ReminderService extends IntentService {
             } else if (Costants.ACTION_DELETE.equals(action)) {
                 final Reminder r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
                 deleteReminder(r);
+            } else if (Costants.ACTION_ARCHIVE.equals(action)) {
+                final Reminder r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
+                archiveReminder(r);
+            } else if (Costants.ACTION_UNARCHIVE.equals(action)) {
+                final Reminder r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
+                unarchiveReminder(r);
             }
         }
     }
@@ -87,6 +95,26 @@ public class ReminderService extends IntentService {
         dbHelper.open();
         if (r.delete_reminder(this, dbHelper)) {
             sendResponse(Costants.ACTION_DELETE, r);
+        }
+        dbHelper.close();
+    }
+
+    private void archiveReminder(Reminder r) {
+        DbAdapter dbHelper = new DbAdapter(this);
+        dbHelper.open();
+        r.setDate_archived(Calendar.getInstance().getTimeInMillis());
+        if (r.update_reminder(this, dbHelper)) {
+            sendResponse(Costants.ACTION_ARCHIVE, r);
+        }
+        dbHelper.close();
+    }
+
+    private void unarchiveReminder(Reminder r) {
+        DbAdapter dbHelper = new DbAdapter(this);
+        dbHelper.open();
+        r.setDate_archived(0);
+        if (r.update_reminder(this, dbHelper)) {
+            sendResponse(Costants.ACTION_UNARCHIVE, r);
         }
         dbHelper.close();
     }

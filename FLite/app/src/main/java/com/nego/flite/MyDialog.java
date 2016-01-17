@@ -98,6 +98,7 @@ public class MyDialog extends AppCompatActivity {
     public int priority = 0;
     private String tmpImgNameFile = "";
     private String address = "";
+    private String voice_note = "";
 
     public EditText title;
     public EditText content;
@@ -114,6 +115,8 @@ public class MyDialog extends AppCompatActivity {
     private CardView url_card;
     private CardView address_card;
     private RelativeLayout action_add_to_list;
+    private ImageView action_unarchive;
+    private ImageView action_delete;
 
     private MyAdapter mAdapter;
 
@@ -133,32 +136,13 @@ public class MyDialog extends AppCompatActivity {
                     i.setDataAndType(Uri.parse(intent.getStringExtra(Costants.EXTRA_ACTION_TYPE)), "image/*");
                 startActivity(i);
                 finish();
-            } else if (intent.getAction().equals(Costants.ACTION_DELETE) || intent.getAction().equals(Costants.ACTION_DELETE_WEAR)) {
+            } else if (intent.getAction().equals(Costants.ACTION_ARCHIVE) || intent.getAction().equals(Costants.ACTION_ARCHIVE_WEAR)) {
                 from_notifications = true;
-                if (intent.getAction().equals(Costants.ACTION_DELETE_WEAR)) {
-                    int id = ((Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER)).getId();
-                    Reminder r_delete = Utils.getReminder(this, id);
-                    ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r_delete);
-                    NotificationF.CancelNotification(MyDialog.this, "" + r_delete.getId());
-                    finish();
-                } else {
-                    new AlertDialog.Builder(this)
-                            .setTitle(getResources().getString(R.string.attention))
-                            .setMessage(getResources().getString(R.string.ask_delete_reminder) + "?")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, (Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER));
-                                }
-                            })
-                            .setNegativeButton(android.R.string.cancel, null)
-                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialog) {
-                                    finish();
-                                }
-                            })
-                            .show();
-                }
+                int id = ((Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER)).getId();
+                Reminder r_delete = Utils.getReminder(this, id);
+                ReminderService.startAction(MyDialog.this, Costants.ACTION_ARCHIVE, r_delete);
+                NotificationF.CancelNotification(MyDialog.this, "" + r_delete.getId());
+                finish();
             } else if (intent.getAction().equals(Costants.ACTION_SNOOZE) || intent.getAction().equals(Costants.ACTION_SNOOZE_WEAR)) {
                 from_notifications = true;
                 int id = ((Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER)).getId();
@@ -219,6 +203,8 @@ public class MyDialog extends AppCompatActivity {
                 url_card = (CardView) findViewById(R.id.card_browser);
                 address_card = (CardView) findViewById(R.id.card_address);
                 action_add_to_list = (RelativeLayout) findViewById(R.id.action_add_to_list);
+                action_delete = (ImageView) findViewById(R.id.action_delete);
+                action_unarchive = (ImageView) findViewById(R.id.action_unarchive);
 
                 content_list.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -392,7 +378,7 @@ public class MyDialog extends AppCompatActivity {
 
                 setPriority(priority);
                 updateUrl();
-                updateUrl();
+                updateUIArchived();
 
                 action_list.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -517,7 +503,7 @@ public class MyDialog extends AppCompatActivity {
         if (!edit) {
             Calendar c = Calendar.getInstance();
             long dateC = c.getTimeInMillis();
-            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, 0, 0, alarm, alarm_repeat, address, priority);
+            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, 0, 0, 0, alarm, alarm_repeat, address, priority, voice_note, new User(this).getId(), "", "");
         } else {
             r.setTitle(titleN);
             r.setContent(contentT);
@@ -530,6 +516,7 @@ public class MyDialog extends AppCompatActivity {
             r.setAlarm_repeat(alarm_repeat);
             r.setAddress(address);
             r.setPriority(priority);
+            r.setVoice_note(voice_note);
         }
     }
 
@@ -628,17 +615,9 @@ public class MyDialog extends AppCompatActivity {
                             share_intent.setType("text/plain");
                             startActivity(share_intent);
                             return true;
-                        case R.id.action_delete:
-                            new AlertDialog.Builder(MyDialog.this)
-                                    .setTitle(getResources().getString(R.string.attention))
-                                    .setMessage(getResources().getString(R.string.ask_delete_reminder) + "?")
-                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r);
-                                            finish();
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.cancel, null).show();
+                        case R.id.action_archive:
+                            r.setDate_archived(Calendar.getInstance().getTimeInMillis());
+                            updateUIArchived();
                             return true;
                     }
                     return false;
@@ -663,17 +642,9 @@ public class MyDialog extends AppCompatActivity {
                             share_intent.setType("text/plain");
                             startActivity(share_intent);
                             return true;
-                        case R.id.action_delete:
-                            new AlertDialog.Builder(MyDialog.this)
-                                    .setTitle(getResources().getString(R.string.attention))
-                                    .setMessage(getResources().getString(R.string.ask_delete_reminder) + "?")
-                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r);
-                                            finish();
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.cancel, null).show();
+                        case R.id.action_archive:
+                            r.setDate_archived(Calendar.getInstance().getTimeInMillis());
+                            updateUIArchived();
                             return true;
                     }
                     return false;
@@ -993,6 +964,7 @@ public class MyDialog extends AppCompatActivity {
         ((TextView) infoView.findViewById(R.id.creation_date)).setText(Utils.getDay(this, r.getDate_create()));
         ((TextView) infoView.findViewById(R.id.reminded_date)).setText(Utils.getDay(this, r.getDate_reminded()));
         ((TextView) infoView.findViewById(R.id.last_changed)).setText(Utils.getDay(this, r.getLast_changed()));
+        ((TextView) infoView.findViewById(R.id.archived)).setText(Utils.getDay(this, r.getDate_archived()));
         new android.support.v7.app.AlertDialog.Builder(this, R.style.mDialog)
                 .setView(infoView)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -1525,6 +1497,52 @@ public class MyDialog extends AppCompatActivity {
             }
         } else {
             Toast.makeText(this, getResources().getString(R.string.error_wifi_off), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void updateUIArchived() {
+        if (r == null || r.getDate_archived() == 0) {
+            action_attach.setVisibility(View.VISIBLE);
+            action_reminder.setVisibility(View.VISIBLE);
+            action_list.setVisibility(View.VISIBLE);
+            action_priority.setVisibility(View.VISIBLE);
+            action_menu.setVisibility(View.VISIBLE);
+
+            action_delete.setVisibility(View.GONE);
+            action_unarchive.setVisibility(View.GONE);
+        } else {
+            action_attach.setVisibility(View.GONE);
+            action_reminder.setVisibility(View.GONE);
+            action_list.setVisibility(View.GONE);
+            action_priority.setVisibility(View.GONE);
+            action_menu.setVisibility(View.GONE);
+
+            action_delete.setVisibility(View.VISIBLE);
+            action_unarchive.setVisibility(View.VISIBLE);
+
+            action_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(MyDialog.this)
+                            .setTitle(getResources().getString(R.string.attention))
+                            .setMessage(getResources().getString(R.string.ask_delete_reminder) + "?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r);
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, null).show();
+                }
+            });
+
+            action_unarchive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    r.setDate_archived(0);
+                    updateUIArchived();
+                }
+            });
         }
     }
 }

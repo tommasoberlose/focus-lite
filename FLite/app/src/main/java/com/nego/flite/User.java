@@ -65,6 +65,7 @@ public class User {
                 .putString(Costants.KEY_USER_EMAIL, this.email)
                 .putString(Costants.KEY_USER_PHOTO, this.photo)
                 .apply();
+        Utils.notification_add_update(context);
     }
 
     public void deleteUser(Context context) {
@@ -75,5 +76,6 @@ public class User {
                 .remove(Costants.KEY_USER_EMAIL)
                 .remove(Costants.KEY_USER_PHOTO)
                 .apply();
+        Utils.notification_add_update(context);
     }
 }

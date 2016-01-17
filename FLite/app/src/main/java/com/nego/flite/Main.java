@@ -35,6 +35,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nego.flite.Adapter.AdapterList;
 import com.nego.flite.database.DbAdapter;
@@ -253,6 +254,22 @@ public class Main extends AppCompatActivity {
             }
         });
 
+        final AppCompatCheckBox archived_check = (AppCompatCheckBox) findViewById(R.id.archived_check);
+        archived_check.setChecked(SP.getBoolean(Costants.PREFERENCES_LIST_ARCHIVED, false));
+        archived_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SP.edit().putBoolean(Costants.PREFERENCES_LIST_ARCHIVED, isChecked).apply();
+                updateList(query);
+            }
+        });
+        findViewById(R.id.section_archived).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                archived_check.setChecked(!archived_check.isChecked());
+            }
+        });
+
         // HEADER
         updateHeader();
     }
@@ -281,14 +298,14 @@ public class Main extends AppCompatActivity {
                 Reminder r = intent.getParcelableExtra(Costants.EXTRA_REMINDER);
                 if (action != null && r != null && mAdapter != null) {
                     mAdapter.update(action, r);
-                    setCount();
                 } else {
                     updateList(query);
                 }
+                setCount();
             }
         };
         registerReceiver(mReceiver, intentFilter);
-        setCount();
+        updateList(query);
         updateHeader();
     }
 
@@ -392,6 +409,7 @@ public class Main extends AppCompatActivity {
         ((TextView) findViewById(R.id.count_item_notes)).setText("" + cs[0]);
         ((TextView) findViewById(R.id.count_item_reminders)).setText("" + cs[1]);
         ((TextView) findViewById(R.id.count_item_starred)).setText("" + cs[2]);
+        ((TextView) findViewById(R.id.count_item_archived)).setText("" + cs[3]);
         if (accountUser == null || accountUser.getEmail().equals("")) {
             if (c == 0) {
                 ((TextView) findViewById(R.id.items_todo)).setText(getString(R.string.no_items));
@@ -401,10 +419,12 @@ public class Main extends AppCompatActivity {
             findViewById(R.id.count_item_notes).setVisibility(View.GONE);
             findViewById(R.id.count_item_reminders).setVisibility(View.GONE);
             findViewById(R.id.count_item_starred).setVisibility(View.GONE);
+            findViewById(R.id.count_item_archived).setVisibility(View.GONE);
         } else {
             findViewById(R.id.count_item_notes).setVisibility(View.VISIBLE);
             findViewById(R.id.count_item_reminders).setVisibility(View.VISIBLE);
             findViewById(R.id.count_item_starred).setVisibility(View.VISIBLE);
+            findViewById(R.id.count_item_archived).setVisibility(View.VISIBLE);
         }
 
         if (mAdapter != null) {
@@ -450,8 +470,10 @@ public class Main extends AppCompatActivity {
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                     drawer.closeDrawer(GravityCompat.START);
                     startActivity(logout);
-                    }
+                }
             });
+
+            setCount();
         } else {
             // NAME
             ((TextView) findViewById(R.id.header_name)).setText(Utils.getOwnerName(this));

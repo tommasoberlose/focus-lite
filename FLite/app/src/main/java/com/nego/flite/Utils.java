@@ -27,6 +27,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +72,7 @@ public class Utils {
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         if (SP.getBoolean(Costants.PREFERENCES_VIEW_ALL, true)) {
 
-            Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
+            Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), new User(context).getId());
             for (c.moveToLast(); !c.isBeforeFirst(); c.moveToPrevious()) {
                 NotificationF.NotificationFixed(context, new Reminder(c));
             }
@@ -85,7 +86,7 @@ public class Utils {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
 
-        Cursor a = dbHelper.fetchAllAlarm();
+        Cursor a = dbHelper.fetchAllAlarm(new User(context).getId());
         while (a.moveToNext()) {
             Reminder reminder = new Reminder(a);
             // Missed alarms
@@ -104,7 +105,7 @@ public class Utils {
     public static void showOldStarred(Context context, SharedPreferences SP) {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
-        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
+        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), new User(context).getId());
         for (c.moveToLast(); !c.isBeforeFirst(); c.moveToPrevious()) {
             Reminder r = new Reminder(c);
             if (r.getPriority() == 1)
@@ -117,7 +118,7 @@ public class Utils {
     public static int itemsToDo(Context context) {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
-        int count = dbHelper.getRemindersN();
+        int count = dbHelper.getRemindersN(new User(context).getId());
         dbHelper.close();
         return count;
     }
@@ -125,7 +126,7 @@ public class Utils {
     public static int[] itemsToDoMultiple(Context context) {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
-        int[] count = {dbHelper.getRemindersNNotes(), dbHelper.getRemindersNReminders(), dbHelper.getRemindersNStarred()};
+        int[] count = {dbHelper.getRemindersNNotes(new User(context).getId()), dbHelper.getRemindersNReminders(new User(context).getId()), dbHelper.getRemindersNStarred(new User(context).getId()), dbHelper.getRemindersNNotesArchived(new User(context).getId())};
         dbHelper.close();
         return count;
     }
@@ -379,7 +380,7 @@ public class Utils {
         String[] split = s.split(" ");
         for (String match : split) {
             String m = match.replace("/","").replace("-","");
-            if (Patterns.PHONE.matcher(m).matches())
+            if (Patterns.PHONE.matcher(m).matches() && m.length() == 10)
                 return new String[] {Costants.ACTION_CALL, m};
             if (Patterns.EMAIL_ADDRESS.matcher(m).matches())
                 return new String[] {Costants.ACTION_MAIL, m};
@@ -444,7 +445,7 @@ public class Utils {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
 
-        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false));
+        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), new User(context).getId());
         while (c.moveToNext()) {
             Reminder r = new Reminder(c);
             if (!r.getPasw().equals(""))

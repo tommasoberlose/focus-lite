@@ -10,6 +10,7 @@ import android.net.wifi.WifiManager;
 import com.nego.flite.Costants;
 import com.nego.flite.Functions.NotificationF;
 import com.nego.flite.Reminder;
+import com.nego.flite.User;
 import com.nego.flite.database.DbAdapter;
 
 import java.util.Calendar;
@@ -27,7 +28,7 @@ public class WiFiReceiver extends BroadcastReceiver {
 
             WifiManager wifiM = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
-            Cursor cursor = dbHelper.fetchRemindersByFilterWifi();
+            Cursor cursor = dbHelper.fetchRemindersByFilterWifi(new User(context).getId());
             while (cursor.moveToNext()) {
                 Reminder actual = new Reminder(cursor);
                 if (actual.getAlarm() == Costants.ALARM_TYPE_WIFI) {
