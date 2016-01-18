@@ -90,12 +90,16 @@ public class Utils {
         while (a.moveToNext()) {
             Reminder reminder = new Reminder(a);
             // Missed alarms
-            if (isMissedAlarm(reminder))
+            if (isMissedAlarm(reminder)) {
                 NotificationF.Notification(context, reminder);
+                Log.i("NEGO_NOT", "MISSED");
+            }
 
             // Future alarm
-            if (reminder.getAlarm() != 0 && !isOldAlarm(reminder))
+            if (reminder.getAlarm() != 0 && !isOldAlarm(reminder)) {
                 AlarmF.updateAlarm(context, reminder.getId(), reminder.getAlarm(), reminder.getAlarm_repeat());
+                Log.i("NEGO_NOT", "FUTURE");
+            }
         }
         a.close();
 

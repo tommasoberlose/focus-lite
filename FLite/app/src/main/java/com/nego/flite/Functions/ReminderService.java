@@ -85,6 +85,7 @@ public class ReminderService extends IntentService {
         DbAdapter dbHelper = new DbAdapter(this);
         dbHelper.open();
         if (r.update_reminder_date(this, dbHelper)) {
+            Log.i("NEGO_REM", "OK");
             sendResponse(Costants.ACTION_UPDATE_DATE, r);
         }
         dbHelper.close();

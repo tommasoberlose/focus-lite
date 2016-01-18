@@ -324,24 +324,25 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
         }
     }
 
-    public void deleteElement(int position) {
+    public Reminder deleteElement(int position) {
         ReminderService.startAction(mContext, Costants.ACTION_ARCHIVE, mDataset.get(position));
         if (!SP.getBoolean(Costants.PREFERENCES_LIST_ARCHIVED, false)) {
-            update(Costants.ACTION_DELETE, mDataset.get(position));
+            return update(Costants.ACTION_DELETE, mDataset.get(position));
         } else {
             mDataset.get(position).setDate_archived(Calendar.getInstance().getTimeInMillis());
             notifyItemChanged(position);
+            return mDataset.get(position);
         }
     }
 
-    public void update(String action, Reminder r) {
+    public Reminder update(String action, Reminder r) {
         int pos = 0;
         switch (action) {
             case Costants.ACTION_CREATE:
                 mDataset.add(0, r);
                 notifyItemInserted(0);
                 ((Main) mContext).recyclerGoUp();
-                break;
+                return r;
             case Costants.ACTION_DELETE:
                 for (Reminder reminder : mDataset) {
                     if (reminder.getId() == r.getId())
@@ -349,9 +350,11 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
                     else
                         pos++;
                 }
-                mDataset.remove(pos);
-                notifyItemRemoved(pos);
-                break;
+                if (pos < mDataset.size()) {
+                    mDataset.remove(pos);
+                    notifyItemRemoved(pos);
+                }
+                return r;
             case Costants.ACTION_UPDATE:
                 for (Reminder reminder : mDataset) {
                     if (reminder.getId() == r.getId())
@@ -359,9 +362,11 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
                     else
                         pos++;
                 }
-                mDataset.set(pos, r);
-                notifyItemChanged(pos);
-                break;
+                if (pos < mDataset.size()) {
+                    mDataset.set(pos, r);
+                    notifyItemChanged(pos);
+                }
+                return r;
             case Costants.ACTION_UPDATE_DATE:
                 for (Reminder reminder : mDataset) {
                     if (reminder.getId() == r.getId())
@@ -369,9 +374,31 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
                     else
                         pos++;
                 }
-                mDataset.set(pos, r);
-                notifyItemChanged(pos);
-                break;
+                if (pos < mDataset.size()) {
+                    mDataset.set(pos, r);
+                    notifyItemChanged(pos);
+                }
+                return r;
+            case Costants.ACTION_UNARCHIVE:
+                r.setDate_archived(0);
+                if (!SP.getBoolean(Costants.PREFERENCES_LIST_ARCHIVED, false)) {
+                    mDataset.add(0, r);
+                    notifyItemInserted(0);
+                    ((Main) mContext).recyclerGoUp();
+                } else {
+                    for (Reminder reminder : mDataset) {
+                        if (reminder.getId() == r.getId())
+                            break;
+                        else
+                            pos++;
+                    }
+                    if (pos < mDataset.size()) {
+                        mDataset.set(pos, r);
+                        notifyItemChanged(pos);
+                    }
+                }
+                return r;
         }
+        return null;
     }
 }

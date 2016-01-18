@@ -400,6 +400,8 @@ public class MyDialog extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.dialog_menu, menu);
 
+
+
         return true;
     }
 
@@ -407,6 +409,58 @@ public class MyDialog extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_attach:
+                setAttachSnackbar();
+                break;
+            case R.id.action_reminder:
+                setRemindersSnackbar();
+                break;
+            case R.id.action_list:
+                switchContent();
+                break;
+            case R.id.action_priority:
+                togglePriority();
+                break;
+            case R.id.action_unarchive:
+                r.setDate_archived(0);
+                updateUIArchived();
+                break;
+            case R.id.action_delete:
+                new AlertDialog.Builder(MyDialog.this)
+                    .setTitle(getResources().getString(R.string.attention))
+                    .setMessage(getResources().getString(R.string.ask_delete_reminder) + "?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r);
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, null).show();
+                break;
+            case R.id.action_lock:
+                if (pasw.equals("")) {
+                    setPasw();
+                } else {
+                    pasw = "";
+                    checkPasw();
+                }
+                break;
+            case R.id.action_share:
+                Intent share_intent = new Intent(Intent.ACTION_SEND);
+                share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle() + "\n" + Utils.getBigContentList(MyDialog.this, r.getContent()));
+                share_intent.setType("text/plain");
+                startActivity(share_intent);
+                break;
+            case R.id.action_show_info:
+                showInfo();
+                break;
+            case R.id.action_archive:
+                r.setDate_archived(Calendar.getInstance().getTimeInMillis());
+                saveAll();
+                break;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -638,7 +692,7 @@ public class MyDialog extends AppCompatActivity {
                             return true;
                         case R.id.action_archive:
                             r.setDate_archived(Calendar.getInstance().getTimeInMillis());
-                            updateUIArchived();
+                            saveAll();
                             return true;
                     }
                     return false;
@@ -665,7 +719,7 @@ public class MyDialog extends AppCompatActivity {
                             return true;
                         case R.id.action_archive:
                             r.setDate_archived(Calendar.getInstance().getTimeInMillis());
-                            updateUIArchived();
+                            saveAll();
                             return true;
                     }
                     return false;
@@ -1245,6 +1299,26 @@ public class MyDialog extends AppCompatActivity {
     public void setPriority(int p) {
         priority = p;
         if (p == 1) {
+            action_priority.setImageResource(R.drawable.ic_action_toggle_star);
+            action_priority.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setPriority(0);
+                }
+            });
+        } else {
+            action_priority.setImageResource(R.drawable.ic_action_toggle_star_outline);
+            action_priority.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setPriority(1);
+                }
+            });
+        }
+    }
+
+    public void togglePriority() {
+        if (priority == 1) {
             action_priority.setImageResource(R.drawable.ic_action_toggle_star);
             action_priority.setOnClickListener(new View.OnClickListener() {
                 @Override

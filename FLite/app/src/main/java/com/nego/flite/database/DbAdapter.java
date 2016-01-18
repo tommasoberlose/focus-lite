@@ -157,7 +157,7 @@ public class DbAdapter {
     public Cursor getReminderById(String id) {
         return database.query(true, DATABASE_TABLE, new String[]{
                         KEY_ID, KEY_TITLE, KEY_CONTENT, KEY_ACTION_TYPE, KEY_ACTION_INFO, KEY_IMG, KEY_PASW, KEY_DATE_CREATE, KEY_DATE_REMINDED, KEY_DATE_ARCHIVED, KEY_LAST_CHANGED, KEY_ALARM, KEY_ALARM_REPEAT, KEY_ADDRESS, KEY_PRIORITY, KEY_VOICE_NOTE, KEY_USER_ID, KEY_COLOR, KEY_ICON},
-                KEY_ID + " == '" + id + "' OR " + KEY_USER_ID + " == ''", null, null, null, null, null);
+                KEY_ID + " == '" + id + "'", null, null, null, null, null);
     }
 
     public Cursor fetchAllAlarm(String user_id) {

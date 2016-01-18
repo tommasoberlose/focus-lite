@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -38,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nego.flite.Adapter.AdapterList;
+import com.nego.flite.Functions.ReminderService;
 import com.nego.flite.database.DbAdapter;
 
 import java.net.URL;
@@ -82,8 +84,18 @@ public class Main extends AppCompatActivity {
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                mAdapter.deleteElement(viewHolder.getAdapterPosition());
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                final Reminder to_archive = mAdapter.deleteElement(viewHolder.getAdapterPosition());
+                if (to_archive != null) {
+                    Snackbar.make(recList, getString(R.string.text_archived), Snackbar.LENGTH_LONG)
+                            .setAction(getString(R.string.action_unarchive), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    ReminderService.startAction(Main.this, Costants.ACTION_UNARCHIVE, to_archive);
+                                }
+                            })
+                            .show();
+                }
             }
         };
 
@@ -416,15 +428,6 @@ public class Main extends AppCompatActivity {
             } else {
                 ((TextView) findViewById(R.id.items_todo)).setText(getString(R.string.num_items_todo, c) + ".");
             }
-            findViewById(R.id.count_item_notes).setVisibility(View.GONE);
-            findViewById(R.id.count_item_reminders).setVisibility(View.GONE);
-            findViewById(R.id.count_item_starred).setVisibility(View.GONE);
-            findViewById(R.id.count_item_archived).setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.count_item_notes).setVisibility(View.VISIBLE);
-            findViewById(R.id.count_item_reminders).setVisibility(View.VISIBLE);
-            findViewById(R.id.count_item_starred).setVisibility(View.VISIBLE);
-            findViewById(R.id.count_item_archived).setVisibility(View.VISIBLE);
         }
 
         if (mAdapter != null) {

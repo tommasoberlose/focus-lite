@@ -12,54 +12,54 @@
         android:id="@+id/action_reminder"
         android:orderInCategory="55"
         app:showAsAction="always"
-        android:icon="@drawable/ic_action_social_notifications"
+        android:icon="@drawable/ic_action_social_notifications_dialog"
         android:title="@string/text_choose_reminder_type" />
     <item
         android:id="@+id/action_list"
         android:orderInCategory="60"
         app:showAsAction="always"
-        android:icon="@drawable/ic_action_ic_playlist_add_check_white_24dp"
+        android:icon="@drawable/ic_action_playlist_add_check_dialog"
         android:title="@string/action_list_show" />
     <item
         android:id="@+id/action_priority"
         android:orderInCategory="65"
         app:showAsAction="always"
-        android:icon="@drawable/ic_action_toggle_star"
+        android:icon="@drawable/ic_action_toggle_star_dialog"
         android:title="@string/action_priority" />
     <item
         android:id="@+id/action_unarchive"
         android:orderInCategory="70"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_unarchive"
+        android:icon="@drawable/ic_action_unarchive_dialog"
         android:title="@string/action_unarchive" />
     <item
         android:id="@+id/action_delete"
         android:orderInCategory="75"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_delete"
+        android:icon="@drawable/ic_action_action_delete_dialog"
         android:title="@string/action_delete" />
     <item
         android:id="@+id/action_lock"
         android:orderInCategory="80"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_lock_big"
+        android:icon="@drawable/ic_action_action_lock_dialog"
         android:title="@string/action_lock" />
     <item
         android:id="@+id/action_show_info"
         android:orderInCategory="90"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_info_outline"
+        android:icon="@drawable/ic_action_action_info_outline_dialog"
         android:title="@string/text_note_info" />
     <item
         android:id="@+id/action_share"
         android:orderInCategory="95"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_social_share"
+        android:icon="@drawable/ic_action_social_share_dialog"
         android:title="@string/action_share" />
     <item
         android:id="@+id/action_archive"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_check"
+        android:icon="@drawable/ic_action_content_archive_dialog"
         android:title="@string/action_archive" />
 </menu>
