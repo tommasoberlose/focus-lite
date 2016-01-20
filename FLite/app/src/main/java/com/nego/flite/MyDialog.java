@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
@@ -105,20 +106,12 @@ public class MyDialog extends AppCompatActivity {
     public EditText title;
     public EditText content;
     private TextView save_button;
-    private ImageView action_attach;
-    private ImageView action_reminder;
     private ViewPager img_card;
-    private ImageView action_menu;
-    private PopupMenu control_menu;
     private CardView contact_card;
-    private ImageView action_list;
     private RecyclerView content_list;
-    private ImageView action_priority;
     private CardView url_card;
     private CardView address_card;
     private RelativeLayout action_add_to_list;
-    private ImageView action_unarchive;
-    private ImageView action_delete;
 
     private MyAdapter mAdapter;
 
@@ -198,19 +191,12 @@ public class MyDialog extends AppCompatActivity {
                 title = (EditText) findViewById(R.id.editText);
                 content = (EditText) findViewById(R.id.content);
                 save_button = (TextView) findViewById(R.id.action_save);
-                action_attach = (ImageView) findViewById(R.id.action_attach);
-                action_reminder = (ImageView) findViewById(R.id.action_reminder);
                 img_card = (ViewPager) findViewById(R.id.card_img);
-                action_menu = (ImageView) findViewById(R.id.control_menu);
                 contact_card = (CardView) findViewById(R.id.card_contact);
-                action_list = (ImageView) findViewById(R.id.action_list);
                 content_list = (RecyclerView) findViewById(R.id.content_list);
-                action_priority = (ImageView) findViewById(R.id.action_priority);
                 url_card = (CardView) findViewById(R.id.card_browser);
                 address_card = (CardView) findViewById(R.id.card_address);
                 action_add_to_list = (RelativeLayout) findViewById(R.id.action_add_to_list);
-                action_delete = (ImageView) findViewById(R.id.action_delete);
-                action_unarchive = (ImageView) findViewById(R.id.action_unarchive);
 
                 content_list.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -353,45 +339,9 @@ public class MyDialog extends AppCompatActivity {
                     }
                 });
 
-                action_attach.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setAttachSnackbar();
-                    }
-                });
-
-
-                action_reminder.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setRemindersSnackbar();
-                    }
-                });
-
-                ContextThemeWrapper mContextPicker = new ContextThemeWrapper(this, R.style.Theme_AppCompat_Light);
-                control_menu = new PopupMenu(mContextPicker, action_menu, GravityCompat.END);
-                control_menu.inflate(R.menu.control_menu);
-                control_menu.getMenu().getItem(1).setVisible(r != null);
-                control_menu.getMenu().getItem(2).setVisible(r != null);
-                control_menu.getMenu().getItem(3).setVisible(r != null);
-                checkPasw();
-                action_menu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(final View v) {
-                        control_menu.show();
-                    }
-                });
 
                 setPriority(priority);
                 updateUrl();
-                updateUIArchived();
-
-                action_list.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        switchContent();
-                    }
-                });
             }
         }
     }
@@ -400,7 +350,55 @@ public class MyDialog extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.dialog_menu, menu);
 
+        // ATTACH
+        menu.getItem(0).setVisible(r == null || r.getDate_archived() == 0);
 
+        // REMINDER
+        menu.getItem(1).setVisible(r == null || r.getDate_archived() == 0);
+        menu.getItem(1).setIcon(alarm == 0 ? R.drawable.ic_action_social_notifications_dialog : R.drawable.ic_action_social_notifications_on_dialog);
+
+        // LIST
+        menu.getItem(2).setVisible(r == null || r.getDate_archived() == 0);
+        menu.getItem(2).setIcon(Utils.checkList(getContent()) ? R.drawable.ic_action_ic_playlist_remove_dialog : R.drawable.ic_action_playlist_add_check_dialog);
+
+        // PRIORITY
+        menu.getItem(3).setVisible(r == null || r.getDate_archived() == 0);
+        menu.getItem(3).setIcon(priority == 0 ? R.drawable.ic_action_toggle_star_outline_dialog : R.drawable.ic_action_toggle_star_dialog);
+
+        // UNARCHIVE
+        menu.getItem(4).setVisible(r != null && r.getDate_archived() != 0);
+
+        // DELETE
+        menu.getItem(5).setVisible(r != null && r.getDate_archived() != 0);
+
+        // NOTE DETAILS
+        menu.getItem(6).setVisible(r!= null);
+        menu.getItem(6).setShowAsAction(r != null && r.getDate_archived() != 0 ? MenuItem.SHOW_AS_ACTION_ALWAYS : MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        // LOCK
+        menu.getItem(7).setIcon(pasw.equals("") ? R.drawable.ic_action_action_lock_dialog : R.drawable.ic_action_ic_lock_open_dialog);
+        menu.getItem(7).setTitle(pasw.equals("") ? R.string.action_lock : R.string.action_unlock);
+
+        // SHARE
+        menu.getItem(8).setVisible(r!= null);
+
+        // ARCHIVE
+        menu.getItem(9).setVisible(r == null || r.getDate_archived() == 0);
+        menu.getItem(9).setVisible(r!= null && r.getDate_archived() == 0);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && SP.getString(Costants.PREFERENCE_STYLE_POPUP, Costants.PREFERENCE_STYLE_POPUP_DEFAULT).equals(Costants.PREFERENCE_STYLE_POPUP_MD)) {
+            menu.getItem(0).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
+            menu.getItem(1).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
+            menu.getItem(2).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
+            menu.getItem(3).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
+            menu.getItem(4).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
+            menu.getItem(5).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
+            menu.getItem(6).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
+            menu.getItem(7).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
+            menu.getItem(8).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
+            menu.getItem(9).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
+        }
 
         return true;
     }
@@ -425,7 +423,7 @@ public class MyDialog extends AppCompatActivity {
                 break;
             case R.id.action_unarchive:
                 r.setDate_archived(0);
-                updateUIArchived();
+                invalidateOptionsMenu();
                 break;
             case R.id.action_delete:
                 new AlertDialog.Builder(MyDialog.this)
@@ -444,7 +442,7 @@ public class MyDialog extends AppCompatActivity {
                     setPasw();
                 } else {
                     pasw = "";
-                    checkPasw();
+                    invalidateOptionsMenu();
                 }
                 break;
             case R.id.action_share:
@@ -457,8 +455,8 @@ public class MyDialog extends AppCompatActivity {
                 showInfo();
                 break;
             case R.id.action_archive:
-                r.setDate_archived(Calendar.getInstance().getTimeInMillis());
-                saveAll();
+                ReminderService.startAction(this, Costants.ACTION_ARCHIVE, r);
+                finish();
                 break;
         }
 
@@ -656,13 +654,10 @@ public class MyDialog extends AppCompatActivity {
         } else {
             this.alarm = alarm;
             this.alarm_repeat = alarm_repeat;
-            if (alarm != 0) {
-                action_reminder.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_notifications_on));
-                if (r != null)
+            if (alarm != 0 && r != null) {
                     r.setDate_reminded(0);
-            } else {
-                action_reminder.setImageDrawable(ContextCompat.getDrawable(MyDialog.this, R.drawable.ic_action_social_notifications));
             }
+            invalidateOptionsMenu();
         }
     }
 
@@ -672,63 +667,6 @@ public class MyDialog extends AppCompatActivity {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    public void checkPasw() {
-        if (pasw.equals("")) {
-            control_menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.action_pasw:
-                            setPasw();
-                            return true;
-                        case R.id.action_info:
-                            showInfo();
-                            return true;
-                        case R.id.action_share:
-                            Intent share_intent = new Intent(Intent.ACTION_SEND);
-                            share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle() + "\n" + Utils.getBigContentList(MyDialog.this, r.getContent()));
-                            share_intent.setType("text/plain");
-                            startActivity(share_intent);
-                            return true;
-                        case R.id.action_archive:
-                            r.setDate_archived(Calendar.getInstance().getTimeInMillis());
-                            saveAll();
-                            return true;
-                    }
-                    return false;
-                }
-            });
-            control_menu.getMenu().getItem(0).setTitle(getString(R.string.action_lock));
-        } else {
-            control_menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.action_pasw:
-                            pasw = "";
-                            checkPasw();
-                            return true;
-                        case R.id.action_info:
-                            showInfo();
-                            return true;
-                        case R.id.action_share:
-                            Intent share_intent = new Intent(Intent.ACTION_SEND);
-                            share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle() + "\n" + Utils.getBigContentList(MyDialog.this, r.getContent()));
-                            share_intent.setType("text/plain");
-                            startActivity(share_intent);
-                            return true;
-                        case R.id.action_archive:
-                            r.setDate_archived(Calendar.getInstance().getTimeInMillis());
-                            saveAll();
-                            return true;
-                    }
-                    return false;
-                }
-            });
-            control_menu.getMenu().getItem(0).setTitle(getString(R.string.action_unlock));
-
-        }
-    }
 
     public void setPasw() {
         final View paswView = LayoutInflater.from(this).inflate(R.layout.pin_dialog, null);
@@ -740,7 +678,7 @@ public class MyDialog extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         pasw = pasw_text.getText().toString();
-                        checkPasw();
+                        invalidateOptionsMenu();
                         dialog.dismiss();
                     }
                 })
@@ -977,8 +915,7 @@ public class MyDialog extends AppCompatActivity {
                             action = Costants.ACTION_CONTACT;
                             action_info = contactList.get(0)[0];
                             setContact();
-                            int ind = t.lastIndexOf("@");
-                            title.setText(new StringBuilder(t).replace(ind, ind + 1, "").toString());
+                            title.setText(new StringBuilder(t).replace(t.lastIndexOf("@"), t.length(), contactList.get(0)[1]).toString());
                             snackbar_suggestions.dismiss();
                         }
                     });
@@ -991,8 +928,7 @@ public class MyDialog extends AppCompatActivity {
                                 action = Costants.ACTION_CONTACT;
                                 action_info = contactList.get(1)[0];
                                 setContact();
-                                int ind = t.lastIndexOf("@");
-                                title.setText(new StringBuilder(t).replace(ind, ind + 1, "").toString());
+                                title.setText(new StringBuilder(t).replace(t.lastIndexOf("@"), t.length(), contactList.get(1)[1]).toString());
                                 snackbar_suggestions.dismiss();
                             }
                         });
@@ -1009,8 +945,7 @@ public class MyDialog extends AppCompatActivity {
                                 action = Costants.ACTION_CONTACT;
                                 action_info = contactList.get(2)[0];
                                 setContact();
-                                int ind = t.lastIndexOf("@");
-                                title.setText(new StringBuilder(t).replace(ind, ind + 1, "").toString());
+                                title.setText(new StringBuilder(t).replace(t.lastIndexOf("@"), t.length(), contactList.get(2)[1]).toString());
                                 snackbar_suggestions.dismiss();
                             }
                         });
@@ -1032,6 +967,88 @@ public class MyDialog extends AppCompatActivity {
                 }
             }
         }
+        /* TODO Date with / and hour with :
+        if (t.contains("")) {
+            if (ContextCompat.checkSelfPermission(MyDialog.this,
+                    Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED && action.equals("")) {
+                final View attachView = LayoutInflater.from(this).inflate(R.layout.item_suggestion, null);
+
+                if (snackbar_suggestions != null && snackbar_suggestions.isShown()) {
+                    snackbar_suggestions.dismiss();
+                }
+
+                snackbar_suggestions = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
+                Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_suggestions.getView();
+                layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
+                TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setVisibility(View.INVISIBLE);
+
+                TextView name_one = (TextView) attachView.findViewById(R.id.name_one);
+                TextView name_two = (TextView) attachView.findViewById(R.id.name_two);
+                TextView name_three = (TextView) attachView.findViewById(R.id.name_three);
+
+                String toCheck = t.substring(t.lastIndexOf("@"), t.length());
+                final ArrayList<String[]> contactList = Utils.getContactsList(this, toCheck);
+                if (contactList.size() > 0) {
+                    name_one.setText(contactList.get(0)[1]);
+                    name_one.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            action = Costants.ACTION_CONTACT;
+                            action_info = contactList.get(0)[0];
+                            setContact();
+                            title.setText(new StringBuilder(t).replace(t.lastIndexOf("@"), t.length(), contactList.get(0)[1]).toString());
+                            snackbar_suggestions.dismiss();
+                        }
+                    });
+
+                    if (contactList.size() > 1) {
+                        name_two.setText(contactList.get(1)[1]);
+                        name_two.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                action = Costants.ACTION_CONTACT;
+                                action_info = contactList.get(1)[0];
+                                setContact();
+                                title.setText(new StringBuilder(t).replace(t.lastIndexOf("@"), t.length(), contactList.get(1)[1]).toString());
+                                snackbar_suggestions.dismiss();
+                            }
+                        });
+                        name_two.setVisibility(View.VISIBLE);
+                    } else {
+                        name_two.setVisibility(View.GONE);
+                    }
+
+                    if (contactList.size() > 2) {
+                        name_three.setText(contactList.get(2)[1]);
+                        name_three.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                action = Costants.ACTION_CONTACT;
+                                action_info = contactList.get(2)[0];
+                                setContact();
+                                title.setText(new StringBuilder(t).replace(t.lastIndexOf("@"), t.length(), contactList.get(2)[1]).toString());
+                                snackbar_suggestions.dismiss();
+                            }
+                        });
+                        name_three.setVisibility(View.VISIBLE);
+                    } else {
+                        name_three.setVisibility(View.GONE);
+                    }
+
+
+                    layout.addView(attachView, 0);
+                    snackbar_suggestions.show();
+                } else {
+                    if (snackbar_suggestions.isShown())
+                        snackbar_suggestions.dismiss();
+                }
+            } else {
+                if (snackbar_suggestions != null && snackbar_suggestions.isShown()) {
+                    snackbar_suggestions.dismiss();
+                }
+            }
+        }*/
     }
 
     public void showInfo() {
@@ -1188,8 +1205,7 @@ public class MyDialog extends AppCompatActivity {
         content.setVisibility(!list ? View.VISIBLE : View.GONE);
         content_list.setVisibility(list ? View.VISIBLE : View.GONE);
         action_add_to_list.setVisibility(list ? View.VISIBLE : View.GONE);
-        action_list.setImageResource(!list ? R.drawable.ic_action_ic_playlist_add_check_white_24dp : R.drawable.ic_action_ic_playlist_remove_white_48dp);
-
+        invalidateOptionsMenu();
     }
 
     public void updateHeight() {
@@ -1298,43 +1314,11 @@ public class MyDialog extends AppCompatActivity {
 
     public void setPriority(int p) {
         priority = p;
-        if (p == 1) {
-            action_priority.setImageResource(R.drawable.ic_action_toggle_star);
-            action_priority.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setPriority(0);
-                }
-            });
-        } else {
-            action_priority.setImageResource(R.drawable.ic_action_toggle_star_outline);
-            action_priority.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setPriority(1);
-                }
-            });
-        }
+        invalidateOptionsMenu();
     }
 
     public void togglePriority() {
-        if (priority == 1) {
-            action_priority.setImageResource(R.drawable.ic_action_toggle_star);
-            action_priority.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setPriority(0);
-                }
-            });
-        } else {
-            action_priority.setImageResource(R.drawable.ic_action_toggle_star_outline);
-            action_priority.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setPriority(1);
-                }
-            });
-        }
+        setPriority(priority == 1 ? 0 : 1);
     }
 
     public void updateUrl() {
@@ -1592,52 +1576,6 @@ public class MyDialog extends AppCompatActivity {
             }
         } else {
             Toast.makeText(this, getResources().getString(R.string.error_wifi_off), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void updateUIArchived() {
-        if (r == null || r.getDate_archived() == 0) {
-            action_attach.setVisibility(View.VISIBLE);
-            action_reminder.setVisibility(View.VISIBLE);
-            action_list.setVisibility(View.VISIBLE);
-            action_priority.setVisibility(View.VISIBLE);
-            action_menu.setVisibility(View.VISIBLE);
-
-            action_delete.setVisibility(View.GONE);
-            action_unarchive.setVisibility(View.GONE);
-        } else {
-            action_attach.setVisibility(View.GONE);
-            action_reminder.setVisibility(View.GONE);
-            action_list.setVisibility(View.GONE);
-            action_priority.setVisibility(View.GONE);
-            action_menu.setVisibility(View.GONE);
-
-            action_delete.setVisibility(View.VISIBLE);
-            action_unarchive.setVisibility(View.VISIBLE);
-
-            action_delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new AlertDialog.Builder(MyDialog.this)
-                            .setTitle(getResources().getString(R.string.attention))
-                            .setMessage(getResources().getString(R.string.ask_delete_reminder) + "?")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r);
-                                    finish();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.cancel, null).show();
-                }
-            });
-
-            action_unarchive.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    r.setDate_archived(0);
-                    updateUIArchived();
-                }
-            });
         }
     }
 }

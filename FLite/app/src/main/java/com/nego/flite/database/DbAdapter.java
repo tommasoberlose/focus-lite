@@ -118,12 +118,12 @@ public class DbAdapter {
     //update a reminder
     public boolean updateReminder(Reminder r) {
         ContentValues updateValues = createContentValues(r.getId(), r.getTitle(), r.getContent(), r.getAction_type(), r.getAction_info(), r.getImg(), r.getPasw(), r.getDate_create(), r.getDate_reminded(), r.getDate_archived(), r.getLast_changed(), r.getAlarm(), r.getAlarm_repeat(), r.getAddress(), r.getPriority(), r.getVoice_note(), r.getUser_id(), r.getColor(), r.getIcon());
-        return database.update(DATABASE_TABLE, updateValues, KEY_ID + "==" + r.getId(), null) > 0;
+        return database.update(DATABASE_TABLE, updateValues, KEY_ID + " == '" + r.getId() + "'", null) > 0;
     }
 
     //delete a reminder
     public boolean deleteReminder(String ID) {
-        return database.delete(DATABASE_TABLE, KEY_ID + "==" + ID, null) > 0;
+        return database.delete(DATABASE_TABLE, KEY_ID + " == '" + ID + "'", null) > 0;
     }
 
     //fetch all reminders

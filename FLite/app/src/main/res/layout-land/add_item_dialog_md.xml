@@ -360,102 +360,18 @@
                             android:background="@color/background_material_dark"
                             android:layout_weight="0">
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:paddingLeft="8dp"
                                 android:paddingRight="8dp"
-                                android:layout_centerVertical="true">
-
-                                <ImageView
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:src="@drawable/ic_action_editor_attach_file"
-                                    android:tint="@android:color/white"
-                                    android:alpha="0.5"
-                                    android:id="@+id/action_attach"
-                                    android:padding="8dp"
-                                    android:background="?attr/selectableItemBackground"
-                                    android:layout_gravity="center_vertical"/>
-
-                                <ImageView
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:src="@drawable/ic_action_social_notifications"
-                                    android:tint="@android:color/white"
-                                    android:alpha="0.5"
-                                    android:id="@+id/action_reminder"
-                                    android:padding="8dp"
-                                    android:background="?attr/selectableItemBackground"
-                                    android:clickable="true"
-                                    android:layout_gravity="center_vertical"/>
-
-                                <ImageView
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:src="@drawable/ic_action_ic_playlist_add_check_white_24dp"
-                                    android:tint="@android:color/white"
-                                    android:alpha="0.5"
-                                    android:id="@+id/action_list"
-                                    android:padding="4dp"
-                                    android:background="?attr/selectableItemBackground"
-                                    android:clickable="true"
-                                    android:layout_gravity="center_vertical"/>
-
-                                <ImageView
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:src="@drawable/ic_action_toggle_star"
-                                    android:tint="@android:color/white"
-                                    android:alpha="0.5"
-                                    android:id="@+id/action_priority"
-                                    android:padding="8dp"
-                                    android:background="?attr/selectableItemBackground"
-                                    android:clickable="true"
-                                    android:layout_gravity="center_vertical"/>
-
-                                <ImageView
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:src="@drawable/ic_action_unarchive"
-                                    android:tint="@android:color/black"
-                                    android:alpha="0.5"
-                                    android:id="@+id/action_unarchive"
-                                    android:padding="8dp"
-                                    android:background="?attr/selectableItemBackground"
-                                    android:clickable="true"
-                                    android:layout_gravity="center_vertical"
-                                    android:visibility="gone" />
-
-                                <ImageView
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:src="@drawable/ic_action_delete"
-                                    android:tint="@android:color/black"
-                                    android:alpha="0.5"
-                                    android:id="@+id/action_delete"
-                                    android:padding="8dp"
-                                    android:background="?attr/selectableItemBackground"
-                                    android:clickable="true"
-                                    android:layout_gravity="center_vertical"
-                                    android:visibility="gone" />
-
-                                <ImageView
-                                    android:layout_width="40dp"
-                                    android:layout_height="48dp"
-                                    android:src="@drawable/ic_action_navigation_more_vert"
-                                    android:tint="@android:color/white"
-                                    android:alpha="0.5"
-                                    android:id="@+id/control_menu"
-                                    android:background="?attr/selectableItemBackground"
-                                    android:clickable="true"
-                                    android:layout_gravity="center_vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingBottom="8dp"
-                                    android:paddingLeft="2dp"
-                                    android:paddingRight="2dp" />
-
-
+                                android:layout_centerVertical="true"
+                                android:layout_toStartOf="@+id/action_save">
+                                <android.support.v7.widget.Toolbar
+                                    android:id="@+id/toolbar"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="?attr/actionBarSize"
+                                    app:popupTheme="@style/AppTheme.PopupOverlay" />
                             </LinearLayout>
                             <TextView
                                 android:layout_width="wrap_content"

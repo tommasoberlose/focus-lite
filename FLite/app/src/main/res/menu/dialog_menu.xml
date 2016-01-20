@@ -6,7 +6,7 @@
         android:id="@+id/action_attach"
         android:orderInCategory="50"
         app:showAsAction="always"
-        android:icon="@drawable/ic_action_editor_attach_file"
+        android:icon="@drawable/ic_action_attach_dialog"
         android:title="@string/text_choose_attach" />
     <item
         android:id="@+id/action_reminder"
@@ -29,27 +29,27 @@
     <item
         android:id="@+id/action_unarchive"
         android:orderInCategory="70"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/ic_action_unarchive_dialog"
         android:title="@string/action_unarchive" />
     <item
         android:id="@+id/action_delete"
         android:orderInCategory="75"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/ic_action_action_delete_dialog"
         android:title="@string/action_delete" />
     <item
-        android:id="@+id/action_lock"
-        android:orderInCategory="80"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_action_lock_dialog"
-        android:title="@string/action_lock" />
-    <item
         android:id="@+id/action_show_info"
-        android:orderInCategory="90"
+        android:orderInCategory="80"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_action_info_outline_dialog"
         android:title="@string/text_note_info" />
+    <item
+        android:id="@+id/action_lock"
+        android:orderInCategory="90"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_action_lock_dialog"
+        android:title="@string/action_lock" />
     <item
         android:id="@+id/action_share"
         android:orderInCategory="95"

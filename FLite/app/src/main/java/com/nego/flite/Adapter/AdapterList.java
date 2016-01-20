@@ -326,13 +326,7 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
 
     public Reminder deleteElement(int position) {
         ReminderService.startAction(mContext, Costants.ACTION_ARCHIVE, mDataset.get(position));
-        if (!SP.getBoolean(Costants.PREFERENCES_LIST_ARCHIVED, false)) {
-            return update(Costants.ACTION_DELETE, mDataset.get(position));
-        } else {
-            mDataset.get(position).setDate_archived(Calendar.getInstance().getTimeInMillis());
-            notifyItemChanged(position);
-            return mDataset.get(position);
-        }
+        return mDataset.get(position);
     }
 
     public Reminder update(String action, Reminder r) {
@@ -379,6 +373,13 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
                     notifyItemChanged(pos);
                 }
                 return r;
+            case Costants.ACTION_ARCHIVE:
+                if (!SP.getBoolean(Costants.PREFERENCES_LIST_ARCHIVED, false)) {
+                    return update(Costants.ACTION_DELETE, r);
+                } else {
+                    r.setDate_archived(Calendar.getInstance().getTimeInMillis());
+                    return update(Costants.ACTION_UPDATE, r);
+                }
             case Costants.ACTION_UNARCHIVE:
                 r.setDate_archived(0);
                 if (!SP.getBoolean(Costants.PREFERENCES_LIST_ARCHIVED, false)) {

@@ -1,5 +1,6 @@
 package com.nego.flite;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -159,7 +160,7 @@ public class Main extends AppCompatActivity {
                 Intent i = new Intent(Main.this, Settings.class);
                 i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_NOTIFICATION_SETTINGS);
                 drawer.closeDrawer(GravityCompat.START);
-                startActivity(i);
+                startActivityForResult(i, Costants.CODE_REQUEST_SETTINGS);
             }
         });
 
@@ -169,7 +170,7 @@ public class Main extends AppCompatActivity {
                 Intent i = new Intent(Main.this, Settings.class);
                 i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_ALARM_SETTINGS);
                 drawer.closeDrawer(GravityCompat.START);
-                startActivity(i);
+                startActivityForResult(i, Costants.CODE_REQUEST_SETTINGS);
             }
         });
 
@@ -179,7 +180,7 @@ public class Main extends AppCompatActivity {
                 Intent i = new Intent(Main.this, Settings.class);
                 i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_STYLE_SETTINGS);
                 drawer.closeDrawer(GravityCompat.START);
-                startActivity(i);
+                startActivityForResult(i, Costants.CODE_REQUEST_SETTINGS);
             }
         });
 
@@ -189,7 +190,7 @@ public class Main extends AppCompatActivity {
                 Intent i = new Intent(Main.this, Settings.class);
                 i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_APPLICATION_SETTINGS);
                 drawer.closeDrawer(GravityCompat.START);
-                startActivity(i);
+                startActivityForResult(i, Costants.CODE_REQUEST_SETTINGS);
             }
         });
 
@@ -297,6 +298,14 @@ public class Main extends AppCompatActivity {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Costants.CODE_REQUEST_SETTINGS || requestCode == Costants.CODE_REQUEST_SIGN) {
+            updateList(query);
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -317,7 +326,6 @@ public class Main extends AppCompatActivity {
             }
         };
         registerReceiver(mReceiver, intentFilter);
-        updateList(query);
         updateHeader();
     }
 
@@ -472,7 +480,7 @@ public class Main extends AppCompatActivity {
                     logout.putExtra(Costants.EXTRA_ACTION_TYPE, Costants.ACTION_DELETE);
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                     drawer.closeDrawer(GravityCompat.START);
-                    startActivity(logout);
+                    startActivityForResult(logout, Costants.CODE_REQUEST_SIGN);
                 }
             });
 
@@ -491,7 +499,7 @@ public class Main extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent login = new Intent(Main.this, SignInActivity.class);
                     login.putExtra(Costants.EXTRA_ACTION_TYPE, Costants.ACTION_CREATE);
-                    startActivity(login);
+                    startActivityForResult(login, Costants.CODE_REQUEST_SIGN);
                 }
             });
         }

@@ -33,6 +33,8 @@ public class Costants {
     public static final int CODE_REQUEST_PERMISSION_READ_CONTACTS = 3;
     public static final int CODE_REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 6;
     public static final int CODE_REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 7;
+    public static final int CODE_REQUEST_SETTINGS = 8;
+    public static final int CODE_REQUEST_SIGN = 9;
 
     public static final String KEY_DIALOG_TITLE = "KEY_DIALOG_TITLE";
     public static final String KEY_DIALOG_CONTENT = "KEY_DIALOG_CONTENT";
