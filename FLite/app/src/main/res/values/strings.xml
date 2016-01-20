@@ -227,4 +227,8 @@
     <string name="text_user">User</string>
     <string name="action_unarchive">Unarchive</string>
     <string name="action_priority">Add to favorites</string>
+    <string name="action_add_account">Add Account</string>
+    <string name="error_user_signed">User already signed</string>
+    <string name="text_account_added">Account added</string>
+    <string name="text_account_removed">Account Removed</string>
 </resources>

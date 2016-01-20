@@ -44,7 +44,7 @@ public class WidgetViewsFactory implements
 
         DbAdapter dbHelper = new DbAdapter(mContext);
         dbHelper.open();
-        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), new User(mContext).getId());
+        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), Utils.getActiveUserId(dbHelper));
         while (c.moveToNext()) {
             mWidgetItems.add(new Reminder(c));
         }
@@ -63,7 +63,7 @@ public class WidgetViewsFactory implements
 
         DbAdapter dbHelper = new DbAdapter(mContext);
         dbHelper.open();
-        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), new User(mContext).getId());
+        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), Utils.getActiveUserId(dbHelper));
         while (c.moveToNext()) {
             mWidgetItems.add(new Reminder(c));
         }

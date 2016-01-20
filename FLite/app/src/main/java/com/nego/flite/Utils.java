@@ -72,7 +72,7 @@ public class Utils {
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         if (SP.getBoolean(Costants.PREFERENCES_VIEW_ALL, true)) {
 
-            Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), new User(context).getId());
+            Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), getActiveUserId(dbHelper));
             for (c.moveToLast(); !c.isBeforeFirst(); c.moveToPrevious()) {
                 NotificationF.NotificationFixed(context, new Reminder(c));
             }
@@ -86,7 +86,7 @@ public class Utils {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
 
-        Cursor a = dbHelper.fetchAllAlarm(new User(context).getId());
+        Cursor a = dbHelper.fetchAllAlarm(getActiveUserId(dbHelper));
         while (a.moveToNext()) {
             Reminder reminder = new Reminder(a);
             // Missed alarms
@@ -109,7 +109,7 @@ public class Utils {
     public static void showOldStarred(Context context, SharedPreferences SP) {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
-        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), new User(context).getId());
+        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), getActiveUserId(dbHelper));
         for (c.moveToLast(); !c.isBeforeFirst(); c.moveToPrevious()) {
             Reminder r = new Reminder(c);
             if (r.getPriority() == 1)
@@ -122,7 +122,7 @@ public class Utils {
     public static int itemsToDo(Context context) {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
-        int count = dbHelper.getRemindersN(new User(context).getId());
+        int count = dbHelper.getRemindersN(getActiveUserId(dbHelper));
         dbHelper.close();
         return count;
     }
@@ -130,7 +130,7 @@ public class Utils {
     public static int[] itemsToDoMultiple(Context context) {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
-        int[] count = {dbHelper.getRemindersNNotes(new User(context).getId()), dbHelper.getRemindersNReminders(new User(context).getId()), dbHelper.getRemindersNStarred(new User(context).getId()), dbHelper.getRemindersNNotesArchived(new User(context).getId())};
+        int[] count = {dbHelper.getRemindersNNotes(getActiveUserId(dbHelper)), dbHelper.getRemindersNReminders(getActiveUserId(dbHelper)), dbHelper.getRemindersNStarred(getActiveUserId(dbHelper)), dbHelper.getRemindersNNotesArchived(getActiveUserId(dbHelper))};
         dbHelper.close();
         return count;
     }
@@ -449,7 +449,7 @@ public class Utils {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
 
-        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), new User(context).getId());
+        Cursor c = dbHelper.fetchAllReminders(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, false), getActiveUserId(dbHelper));
         while (c.moveToNext()) {
             Reminder r = new Reminder(c);
             if (!r.getPasw().equals(""))
@@ -644,5 +644,31 @@ public class Utils {
             cur.close();
         }
         return arrayList;
+    }
+
+    public static String getActiveUserId(Context context) {
+        DbAdapter dbAdapter = new DbAdapter(context);
+        Cursor c = dbAdapter.getActiveUser();
+
+        String userId = "";
+        while (c.moveToFirst()) {
+            User activeUser = new User(c);
+            userId = activeUser.getId();
+        }
+        c.close();
+        dbAdapter.close();
+        return userId;
+    }
+
+    public static String getActiveUserId(DbAdapter dbAdapter) {
+        Cursor c = dbAdapter.getActiveUser();
+
+        String userId = "";
+        while (c.moveToFirst()) {
+            User activeUser = new User(c);
+            userId = activeUser.getId();
+        }
+        c.close();
+        return userId;
     }
 }

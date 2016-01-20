@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -455,54 +456,66 @@ public class Main extends AppCompatActivity {
     }
 
     public void updateHeader() {
-        accountUser = new User(this);
+        final Handler mHandler = new Handler();
 
-        if (!accountUser.getName().equals("")) {
-            // NAME
-            ((TextView) findViewById(R.id.header_name)).setText(accountUser.getName());
+        new Thread(new Runnable() {
+            public void run() {
+                DbAdapter dbHelper = new DbAdapter(Main.this);
+                dbHelper.open();
+                Cursor c = dbHelper.getActiveUser();
+                accountUser = null;
+                while (c.moveToFirst())
+                    accountUser = new User(c);
+                c.close();
+                dbHelper.close();
 
-            // PHOTO
-            if (!accountUser.getPhoto().equals("")) {
-                updatePhoto();
-            } else {
-                findViewById(R.id.account_photo).setVisibility(View.GONE);
+                mHandler.post(new Runnable() {
+                    public void run() {
+
+                        if (accountUser != null) {
+                            // NAME
+                            ((TextView) findViewById(R.id.header_name)).setText(accountUser.getName());
+
+                            // PHOTO
+                            if (!accountUser.getPhoto().equals("")) {
+                                updatePhoto();
+                            } else {
+                                findViewById(R.id.account_photo).setVisibility(View.GONE);
+                            }
+
+                            // EMAIL
+                            ((TextView) findViewById(R.id.items_todo)).setText(accountUser.getEmail());
+
+                            // IMG LOGOUT
+                            findViewById(R.id.action_signin).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent logout = new Intent(Main.this, SignInActivity.class);
+                                    startActivityForResult(logout, Costants.CODE_REQUEST_SIGN);
+                                }
+                            });
+
+                            setCount();
+                        } else {
+                            // NAME
+                            ((TextView) findViewById(R.id.header_name)).setText(Utils.getOwnerName(Main.this));
+
+                            // PHOTO
+                            findViewById(R.id.account_photo).setVisibility(View.GONE);
+
+                            // IMG LOGIN
+                            findViewById(R.id.action_signin).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent login = new Intent(Main.this, SignInActivity.class);
+                                    startActivityForResult(login, Costants.CODE_REQUEST_SIGN);
+                                }
+                            });
+                        }
+                    }
+                });
             }
-
-            // EMAIL
-            ((TextView) findViewById(R.id.items_todo)).setText(accountUser.getEmail());
-
-            // IMG LOGOUT
-            ((ImageView) findViewById(R.id.action_signin)).setImageResource(R.drawable.ic_action_person_remove);
-            findViewById(R.id.action_signin).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent logout = new Intent(Main.this, SignInActivity.class);
-                    logout.putExtra(Costants.EXTRA_ACTION_TYPE, Costants.ACTION_DELETE);
-                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                    drawer.closeDrawer(GravityCompat.START);
-                    startActivityForResult(logout, Costants.CODE_REQUEST_SIGN);
-                }
-            });
-
-            setCount();
-        } else {
-            // NAME
-            ((TextView) findViewById(R.id.header_name)).setText(Utils.getOwnerName(this));
-
-            // PHOTO
-            findViewById(R.id.account_photo).setVisibility(View.GONE);
-
-            // IMG LOGIN
-            ((ImageView) findViewById(R.id.action_signin)).setImageResource(R.drawable.ic_action_person_add);
-            findViewById(R.id.action_signin).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent login = new Intent(Main.this, SignInActivity.class);
-                    login.putExtra(Costants.EXTRA_ACTION_TYPE, Costants.ACTION_CREATE);
-                    startActivityForResult(login, Costants.CODE_REQUEST_SIGN);
-                }
-            });
-        }
+        }).start();
     }
 
     public void updatePhoto() {

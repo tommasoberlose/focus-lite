@@ -7,9 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "reminderdb";
-    public static final int DATABASE_VERSION = 11;
+    public static final int DATABASE_VERSION = 12;
 
     private static final String DATABASE_CREATE = "create table IF NOT EXISTS reminders (id integer primary key autoincrement, title text not null, content text default '', action_type text default '', action_info text default '', img text default '', pasw default '', date_create long default 0, date_reminded long default 0, date_archived long default 0, last_changed long default 0, alarm long default 0, alarm_repeat text default '', address text default '', priority int default 0, voice_note text default '', user_id text default '', color text default '', icon text default '');";
+    private static final String DATABASE_CREATE_USER = "create table IF NOT EXISTS users (user_id text primary key, name text default '', email text default '', photo text default '', active integer default 0);";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -18,6 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(DATABASE_CREATE);
+        database.execSQL(DATABASE_CREATE_USER);
     }
 
     @Override
@@ -60,6 +62,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             database.execSQL("ALTER TABLE reminders ADD COLUMN color text default ''");
             database.execSQL("ALTER TABLE reminders ADD COLUMN icon text default ''");
             onUpgrade(database, 11, DATABASE_VERSION);
+        }
+        if (oldVersion == 11) {
+            database.execSQL(DATABASE_CREATE_USER);
+            onUpgrade(database, 12, DATABASE_VERSION);
         }
         //database.execSQL("DROP TABLE IF EXISTS user");
         onCreate(database);

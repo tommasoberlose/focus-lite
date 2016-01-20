@@ -10,6 +10,7 @@ import com.nego.flite.Costants;
 import com.nego.flite.Functions.NotificationF;
 import com.nego.flite.Reminder;
 import com.nego.flite.User;
+import com.nego.flite.Utils;
 import com.nego.flite.database.DbAdapter;
 
 import java.util.Calendar;
@@ -24,7 +25,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
             DbAdapter dbHelper = new DbAdapter(context);
             dbHelper.open();
 
-            Cursor cursor = dbHelper.fetchRemindersByFilterBluetooth(new User(context).getId());
+            Cursor cursor = dbHelper.fetchRemindersByFilterBluetooth(Utils.getActiveUserId(dbHelper));
             while (cursor.moveToNext()) {
                 Reminder actual = new Reminder(cursor);
                 if (actual.getAlarm() == Costants.ALARM_TYPE_BLUETOOTH) {

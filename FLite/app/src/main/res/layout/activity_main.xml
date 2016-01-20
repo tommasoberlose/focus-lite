@@ -88,7 +88,7 @@
                                     android:padding="8dp"
                                     android:id="@+id/action_signin"
                                     android:background="?attr/selectableItemBackgroundBorderless"
-                                    android:src="@drawable/ic_action_person_add"/>
+                                    android:src="@drawable/ic_action_people"/>
                             </LinearLayout>
                         </RelativeLayout>
                     </RelativeLayout>

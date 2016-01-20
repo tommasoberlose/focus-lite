@@ -313,7 +313,8 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
     // GENERATE LIST
     public void generate_list(DbAdapter dbAdapter, String query) {
         mDataset.clear();
-        Cursor c = dbAdapter.fetchAllRemindersFilterByTitle(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, true), query, new User(mContext).getId());
+
+        Cursor c = dbAdapter.fetchAllRemindersFilterByTitle(SP.getBoolean(Costants.PREFERENCE_ORDER_ALARM_FIRST, true), query, Utils.getActiveUserId(dbAdapter));
         while (c.moveToNext()) {
             Reminder r = new Reminder(c);
             if (!((!SP.getBoolean(Costants.PREFERENCES_LIST_ARCHIVED, false) && r.getDate_archived() != 0) ||

@@ -226,4 +226,8 @@
     <string name="text_user">Utente</string>
     <string name="action_unarchive">Ripristina</string>
     <string name="action_priority">Aggiungi ai preferiti</string>
+    <string name="action_add_account">Aggiungi Account</string>
+    <string name="error_user_signed">Utente già presente</string>
+    <string name="text_account_added">Account aggiunto</string>
+    <string name="text_account_removed">Account rimosso</string>
 </resources>

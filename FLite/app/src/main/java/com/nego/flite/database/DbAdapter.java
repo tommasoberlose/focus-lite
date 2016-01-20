@@ -21,6 +21,7 @@ public class DbAdapter {
 
     // Database fields
     public static final String DATABASE_TABLE = "reminders";
+    public static final String DATABASE_TABLE_USER = "users";
 
     public static final String KEY_ID = "id";
     public static final String KEY_TITLE = "title";
@@ -41,6 +42,11 @@ public class DbAdapter {
     public static final String KEY_USER_ID = "user_id";
     public static final String KEY_COLOR = "color";
     public static final String KEY_ICON = "icon";
+
+    public static final String KEY_USER_NAME = "name";
+    public static final String KEY_USER_EMAIL = "email";
+    public static final String KEY_USER_PHOTO = "photo";
+    public static final String KEY_USER_ACTIVE = "active";
 
     public DbAdapter(Context context) {
         this.context = context;
@@ -105,6 +111,17 @@ public class DbAdapter {
         values.put(KEY_USER_ID, user_id);
         values.put(KEY_COLOR, color);
         values.put(KEY_ICON, icon);
+
+        return values;
+    }
+
+    private ContentValues createContentValues(String user_id, String name, String email, String photo, int active) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_USER_ID, user_id);
+        values.put(KEY_USER_NAME, name);
+        values.put(KEY_USER_EMAIL, email);
+        values.put(KEY_USER_PHOTO, photo);
+        values.put(KEY_USER_ACTIVE, active);
 
         return values;
     }
@@ -202,4 +219,36 @@ public class DbAdapter {
         return database.delete(DATABASE_TABLE, KEY_USER_ID + " == '" + user_id + "' OR " + KEY_USER_ID + " == ''", null) > 0;
     }
 
+    // USER
+    //create a reminder
+    public long createUser(User u) {
+        ContentValues initialValues = createContentValues(u.getId(), u.getName(), u.getEmail(), u.getPhoto(), u.getActive());
+        return database.insertOrThrow(DATABASE_TABLE_USER, null, initialValues);
+    }
+
+    //update a reminder
+    public boolean updateUser(User u) {
+        ContentValues updateValues = createContentValues(u.getId(), u.getName(), u.getEmail(), u.getPhoto(), u.getActive());
+        return database.update(DATABASE_TABLE_USER, updateValues, KEY_USER_ID + " == '" + u.getId() + "'", null) > 0;
+    }
+
+    //delete a reminder
+    public boolean deleteUser(String id) {
+        return database.delete(DATABASE_TABLE_USER, KEY_USER_ID + " == '" + id + "'", null) > 0;
+    }
+
+    //fetch all users
+    public Cursor fetchAllUsers() {
+        return database.query(DATABASE_TABLE_USER, new String[]{KEY_USER_ID, KEY_USER_NAME, KEY_USER_EMAIL, KEY_USER_PHOTO, KEY_USER_ACTIVE}, null, null, null, null, null);
+    }
+
+    //fetch all users
+    public Cursor getUserById(String user_id) {
+        return database.query(DATABASE_TABLE_USER, new String[]{KEY_USER_ID, KEY_USER_NAME, KEY_USER_EMAIL, KEY_USER_PHOTO, KEY_USER_ACTIVE}, KEY_USER_ID + " == '" + user_id + "'", null, null, null, null);
+    }
+
+    //fetch all users
+    public Cursor getActiveUser() {
+        return database.query(DATABASE_TABLE_USER, new String[]{KEY_USER_ID, KEY_USER_NAME, KEY_USER_EMAIL, KEY_USER_PHOTO, KEY_USER_ACTIVE}, KEY_USER_ACTIVE + " == '1'", null, null, null, null);
+    }
 }

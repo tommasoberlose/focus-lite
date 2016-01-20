@@ -576,7 +576,7 @@ public class MyDialog extends AppCompatActivity {
         if (!edit) {
             Calendar c = Calendar.getInstance();
             long dateC = c.getTimeInMillis();
-            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, 0, 0, 0, alarm, alarm_repeat, address, priority, voice_note, new User(this).getId(), "", "");
+            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, 0, 0, 0, alarm, alarm_repeat, address, priority, voice_note, Utils.getActiveUserId(this), "", "");
         } else {
             r.setTitle(titleN);
             r.setContent(contentT);
