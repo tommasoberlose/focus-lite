@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.nego.flite.Costants;
 import com.nego.flite.Reminder;
@@ -249,6 +250,6 @@ public class DbAdapter {
 
     //fetch all users
     public Cursor getActiveUser() {
-        return database.query(DATABASE_TABLE_USER, new String[]{KEY_USER_ID, KEY_USER_NAME, KEY_USER_EMAIL, KEY_USER_PHOTO, KEY_USER_ACTIVE}, KEY_USER_ACTIVE + " == '1'", null, null, null, null);
+        return database.query(DATABASE_TABLE_USER, new String[]{KEY_USER_ID, KEY_USER_NAME, KEY_USER_EMAIL, KEY_USER_PHOTO, KEY_USER_ACTIVE}, KEY_USER_ACTIVE + " == 1", null, null, null, null);
     }
 }

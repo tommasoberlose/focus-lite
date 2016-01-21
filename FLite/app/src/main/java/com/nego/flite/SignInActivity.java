@@ -1,7 +1,11 @@
 package com.nego.flite;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -28,6 +33,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.nego.flite.Adapter.AdapterAccounts;
 import com.nego.flite.Adapter.AdapterList;
+import com.nego.flite.Functions.UserService;
 import com.nego.flite.database.DbAdapter;
 
 public class SignInActivity extends AppCompatActivity implements
@@ -35,10 +41,8 @@ public class SignInActivity extends AppCompatActivity implements
 
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
-    private CardView signInButton;
-
     private RecyclerView recList;
-
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +63,6 @@ public class SignInActivity extends AppCompatActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        signInButton = (CardView) findViewById(R.id.sign_in_button);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showProgressBar(true);
-                signIn();
-            }
-        });
-
         recList = (RecyclerView) findViewById(R.id.listView);
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -78,12 +73,30 @@ public class SignInActivity extends AppCompatActivity implements
 
     }
 
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.signin_menu, menu);
+        return true;
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == android.R.id.home)
-            onBackPressed();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            case R.id.action_add_account:
+                showProgressBar(true);
+                signIn();
+                break;
+        }
+
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -135,36 +148,69 @@ public class SignInActivity extends AppCompatActivity implements
         Toast.makeText(this, getString(R.string.common_google_play_services_sign_in_failed_title), Toast.LENGTH_LONG).show();
     }
 
-    public void setUserInfo(GoogleSignInAccount account) {
-        User user = new User(account.getId(), account.getDisplayName(), account.getEmail(), account.getPhotoUrl().toString(), 0);
-        DbAdapter dbHelper = new DbAdapter(SignInActivity.this);
-        dbHelper.open();
-        Cursor c = dbHelper.getUserById(user.getId());
-        if (c.moveToFirst()) {
-            Toast.makeText(this, getString(R.string.error_user_signed), Toast.LENGTH_LONG).show();
-        } else {
-            user.createUser(SignInActivity.this, dbHelper);
-        }
-        c.close();
-        dbHelper.close();
-        revokeAccess();
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        IntentFilter intentFilter = new IntentFilter(Costants.ACTION_UPDATE_LIST_ACCOUNT);
+
+        mReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getStringExtra(Costants.EXTRA_ACTION_TYPE);
+                switch (action) {
+                    case Costants.ACTION_CREATE:
+                        Toast.makeText(SignInActivity.this, getString(R.string.text_account_added), Toast.LENGTH_SHORT).show();
+                        break;
+                    case Costants.ACTION_DELETE:
+                        Toast.makeText(SignInActivity.this, getString(R.string.text_account_removed), Toast.LENGTH_SHORT).show();
+                        break;
+                    case Costants.GENERAL_ERROR:
+                        Toast.makeText(SignInActivity.this, getString(R.string.error_user_signed), Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                updateList();
+            }
+        };
+        registerReceiver(mReceiver, intentFilter);
+
         updateList();
-        showProgressBar(false);
-        Toast.makeText(this, getString(R.string.text_account_added), Toast.LENGTH_SHORT).show();
     }
 
-    public void deleteUserInfo(User user) {
-        DbAdapter dbHelper = new DbAdapter(SignInActivity.this);
-        dbHelper.open();
-        user.deleteUser(this, dbHelper);
-        dbHelper.close();
-        updateList();
-        Toast.makeText(this, getString(R.string.text_account_removed), Toast.LENGTH_SHORT).show();
+    @Override
+    public void onPause() {
+        unregisterReceiver(mReceiver);
+        super.onPause();
+    }
+
+    private User userToSave = null;
+    public void setUserInfo(GoogleSignInAccount account) {
+        userToSave = new User(account.getId(), account.getDisplayName(), account.getEmail(), account.getPhotoUrl().toString(), 0);
+        final Handler mHandler = new Handler();
+
+        new Thread(new Runnable() {
+            public void run() {
+                final String photo = Utils.savePhoto(SignInActivity.this, userToSave.getPhoto(), userToSave.getId());
+
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        userToSave.setPhoto(photo);
+                        UserService.startAction(SignInActivity.this, Costants.ACTION_CREATE, userToSave);
+                        revokeAccess();
+                    }
+                });
+            }
+        }).start();
     }
 
     public void showProgressBar(boolean b) {
         findViewById(R.id.progress_bar).setVisibility(b ? View.VISIBLE : View.GONE);
-        findViewById(R.id.text_signin).setVisibility(!b ? View.VISIBLE : View.GONE);
+        if (b)
+            Utils.collapse(recList);
+        else
+            Utils.expand(recList);
     }
 
     public void updateList() {
@@ -182,9 +228,11 @@ public class SignInActivity extends AppCompatActivity implements
                 mHandler.post(new Runnable() {
                     public void run() {
                         recList.setAdapter(adapter);
+                        showProgressBar(false);
                     }
                 });
             }
         }).start();
     }
+
 }

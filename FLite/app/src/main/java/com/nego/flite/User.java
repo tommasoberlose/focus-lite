@@ -3,10 +3,12 @@ package com.nego.flite;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.nego.flite.database.DbAdapter;
 
-public class User {
+public class User implements Parcelable {
 
     private String id;
     private String name;
@@ -92,5 +94,31 @@ public class User {
             return true;
         }
         return false;
+    }
+
+
+    // PARCELIZZAZIONE
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel source) {
+            return new User(source.readString(), source.readString(), source.readString(), source.readString(), source.readInt());
+        }
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(email);
+        dest.writeString(photo);
+        dest.writeInt(active);
     }
 }

@@ -10,12 +10,16 @@ public class Costants {
     public static final String ACTION_ARCHIVE = "android.intent.action.ACTION_ARCHIVE";
     public static final String ACTION_ARCHIVE_WEAR = "android.intent.action.ACTION_ARCHIVE_WEAR";
     public static final String ACTION_UNARCHIVE = "android.intent.action.ACTION_UNARCHIVE";
+    public static final String ACTION_SET_ACTIVE_USER = "android.intent.action.ACTION_SET_ACTIVE_USER";
+    public static final String GENERAL_ERROR = "android.intent.error.GENERAL_ERROR";
 
     public static final String EXTRA_ACTION_TYPE = "android.intent.extra.ACTION_TYPE";
     public static final String EXTRA_REMINDER = "android.intent.extra.REMINDER";
+    public static final String EXTRA_USER = "android.intent.extra.USER";
     public static final String EXTRA_REMINDER_ID = "android.intent.extra.REMINDER_ID";
     public static final String EXTRA_IS_PHOTO = "android.intent.extra.IS_PHOTO";
     public static final String ACTION_UPDATE_LIST = "android.intent.action.flite.UPDATE_LIST";
+    public static final String ACTION_UPDATE_LIST_ACCOUNT = "android.intent.action.flite.UPDATE_LIST_ACCOUNT";
 
     public static final String PREFERENCES_COSTANT = "preferences_costant";
     public static final String PREFERENCES_COSTANT_BACKUP = "preferences_costant_backup";

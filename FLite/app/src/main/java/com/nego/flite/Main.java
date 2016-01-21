@@ -464,7 +464,7 @@ public class Main extends AppCompatActivity {
                 dbHelper.open();
                 Cursor c = dbHelper.getActiveUser();
                 accountUser = null;
-                while (c.moveToFirst())
+                if (c.moveToFirst())
                     accountUser = new User(c);
                 c.close();
                 dbHelper.close();
@@ -478,7 +478,8 @@ public class Main extends AppCompatActivity {
 
                             // PHOTO
                             if (!accountUser.getPhoto().equals("")) {
-                                updatePhoto();
+                                ((ImageView) findViewById(R.id.account_photo)).setImageURI(Uri.parse(accountUser.getPhoto()));
+                                findViewById(R.id.account_photo).setVisibility(View.VISIBLE);
                             } else {
                                 findViewById(R.id.account_photo).setVisibility(View.GONE);
                             }
@@ -514,28 +515,6 @@ public class Main extends AppCompatActivity {
                         }
                     }
                 });
-            }
-        }).start();
-    }
-
-    public void updatePhoto() {
-        final Handler mHandler = new Handler();
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    final Bitmap image = BitmapFactory.decodeStream(new URL(accountUser.getPhoto()).openStream());
-                    mHandler.post(new Runnable() {
-                        public void run() {
-                            ((ImageView) findViewById(R.id.account_photo)).setImageBitmap(image);
-                            findViewById(R.id.account_photo).setVisibility(View.VISIBLE);
-                        }
-                    });
-                } catch (Exception e) {
-                    try {
-                        findViewById(R.id.account_photo).setVisibility(View.GONE);
-                    } catch (Exception ex) {ex.printStackTrace();}
-                    e.printStackTrace();
-                }
             }
         }).start();
     }

@@ -47,6 +47,10 @@
             android:name=".Functions.ReminderService"
             android:exported="false" />
 
+        <service
+            android:name=".Functions.UserService"
+            android:exported="false" />
+
         <activity
             android:name=".MyDialog"
             android:icon="@mipmap/ic_launcher"

@@ -66,6 +66,7 @@ public class ReminderService extends IntentService {
     private void createReminder(Reminder r) {
         DbAdapter dbHelper = new DbAdapter(this);
         dbHelper.open();
+        r.setUser_id(Utils.getActiveUserId(dbHelper));
         if (r.create_reminder(this, dbHelper)) {
             sendResponse(Costants.ACTION_CREATE, r);
         }

@@ -6,20 +6,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:orientation="vertical"
-    android:background="@color/primary"
+    android:background="@color/back_select"
     tools:context="com.nego.flite.SignInActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.8"
         android:orientation="vertical">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary"
-            android:theme="@style/style_actionBar"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:cardCornerRadius="0dp"
+            app:cardElevation="2dp">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/primary"
+                android:theme="@style/style_actionBar"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        </android.support.v7.widget.CardView>
         <!--
         <android.support.v7.widget.CardView
             android:layout_width="128dp"
@@ -55,50 +62,23 @@
             android:text="@string/common_google_play_services_sign_in_failed_text"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
             -->
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/listView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-    </LinearLayout>
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.2"
-        android:background="@color/primary_dark"
-        app:cardElevation="2dp"
-        app:cardBackgroundColor="@color/primary_dark"
-        app:cardCornerRadius="0dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <android.support.v7.widget.CardView
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listView"
                 android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                android:background="@android:color/white"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:id="@+id/sign_in_button"
-                android:foreground="?attr/selectableItemBackground">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:id="@+id/text_signin"
-                    android:textAppearance="?android:attr/textAppearanceButton"
-                    android:textColor="@color/primary_text"
-                    android:text="@string/action_add_account"/>
-                <ProgressBar
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:id="@+id/progress_bar"
-                    android:progressTint="@color/primary"
-                    android:theme="@style/CheckBox.Colored.Blue"
-                    android:layout_gravity="center"
-                    android:visibility="gone"/>
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            <ProgressBar
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                style="?android:attr/progressBarStyleLarge"
+                android:id="@+id/progress_bar"
+                android:progressTint="@color/primary"
+                android:theme="@style/CheckBox.Colored.Blue"
+                android:visibility="gone"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

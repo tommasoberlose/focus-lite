@@ -45,12 +45,17 @@ import com.nego.flite.Functions.ReminderService;
 import com.nego.flite.Widget.FocusWidget;
 import com.nego.flite.database.DbAdapter;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -92,13 +97,11 @@ public class Utils {
             // Missed alarms
             if (isMissedAlarm(reminder)) {
                 NotificationF.Notification(context, reminder);
-                Log.i("NEGO_NOT", "MISSED");
             }
 
             // Future alarm
             if (reminder.getAlarm() != 0 && !isOldAlarm(reminder)) {
                 AlarmF.updateAlarm(context, reminder.getId(), reminder.getAlarm(), reminder.getAlarm_repeat());
-                Log.i("NEGO_NOT", "FUTURE");
             }
         }
         a.close();
@@ -646,29 +649,52 @@ public class Utils {
         return arrayList;
     }
 
-    public static String getActiveUserId(Context context) {
-        DbAdapter dbAdapter = new DbAdapter(context);
-        Cursor c = dbAdapter.getActiveUser();
-
-        String userId = "";
-        while (c.moveToFirst()) {
-            User activeUser = new User(c);
-            userId = activeUser.getId();
-        }
-        c.close();
-        dbAdapter.close();
-        return userId;
-    }
-
     public static String getActiveUserId(DbAdapter dbAdapter) {
         Cursor c = dbAdapter.getActiveUser();
 
         String userId = "";
-        while (c.moveToFirst()) {
+        if (c.moveToFirst()) {
             User activeUser = new User(c);
             userId = activeUser.getId();
         }
         c.close();
         return userId;
+    }
+
+    public static String savePhoto(Context context, String uri, String user_id) {
+        String photo = "";
+        File destination = new File(context.getFilesDir() + File.separator + "photo_" + user_id + ".jpeg");
+
+        InputStream input = null;
+        FileOutputStream output = null;
+
+        try {
+
+            input = new URL(uri).openConnection().getInputStream();
+            output = new FileOutputStream(destination, false);
+
+            int read;
+            byte[] data = new byte[1024];
+            while ((read = input.read(data)) != -1)
+                output.write(data, 0, read);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return photo;
+        } finally {
+            try {
+                if (output != null)
+                    output.close();
+                if (input != null)
+                    input.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return photo;
+            }
+        }
+
+
+        photo = Uri.fromFile(destination).toString();
+        return photo;
     }
 }

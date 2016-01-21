@@ -2,96 +2,62 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:layout_margin="8dp"
-        android:id="@+id/active_user"
-        android:orientation="vertical"
-        android:gravity="center">
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_margin="16dp"
-            android:src="@drawable/new_google_logo"
-            android:id="@+id/photo_active"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/title_active"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:gravity="center_horizontal"
-                android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceListItem" />
-            <TextView
-                android:id="@+id/subtitle_active"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:singleLine="true"
-                android:textColor="@color/white_back" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/black"
-            android:alpha="0.1"
-            android:layout_marginTop="32dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:layout_margin="8dp"
-        android:id="@+id/other_user"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+    android:background="?attr/selectableItemBackground"
+    android:padding="8dp"
+    android:clickable="true"
+    android:id="@+id/user"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
 
+    <RelativeLayout
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/photo"
+            android:layout_centerInParent="true"
+            android:background="@drawable/circle_back"/>
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:id="@+id/active"
+            android:orientation="horizontal"
+            android:background="@drawable/circle_back_light"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.9"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.9"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceListItem" />
-            <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:textColor="@color/white_back" />
-        </LinearLayout>
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="8dp"
-            android:src="@drawable/ic_action_person_remove"
-            android:id="@+id/remove_account"/>
+            android:textColor="@color/primary_text"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceListItem" />
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@color/secondary_text" />
     </LinearLayout>
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="8dp"
+        android:layout_marginEnd="-8dp"
+        android:src="@drawable/ic_action_person_remove"
+        android:tint="@android:color/black"
+        android:alpha="0.3"
+        android:id="@+id/remove_account"/>
 </LinearLayout>
