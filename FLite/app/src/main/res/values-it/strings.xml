@@ -230,4 +230,5 @@
     <string name="error_user_signed">Utente già presente</string>
     <string name="text_account_added">Account aggiunto</string>
     <string name="text_account_removed">Account rimosso</string>
+    <string name="text_login_with_google">Esegui il login tramite account google così da avere note private per ogni utente.\nScegli l\'utente principale e cambialo in ogni momento velocemente.</string>
 </resources>

@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_toStartOf="@+id/toogle_icon"
+        android:layout_toStartOf="@+id/open_app"
         android:layout_toEndOf="@+id/notification_icon"
         android:layout_centerVertical="true">
         <TextView
@@ -32,16 +32,24 @@
             android:textColor="@color/secondary_text"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/notification_subtitle"
-            android:text="Subtitle"/>
+            android:singleLine="true"
+            android:text="@string/no_items"/>
     </LinearLayout>
     <ImageView
         android:layout_width="40dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_action_hide_all"
-        android:id="@+id/toogle_icon"
+        android:src="@drawable/ic_action_list"
+        android:id="@+id/open_app"
+        android:layout_toStartOf="@+id/toggle_icon"
         android:tint="@color/secondary_text"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp" />
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_action_hide_all"
+        android:id="@+id/toggle_icon"
+        android:tint="@color/secondary_text"
+        android:layout_marginEnd="16dp"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true" />
 </RelativeLayout>

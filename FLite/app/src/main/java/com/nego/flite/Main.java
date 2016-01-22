@@ -487,15 +487,6 @@ public class Main extends AppCompatActivity {
                             // EMAIL
                             ((TextView) findViewById(R.id.items_todo)).setText(accountUser.getEmail());
 
-                            // IMG LOGOUT
-                            findViewById(R.id.action_signin).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent logout = new Intent(Main.this, SignInActivity.class);
-                                    startActivityForResult(logout, Costants.CODE_REQUEST_SIGN);
-                                }
-                            });
-
                             setCount();
                         } else {
                             // NAME
@@ -503,20 +494,19 @@ public class Main extends AppCompatActivity {
 
                             // PHOTO
                             findViewById(R.id.account_photo).setVisibility(View.GONE);
-
-                            // IMG LOGIN
-                            findViewById(R.id.action_signin).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent login = new Intent(Main.this, SignInActivity.class);
-                                    startActivityForResult(login, Costants.CODE_REQUEST_SIGN);
-                                }
-                            });
                         }
                     }
                 });
             }
         }).start();
+
+        findViewById(R.id.header_nav).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent login = new Intent(Main.this, SignInActivity.class);
+                startActivityForResult(login, Costants.CODE_REQUEST_SIGN);
+            }
+        });
     }
 
     public void recyclerGoUp() {

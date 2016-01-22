@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -14,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.nego.flite.Costants;
@@ -52,13 +54,13 @@ public class NotificationF {
                 .setAutoCancel(true);
 
         NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender();
-        /* TODO IMG BACKGROUND WEAR NOTIFICATION
         try {
-            wearableExtender.setBackground(MediaStore.Images.Media.getBitmap(context.getContentResolver(), URLIMG));
+            wearableExtender.setBackground(BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.background_wear));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        */
+
 
 
         if (r.getPasw().equals("")) {
@@ -379,7 +381,14 @@ public class NotificationF {
                     remoteViews.setImageViewResource(R.id.toogle_icon, R.drawable.ic_action_view_all);
                     remoteViews.setOnClickFillInIntent(R.id.toogle_icon, new Intent(Costants.ACTION_VIEW_ALL));
                 }
+                remoteViews.setViewVisibility(R.id.toogle_icon, View.VISIBLE);
+            } else {
+                remoteViews.setViewVisibility(R.id.toogle_icon, View.GONE);
             }
+
+            PendingIntent pi_open_app = PendingIntent.getActivity(context, -3, new Intent(context, Main.class), PendingIntent.FLAG_UPDATE_CURRENT);
+            remoteViews.setOnClickPendingIntent(R.id.open_app, pi_open_app);
+            remoteViews.setOnClickFillInIntent(R.id.open_app, new Intent(context, Main.class));
 
             n.setContent(remoteViews);
 

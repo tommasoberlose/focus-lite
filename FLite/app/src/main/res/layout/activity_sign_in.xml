@@ -79,6 +79,38 @@
                 android:theme="@style/CheckBox.Colored.Blue"
                 android:visibility="gone"
                 android:layout_centerInParent="true"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:id="@+id/no_account"
+                android:gravity="center"
+                android:visibility="gone">
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/new_google_logo"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/all_text"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/common_signin_button_text_long"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginBottom="8dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/secondary_text"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/text_login_with_google"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginBottom="16dp" />
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

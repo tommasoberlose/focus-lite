@@ -351,40 +351,40 @@ public class MyDialog extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.dialog_menu, menu);
 
         // ATTACH
-        menu.getItem(0).setVisible(r == null || r.getDate_archived() == 0);
+        menu.findItem(R.id.action_attach).setVisible(r == null || r.getDate_archived() == 0);
 
         // REMINDER
-        menu.getItem(1).setVisible(r == null || r.getDate_archived() == 0);
-        menu.getItem(1).setIcon(alarm == 0 ? R.drawable.ic_action_social_notifications_dialog : R.drawable.ic_action_social_notifications_on_dialog);
+        menu.findItem(R.id.action_reminder).setVisible(r == null || r.getDate_archived() == 0);
+        menu.findItem(R.id.action_reminder).setIcon(alarm == 0 ? R.drawable.ic_action_social_notifications_dialog : R.drawable.ic_action_social_notifications_on_dialog);
 
         // LIST
-        menu.getItem(2).setVisible(r == null || r.getDate_archived() == 0);
-        menu.getItem(2).setIcon(Utils.checkList(getContent()) ? R.drawable.ic_action_ic_playlist_remove_dialog : R.drawable.ic_action_playlist_add_check_dialog);
+        menu.findItem(R.id.action_list).setVisible(r == null || r.getDate_archived() == 0);
+        menu.findItem(R.id.action_list).setIcon(Utils.checkList(getContent()) ? R.drawable.ic_action_ic_playlist_remove_dialog : R.drawable.ic_action_playlist_add_check_dialog);
 
         // PRIORITY
-        menu.getItem(3).setVisible(r == null || r.getDate_archived() == 0);
-        menu.getItem(3).setIcon(priority == 0 ? R.drawable.ic_action_toggle_star_outline_dialog : R.drawable.ic_action_toggle_star_dialog);
+        menu.findItem(R.id.action_priority).setVisible(r == null || r.getDate_archived() == 0);
+        menu.findItem(R.id.action_priority).setIcon(priority == 0 ? R.drawable.ic_action_toggle_star_outline_dialog : R.drawable.ic_action_toggle_star_dialog);
 
         // UNARCHIVE
-        menu.getItem(4).setVisible(r != null && r.getDate_archived() != 0);
+        menu.findItem(R.id.action_unarchive).setVisible(r != null && r.getDate_archived() != 0);
 
         // DELETE
-        menu.getItem(5).setVisible(r != null && r.getDate_archived() != 0);
+        menu.findItem(R.id.action_delete).setVisible(r != null);
+        menu.findItem(R.id.action_delete).setShowAsAction(r != null && r.getDate_archived() != 0 ? MenuItem.SHOW_AS_ACTION_ALWAYS : MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
         // NOTE DETAILS
-        menu.getItem(6).setVisible(r!= null);
-        menu.getItem(6).setShowAsAction(r != null && r.getDate_archived() != 0 ? MenuItem.SHOW_AS_ACTION_ALWAYS : MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        menu.findItem(R.id.action_show_info).setVisible(r != null);
 
         // LOCK
-        menu.getItem(7).setIcon(pasw.equals("") ? R.drawable.ic_action_action_lock_dialog : R.drawable.ic_action_ic_lock_open_dialog);
-        menu.getItem(7).setTitle(pasw.equals("") ? R.string.action_lock : R.string.action_unlock);
+        menu.findItem(R.id.action_lock).setIcon(pasw.equals("") ? R.drawable.ic_action_action_lock_dialog : R.drawable.ic_action_ic_lock_open_dialog);
+        menu.findItem(R.id.action_lock).setTitle(pasw.equals("") ? R.string.action_lock : R.string.action_unlock);
 
         // SHARE
-        menu.getItem(8).setVisible(r!= null);
+        menu.findItem(R.id.action_share).setVisible(r!= null);
 
         // ARCHIVE
-        menu.getItem(9).setVisible(r == null || r.getDate_archived() == 0);
-        menu.getItem(9).setVisible(r!= null && r.getDate_archived() == 0);
+        menu.findItem(R.id.action_archive).setVisible(r == null || r.getDate_archived() == 0);
+        menu.findItem(R.id.action_archive).setVisible(r != null && r.getDate_archived() == 0);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && SP.getString(Costants.PREFERENCE_STYLE_POPUP, Costants.PREFERENCE_STYLE_POPUP_DEFAULT).equals(Costants.PREFERENCE_STYLE_POPUP_MD)) {

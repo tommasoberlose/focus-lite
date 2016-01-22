@@ -231,4 +231,5 @@
     <string name="error_user_signed">User already signed</string>
     <string name="text_account_added">Account added</string>
     <string name="text_account_removed">Account Removed</string>
+    <string name="text_login_with_google">Log in using google account so as to have private notes for each user.\nSelect the primary user and change it at any time quickly.</string>
 </resources>

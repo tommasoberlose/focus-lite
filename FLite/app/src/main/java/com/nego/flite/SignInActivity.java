@@ -229,6 +229,11 @@ public class SignInActivity extends AppCompatActivity implements
                     public void run() {
                         recList.setAdapter(adapter);
                         showProgressBar(false);
+                        try {
+                            findViewById(R.id.no_account).setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }

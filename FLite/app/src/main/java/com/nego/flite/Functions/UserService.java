@@ -67,7 +67,7 @@ public class UserService extends IntentService {
 
         Cursor c = dbHelper.getUserById(user.getId());
         if (c.moveToFirst()) {
-            sendResponse(Costants.GENERAL_ERROR, user);
+            updateUser(user);
         } else {
             if (user.createUser(this, dbHelper)) {
                 sendResponse(Costants.ACTION_CREATE, user);
@@ -81,7 +81,7 @@ public class UserService extends IntentService {
         DbAdapter dbHelper = new DbAdapter(this);
         dbHelper.open();
         if (u.updateUser(this, dbHelper)) {
-            sendResponse(Costants.ACTION_UPDATE, u);
+            sendResponse(Costants.GENERAL_ERROR, u);
         }
         dbHelper.close();
     }
