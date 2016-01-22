@@ -58,7 +58,7 @@
         android:title="@string/action_archive" />
     <item
         android:id="@+id/action_delete"
-        android:orderInCategory="75"
+        android:orderInCategory="105"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_action_delete_dialog"
         android:title="@string/action_delete" />

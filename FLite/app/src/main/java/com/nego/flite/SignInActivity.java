@@ -102,26 +102,32 @@ public class SignInActivity extends AppCompatActivity implements
     }
 
     private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        if (mGoogleApiClient.isConnected()) {
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        }
     }
 
     private void signOut() {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                    }
-                });
+        if (mGoogleApiClient.isConnected()) {
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
+                        }
+                    });
+        }
     }
 
     private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                    }
-                });
+        if (mGoogleApiClient.isConnected()) {
+            Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
+                        }
+                    });
+        }
     }
 
     @Override
@@ -207,6 +213,7 @@ public class SignInActivity extends AppCompatActivity implements
 
     public void showProgressBar(boolean b) {
         findViewById(R.id.progress_bar).setVisibility(b ? View.VISIBLE : View.GONE);
+        findViewById(R.id.no_account).setVisibility(!b ? View.VISIBLE : View.GONE);
         if (b)
             Utils.collapse(recList);
         else

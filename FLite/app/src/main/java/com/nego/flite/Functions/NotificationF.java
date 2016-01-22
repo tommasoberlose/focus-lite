@@ -372,18 +372,18 @@ public class NotificationF {
             if (count > 0) {
                 if (SP.getBoolean(Costants.PREFERENCES_VIEW_ALL, true)) {
                     PendingIntent pi_hide = PendingIntent.getBroadcast(context, -2, new Intent(Costants.ACTION_HIDE_ALL), PendingIntent.FLAG_UPDATE_CURRENT);
-                    remoteViews.setOnClickPendingIntent(R.id.toogle_icon, pi_hide);
-                    remoteViews.setImageViewResource(R.id.toogle_icon, R.drawable.ic_action_hide_all);
-                    remoteViews.setOnClickFillInIntent(R.id.toogle_icon, new Intent(Costants.ACTION_HIDE_ALL));
+                    remoteViews.setOnClickPendingIntent(R.id.toggle_icon, pi_hide);
+                    remoteViews.setImageViewResource(R.id.toggle_icon, R.drawable.ic_action_hide_all);
+                    remoteViews.setOnClickFillInIntent(R.id.toggle_icon, new Intent(Costants.ACTION_HIDE_ALL));
                 } else {
                     PendingIntent pi_view = PendingIntent.getBroadcast(context, -2, new Intent(Costants.ACTION_VIEW_ALL), PendingIntent.FLAG_UPDATE_CURRENT);
-                    remoteViews.setOnClickPendingIntent(R.id.toogle_icon, pi_view);
-                    remoteViews.setImageViewResource(R.id.toogle_icon, R.drawable.ic_action_view_all);
-                    remoteViews.setOnClickFillInIntent(R.id.toogle_icon, new Intent(Costants.ACTION_VIEW_ALL));
+                    remoteViews.setOnClickPendingIntent(R.id.toggle_icon, pi_view);
+                    remoteViews.setImageViewResource(R.id.toggle_icon, R.drawable.ic_action_view_all);
+                    remoteViews.setOnClickFillInIntent(R.id.toggle_icon, new Intent(Costants.ACTION_VIEW_ALL));
                 }
-                remoteViews.setViewVisibility(R.id.toogle_icon, View.VISIBLE);
+                remoteViews.setViewVisibility(R.id.toggle_icon, View.VISIBLE);
             } else {
-                remoteViews.setViewVisibility(R.id.toogle_icon, View.GONE);
+                remoteViews.setViewVisibility(R.id.toggle_icon, View.GONE);
             }
 
             PendingIntent pi_open_app = PendingIntent.getActivity(context, -3, new Intent(context, Main.class), PendingIntent.FLAG_UPDATE_CURRENT);

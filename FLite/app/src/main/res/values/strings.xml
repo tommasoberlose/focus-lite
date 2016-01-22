@@ -231,5 +231,7 @@
     <string name="error_user_signed">User already signed</string>
     <string name="text_account_added">Account added</string>
     <string name="text_account_removed">Account Removed</string>
-    <string name="text_login_with_google">Log in using google account so as to have private notes for each user.\nSelect the primary user and change it at any time quickly.</string>
+    <string name="text_login_with_google">Log in using google account so as to have private notes for each user.\nSelect the primary user and change it at any time quickly.\n\nAttention, alarms and reminders will be active only for the selected user.</string>
+    <string name="ask_replace_voice_note">Are you sure you want to raplace voice note</string>
+    <string name="ask_delete_voice_note">Are you sure you want to delete this voice note</string>
 </resources>

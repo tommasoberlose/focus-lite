@@ -18,6 +18,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -64,6 +65,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +77,7 @@ import com.nego.flite.Functions.NotificationF;
 import com.nego.flite.Functions.ReminderService;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -112,8 +115,14 @@ public class MyDialog extends AppCompatActivity {
     private CardView url_card;
     private CardView address_card;
     private RelativeLayout action_add_to_list;
+    private CardView voice_note_card;
+    private ImageView action_play_voice_note;
+    private SeekBar seekbar_voice_note;
+    private ImageView remove_voice_note;
+    private ImageView replace_voice_note;
 
     private MyAdapter mAdapter;
+    private MediaPlayer mPlayer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,6 +206,11 @@ public class MyDialog extends AppCompatActivity {
                 url_card = (CardView) findViewById(R.id.card_browser);
                 address_card = (CardView) findViewById(R.id.card_address);
                 action_add_to_list = (RelativeLayout) findViewById(R.id.action_add_to_list);
+                voice_note_card = (CardView) findViewById(R.id.card_voice_note);
+                action_play_voice_note = (ImageView) findViewById(R.id.action_play_voice_note);
+                remove_voice_note = (ImageView) findViewById(R.id.remove_voice_note);
+                seekbar_voice_note = (SeekBar) findViewById(R.id.seekBar);
+                replace_voice_note = (ImageView) findViewById(R.id.replace_voice_note);
 
                 content_list.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -239,6 +253,9 @@ public class MyDialog extends AppCompatActivity {
                     setPriority(r.getPriority());
 
                     updateAddress(r.getAddress());
+
+                    voice_note = r.getVoice_note();
+                    setVoiceNote();
 
                     save_button.setAlpha(1f);
 
@@ -288,6 +305,8 @@ public class MyDialog extends AppCompatActivity {
                     setContact();
                     updateAddress(savedInstanceState.getString(Costants.KEY_DIALOG_ADDRESS));
                     setPriority(savedInstanceState.getInt(Costants.KEY_DIALOG_PRIORITY));
+                    voice_note =savedInstanceState.getString(Costants.KEY_DIALOG_VOICE_NOTE);
+                    setVoiceNote();
 
                     if (savedInstanceState.getString(Costants.KEY_DIALOG_ALARM) != null)
                         setAlarm(Long.parseLong(savedInstanceState.getString(Costants.KEY_DIALOG_ALARM)), savedInstanceState.getString(Costants.KEY_DIALOG_ALARM_REPEAT));
@@ -342,6 +361,7 @@ public class MyDialog extends AppCompatActivity {
 
                 setPriority(priority);
                 updateUrl();
+                setVoiceNote();
             }
         }
     }
@@ -403,6 +423,14 @@ public class MyDialog extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mPlayer != null) {
+            mPlayer.release();
+            mPlayer = null;
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -470,6 +498,11 @@ public class MyDialog extends AppCompatActivity {
             if (data != null) {
                 Uri selectedImageURI = data.getData();
                 addImg(selectedImageURI.toString());
+            }
+        } else if (requestCode == Costants.CODE_REQUEST_VOICE_NOTE && resultCode == Activity.RESULT_OK) {
+            if (data != null && data.getStringExtra(Costants.EXTRA_ACTION_TYPE) != null) {
+                voice_note = data.getStringExtra(Costants.EXTRA_ACTION_TYPE);
+                setVoiceNote();
             }
         } else if (requestCode == Costants.CODE_REQUEST_CONTACT && resultCode == Activity.RESULT_OK) {
             Uri contactData = data.getData();
@@ -546,6 +579,7 @@ public class MyDialog extends AppCompatActivity {
             outState.putString(Costants.KEY_DIALOG_ALARM_REPEAT, alarm_repeat);
             outState.putString(Costants.KEY_DIALOG_ADDRESS, address);
             outState.putInt(Costants.KEY_DIALOG_PRIORITY, priority);
+            outState.putString(Costants.KEY_DIALOG_VOICE_NOTE, voice_note);
         }
     }
 
@@ -700,6 +734,8 @@ public class MyDialog extends AppCompatActivity {
         LinearLayout action_gallery = (LinearLayout) attachView.findViewById(R.id.action_gallery);
         LinearLayout action_contact = (LinearLayout) attachView.findViewById(R.id.action_contact);
         LinearLayout action_address = (LinearLayout) attachView.findViewById(R.id.action_place);
+        LinearLayout action_voice_note = (LinearLayout) attachView.findViewById(R.id.action_voice_note);
+        ImageView replace_voice_note = (ImageView) attachView.findViewById(R.id.replace_voice_note);
 
         snackbar_attach = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_attach.getView();
@@ -803,6 +839,35 @@ public class MyDialog extends AppCompatActivity {
             public void onClick(View v) {
                 editAddress();
                 snackbar_attach.dismiss();
+            }
+        });
+
+
+        replace_voice_note.setVisibility(!voice_note.equals("") ? View.VISIBLE : View.GONE);
+
+        action_voice_note.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(MyDialog.this,
+                        Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                    if (!voice_note.equals("")) {
+                        new AlertDialog.Builder(MyDialog.this)
+                                .setTitle(getResources().getString(R.string.attention))
+                                .setMessage(getResources().getString(R.string.ask_replace_voice_note) + "?")
+                                .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        startActivityForResult(new Intent(MyDialog.this, MyAudioRecord.class), Costants.CODE_REQUEST_VOICE_NOTE);
+                                        snackbar_attach.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, null).show();
+                    } else {
+                        startActivityForResult(new Intent(MyDialog.this, MyAudioRecord.class), Costants.CODE_REQUEST_VOICE_NOTE);
+                        snackbar_attach.dismiss();
+                    }
+                } else {
+                    requestPermission(Manifest.permission.RECORD_AUDIO);
+                }
             }
         });
 
@@ -1291,6 +1356,11 @@ public class MyDialog extends AppCompatActivity {
                         new String[]{Manifest.permission.READ_CONTACTS},
                         Costants.CODE_REQUEST_PERMISSION_READ_CONTACTS);
                 break;
+            case Manifest.permission.RECORD_AUDIO:
+                ActivityCompat.requestPermissions(MyDialog.this,
+                        new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        Costants.CODE_REQUEST_PERMISSION_READ_CONTACTS);
+                break;
         }
     }
     @Override
@@ -1307,6 +1377,12 @@ public class MyDialog extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setContact();
+                }
+                break;
+            case Costants.CODE_REQUEST_PERMISSION_RECORD_AUDIO:
+                if (grantResults.length > 1
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    startActivityForResult(new Intent(MyDialog.this, MyAudioRecord.class), Costants.CODE_REQUEST_VOICE_NOTE);
                 }
                 break;
         }
@@ -1576,6 +1652,117 @@ public class MyDialog extends AppCompatActivity {
             }
         } else {
             Toast.makeText(this, getResources().getString(R.string.error_wifi_off), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void setVoiceNote() {
+        if (!voice_note.equals("")) {
+            action_play_voice_note.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onPlayVoiceNote();
+                    // TODO controllo volume
+                }
+            });
+            seekbar_voice_note.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser){
+                        actualSeek = progress;
+                        Log.i("NEGO_V", "START TO: " + actualSeek);
+                        onPlayVoiceNote();
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+            remove_voice_note.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(MyDialog.this)
+                            .setTitle(getResources().getString(R.string.attention))
+                            .setMessage(getResources().getString(R.string.ask_delete_voice_note) + "?")
+                            .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    File old_voice = new File(voice_note);
+                                    if (old_voice.exists())
+                                        if (old_voice.delete()) {
+                                            voice_note = "";
+                                            setVoiceNote();
+                                        }
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null).show();
+                }
+            });
+            Utils.expand(voice_note_card);
+        } else {
+            Utils.collapse(voice_note_card);
+        }
+    }
+
+
+    private Handler mHandlerVoice = new Handler();
+    private int actualSeek = 0;
+    public void onPlayVoiceNote() {
+        if (mPlayer == null) {
+            Log.i("NEGO_V", "START");
+            Log.i("NEGO_V", "START FROM: " + actualSeek);
+            mPlayer = new MediaPlayer();
+            try {
+                mPlayer.setDataSource(voice_note);
+                mPlayer.prepare();
+                seekbar_voice_note.setMax(mPlayer.getDuration() / 1000);
+                action_play_voice_note.setImageResource(R.drawable.ic_action_pause);
+                mPlayer.start();
+                mPlayer.seekTo(actualSeek);
+                mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        action_play_voice_note.setImageResource(R.drawable.ic_action_play);
+                        actualSeek = 0;
+                        mPlayer.release();
+                        mPlayer = null;
+                    }
+                });
+
+                new Thread(new Runnable() {
+                    public void run() {
+                        while (mPlayer != null) {
+                            mHandlerVoice.postDelayed(new Runnable() {
+                                public void run() {
+                                    if (mPlayer != null) {
+                                        if (mPlayer.getCurrentPosition() != mPlayer.getDuration()) {
+                                            seekbar_voice_note.setProgress(mPlayer.getCurrentPosition());
+                                        } else {
+                                            action_play_voice_note.setImageResource(R.drawable.ic_action_play);
+                                            actualSeek = 0;
+                                            mPlayer.release();
+                                            mPlayer = null;
+                                        }
+                                    }
+                                }
+                            }, 1000);
+                        }
+                    }
+                }).start();
+            } catch (IOException e) {
+                Utils.collapse(voice_note_card);
+            }
+        } else {
+            Log.i("NEGO_V", "STOP");
+            action_play_voice_note.setImageResource(R.drawable.ic_action_play);
+            actualSeek = mPlayer.getCurrentPosition();
+            mPlayer.release();
+            mPlayer = null;
         }
     }
 }

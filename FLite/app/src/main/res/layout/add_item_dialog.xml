@@ -251,7 +251,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:visibility="gone">
+                android:visibility="visible">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -271,6 +271,8 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:padding="4dp"
+                            android:clickable="true"
+                            android:background="?attr/selectableItemBackgroundBorderless"
                             android:id="@+id/action_play_voice_note"
                             android:src="@drawable/ic_action_play"/>
                     </RelativeLayout>
@@ -308,6 +310,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:alpha="0.5"
+                        android:clickable="true"
                         android:tint="@android:color/black"
                         android:layout_marginRight="8dp" />
                 </RelativeLayout>

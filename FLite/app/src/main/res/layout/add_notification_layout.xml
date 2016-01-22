@@ -42,7 +42,8 @@
         android:id="@+id/open_app"
         android:layout_toStartOf="@+id/toggle_icon"
         android:tint="@color/secondary_text"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        android:layout_centerVertical="true" />
     <ImageView
         android:layout_width="40dp"
         android:layout_height="48dp"

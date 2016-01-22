@@ -85,12 +85,14 @@
                 android:layout_centerInParent="true"
                 android:orientation="vertical"
                 android:id="@+id/no_account"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:visibility="gone">
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:src="@drawable/new_google_logo"/>
+                    android:src="@drawable/new_google_logo"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -99,8 +101,7 @@
                     android:text="@string/common_signin_button_text_long"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="32dp"
-                    android:layout_marginLeft="32dp"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_marginLeft="32dp" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

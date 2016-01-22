@@ -34,9 +34,11 @@ public class Costants {
     public static final int CODE_REQUEST_CONTACT = 2;
     public static final int CODE_REQUEST_PASW = 5;
     public static final int CODE_REQUEST_CAMERA = 4;
+    public static final int CODE_REQUEST_VOICE_NOTE = 11;
     public static final int CODE_REQUEST_PERMISSION_READ_CONTACTS = 3;
     public static final int CODE_REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 6;
     public static final int CODE_REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 7;
+    public static final int CODE_REQUEST_PERMISSION_RECORD_AUDIO = 10;
     public static final int CODE_REQUEST_SETTINGS = 8;
     public static final int CODE_REQUEST_SIGN = 9;
 
@@ -50,6 +52,7 @@ public class Costants {
     public static final String KEY_DIALOG_ALARM_REPEAT = "KEY_DIALOG_ALARM_REPEAT";
     public static final String KEY_DIALOG_ADDRESS = "KEY_DIALOG_ADDRESS";
     public static final String KEY_DIALOG_PRIORITY = "KEY_DIALOG_PRIORITY";
+    public static final String KEY_DIALOG_VOICE_NOTE = "KEY_DIALOG_VOICE_NOTE";
 
     public static final String ACTION_HIDE_ALL = "android.intent.action.ACTION_HIDE_ALL";
     public static final String ACTION_VIEW_ALL = "android.intent.action.ACTION_VIEW_ALL";
