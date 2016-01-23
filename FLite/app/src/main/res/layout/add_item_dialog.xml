@@ -294,6 +294,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white_back"
                             android:text="00:08"
+                            android:id="@+id/duration_voice_note"
                             android:layout_marginLeft="8dp"
                             android:layout_marginRight="8dp"
                             android:singleLine="true"

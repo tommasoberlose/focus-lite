@@ -166,6 +166,7 @@ public class Utils {
     public static void notification_update(Context context, String action, Reminder r) {
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         NotificationF.CancelNotification(context, "" + r.getId());
+        NotificationF.CancelNotification(context, "" + r.getId() + Costants.PLUS_NOTIFICATION);
         AlarmF.updateAlarm(context, r.getId(), r.getAlarm(), r.getAlarm_repeat());
         updateWidget(context);
 
@@ -696,5 +697,39 @@ public class Utils {
 
         photo = Uri.fromFile(destination).toString();
         return photo;
+    }
+
+    public static String getDuration(int dur) {
+        dur = dur / 1000;
+        if (dur < 60) {
+            if (dur < 10)
+                return "00:0"+dur;
+            else
+                return "00:"+dur;
+        } else if (dur < 60 * 60) {
+            int minuti = dur / 60;
+            int secondi = dur % 60;
+            String textMin = "";
+            String textSec = "";
+            if (minuti < 10)
+                textMin = "0";
+            if (secondi < 10)
+                textSec = "0";
+            return textMin + minuti + ":" + textSec + secondi;
+        } else {
+            int ore = dur / (60 * 60);
+            int minuti = (dur % (60 * 60)) / 60;
+            int secondi = (dur % (60 * 60)) % 60;
+            String textHour = "";
+            String textMin = "";
+            String textSec = "";
+            if (minuti < 10)
+                textMin = "0";
+            if (ore < 10)
+                textHour = "0";
+            if (secondi < 10)
+                textSec = "0";
+            return textHour + ore + ":" + textMin + minuti + ":" + textSec + secondi;
+        }
     }
 }

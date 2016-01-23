@@ -188,7 +188,7 @@ public class NotificationF {
 
         n.extend(wearableExtender);
 
-        notificationManager.notify(r.getId(), n.build());
+        notificationManager.notify(r.getId() + Costants.PLUS_NOTIFICATION, n.build());
 
         // Aggiorno il promemoria con il fatto di aver fatto suonare l'allarme
         r.setDate_reminded(Calendar.getInstance().getTimeInMillis());

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/back_to_dismiss"
+    android:layout_height="match_parent" android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        android:background="@drawable/circle_back"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:gravity="center"
+            android:background="@drawable/circle_back_light">
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:id="@+id/record_button"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:src="@drawable/ic_mic_white_24dp"
+                android:padding="16dp"
+                android:transitionName="voice_note"/>
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recording..."
+        android:textAppearance="?android:attr/textAppearanceButton"
+        android:layout_margin="16dp"
+        android:textColor="@android:color/white"/>
+
+</LinearLayout>

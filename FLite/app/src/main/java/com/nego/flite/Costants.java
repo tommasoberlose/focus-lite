@@ -113,4 +113,6 @@ public class Costants {
     public static final String LIST_ORDER_SEPARATOR = "ORDER@@@";
     public static final String LIST_ITEM_SEPARATOR = "ITEM@@@";
     public static final String LIST_IMG_SEPARATOR = "IMG@@@";
+
+    public static final int PLUS_NOTIFICATION = 10000;
 }

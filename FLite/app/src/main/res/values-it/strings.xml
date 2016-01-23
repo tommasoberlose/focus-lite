@@ -233,4 +233,5 @@
     <string name="text_login_with_google">Esegui il login tramite account google così da avere note private per ogni utente.\nScegli l\'utente principale e cambialo in ogni momento velocemente.\n\nAttenzione, gli allarmi e i promemoria saranno attivi solo per l\'utente selezionato.</string>
     <string name="ask_replace_voice_note">Sei sicuro di voler eliminare la nota vocale presente</string>
     <string name="ask_delete_voice_note">Sei sicuro di voler eliminare questa nota vocale</string>
+    <string name="error_turn_up_volume">Alza il volume</string>
 </resources>

@@ -165,7 +165,10 @@
         <meta-data android:name="com.google.android.backup.api_key" android:value="AEdPqrEAAAAITU3EZpffM4_zXlko0scUPEz3lCgRYicqK21Ing" />
 
         <activity
-            android:name=".MyAudioRecord" />
+            android:name=".MyAudioRecord"
+            android:label="@string/action_voice_note"
+            android:theme="@style/MyDialog_theme"
+            android:parentActivityName=".MyDialog" />
 
     </application>
 
