@@ -235,4 +235,5 @@
     <string name="ask_replace_voice_note">Are you sure you want to raplace voice note</string>
     <string name="ask_delete_voice_note">Are you sure you want to delete this voice note</string>
     <string name="error_turn_up_volume">Turn up volume</string>
+    <string name="action_recording">Recording&#8230;\nClick mic to stop</string>
 </resources>

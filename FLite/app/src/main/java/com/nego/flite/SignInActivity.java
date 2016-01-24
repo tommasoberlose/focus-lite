@@ -198,7 +198,7 @@ public class SignInActivity extends AppCompatActivity implements
 
         new Thread(new Runnable() {
             public void run() {
-                final String photo = Utils.savePhoto(SignInActivity.this, userToSave.getPhoto(), userToSave.getId());
+                final String photo = Utils.savePhoto(SignInActivity.this, userToSave.getPhoto(), userToSave.getId(), Costants.DIRECTORY_USER);
 
                 mHandler.post(new Runnable() {
                     public void run() {

@@ -542,6 +542,11 @@ public class MyDialog extends AppCompatActivity {
                 addImg(tmpImgNameFile);
                 tmpImgNameFile = "";
             }
+        } else if (requestCode == Costants.CODE_REQUEST_CAMERA && resultCode != RESULT_OK) {
+            File tmpCameraFile = new File(tmpImgNameFile);
+            if (tmpCameraFile.exists())
+                tmpCameraFile.delete();
+            tmpImgNameFile = "";
         }
     }
 
@@ -1044,88 +1049,6 @@ public class MyDialog extends AppCompatActivity {
                 }
             }
         }
-        /* TODO Date with / and hour with :
-        if (t.contains("")) {
-            if (ContextCompat.checkSelfPermission(MyDialog.this,
-                    Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED && action.equals("")) {
-                final View attachView = LayoutInflater.from(this).inflate(R.layout.item_suggestion, null);
-
-                if (snackbar_suggestions != null && snackbar_suggestions.isShown()) {
-                    snackbar_suggestions.dismiss();
-                }
-
-                snackbar_suggestions = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
-                Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_suggestions.getView();
-                layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
-                TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
-                textView.setVisibility(View.INVISIBLE);
-
-                TextView name_one = (TextView) attachView.findViewById(R.id.name_one);
-                TextView name_two = (TextView) attachView.findViewById(R.id.name_two);
-                TextView name_three = (TextView) attachView.findViewById(R.id.name_three);
-
-                String toCheck = t.substring(t.lastIndexOf("@"), t.length());
-                final ArrayList<String[]> contactList = Utils.getContactsList(this, toCheck);
-                if (contactList.size() > 0) {
-                    name_one.setText(contactList.get(0)[1]);
-                    name_one.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            action = Costants.ACTION_CONTACT;
-                            action_info = contactList.get(0)[0];
-                            setContact();
-                            title.setText(new StringBuilder(t).replace(t.lastIndexOf("@"), t.length(), contactList.get(0)[1]).toString());
-                            snackbar_suggestions.dismiss();
-                        }
-                    });
-
-                    if (contactList.size() > 1) {
-                        name_two.setText(contactList.get(1)[1]);
-                        name_two.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                action = Costants.ACTION_CONTACT;
-                                action_info = contactList.get(1)[0];
-                                setContact();
-                                title.setText(new StringBuilder(t).replace(t.lastIndexOf("@"), t.length(), contactList.get(1)[1]).toString());
-                                snackbar_suggestions.dismiss();
-                            }
-                        });
-                        name_two.setVisibility(View.VISIBLE);
-                    } else {
-                        name_two.setVisibility(View.GONE);
-                    }
-
-                    if (contactList.size() > 2) {
-                        name_three.setText(contactList.get(2)[1]);
-                        name_three.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                action = Costants.ACTION_CONTACT;
-                                action_info = contactList.get(2)[0];
-                                setContact();
-                                title.setText(new StringBuilder(t).replace(t.lastIndexOf("@"), t.length(), contactList.get(2)[1]).toString());
-                                snackbar_suggestions.dismiss();
-                            }
-                        });
-                        name_three.setVisibility(View.VISIBLE);
-                    } else {
-                        name_three.setVisibility(View.GONE);
-                    }
-
-
-                    layout.addView(attachView, 0);
-                    snackbar_suggestions.show();
-                } else {
-                    if (snackbar_suggestions.isShown())
-                        snackbar_suggestions.dismiss();
-                }
-            } else {
-                if (snackbar_suggestions != null && snackbar_suggestions.isShown()) {
-                    snackbar_suggestions.dismiss();
-                }
-            }
-        }*/
     }
 
     public void showInfo() {
@@ -1673,29 +1596,37 @@ public class MyDialog extends AppCompatActivity {
             try {
                 mPlayer.setDataSource(voice_note);
                 mPlayer.prepare();
-                seekbar_voice_note.setMax(mPlayer.getDuration() / 1000);
-                ((TextView) findViewById(R.id.duration_voice_note)).setText(Utils.getDuration(mPlayer.getDuration()));
+                seekbar_voice_note.setMax(mPlayer.getDuration());
+                ((TextView) findViewById(R.id.max_duration_voice_note)).setText(Utils.getDuration(mPlayer.getDuration()));
+                ((TextView) findViewById(R.id.duration_voice_note)).setText(Utils.getDuration(0));
+                action_play_voice_note.setImageResource(R.drawable.ic_action_play);
+                actualSeek = 0;
                 mPlayer.release();
                 mPlayer = null;
             } catch (IOException e) {
-                Utils.collapse(voice_note_card);
+                voice_note = "";
+                setVoiceNote();
             }
             action_play_voice_note.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onPlayVoiceNote();
                     AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
                     if (am.getStreamVolume(AudioManager.STREAM_MUSIC) == 0)
                         Toast.makeText(MyDialog.this, getString(R.string.error_turn_up_volume), Toast.LENGTH_SHORT).show();
+                    onPlayVoiceNote();
                 }
             });
             seekbar_voice_note.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if (fromUser){
+                        if (mPlayer != null) {
+                            mPlayer.release();
+                            mPlayer = null;
+                        }
+                        action_play_voice_note.setImageResource(R.drawable.ic_action_play);
+                        ((TextView) findViewById(R.id.duration_voice_note)).setText(Utils.getDuration(progress));
                         actualSeek = progress;
-                        Log.i("NEGO_V", "START TO: " + actualSeek);
-                        onPlayVoiceNote();
                     }
                 }
 
@@ -1752,7 +1683,6 @@ public class MyDialog extends AppCompatActivity {
             }
         }
         if (!mPlayer.isPlaying()) {
-            Log.i("NEGO_V", "START FROM: " + actualSeek);
             action_play_voice_note.setImageResource(R.drawable.ic_action_pause);
             mPlayer.seekTo(actualSeek);
             mPlayer.start();
@@ -1762,14 +1692,14 @@ public class MyDialog extends AppCompatActivity {
                     action_play_voice_note.setImageResource(R.drawable.ic_action_play);
                     actualSeek = 0;
                     seekbar_voice_note.setProgress(0);
-            mPlayer.release();
-            mPlayer = null;
+                    mPlayer.release();
+                    mPlayer = null;
+                    ((TextView) findViewById(R.id.duration_voice_note)).setText(Utils.getDuration(0));
                 }
             });
 
             updateSeekBar();
         } else {
-            Log.i("NEGO_V", "STOP");
             action_play_voice_note.setImageResource(R.drawable.ic_action_play);
             actualSeek = mPlayer.getCurrentPosition();
             mPlayer.release();
@@ -1783,7 +1713,8 @@ public class MyDialog extends AppCompatActivity {
                 mHandlerVoice.postDelayed(new Runnable() {
                     public void run() {
                         if (mPlayer != null && mPlayer.isPlaying()) {
-                            seekbar_voice_note.setProgress(mPlayer.getCurrentPosition() / 1000);
+                            seekbar_voice_note.setProgress(mPlayer.getCurrentPosition());
+                            ((TextView) findViewById(R.id.duration_voice_note)).setText(Utils.getDuration(mPlayer.getCurrentPosition()));
                             updateSeekBar();
                         }
                     }

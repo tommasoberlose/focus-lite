@@ -9,6 +9,9 @@ import android.util.Log;
 import com.nego.flite.Functions.AlarmF;
 import com.nego.flite.database.DbAdapter;
 
+import java.io.File;
+import java.util.Calendar;
+
 public class Reminder implements Parcelable {
     private int id;
     private String title;
@@ -268,6 +271,14 @@ public class Reminder implements Parcelable {
 
     public boolean delete_reminder(Context context, DbAdapter dbHelper) {
         if (dbHelper.deleteReminder("" + this.getId())) {
+            try {
+                if (!voice_note.equals("")) {
+                    File voice = new File(voice_note);
+                    if (voice.exists())
+                        voice.delete();
+                }
+            } catch (Exception e) {e.printStackTrace();}
+
             AlarmF.deleteAlarm(context, this.getId());
             return true;
         }

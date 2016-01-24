@@ -247,6 +247,105 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:cardCornerRadius="3dp"
+                    app:cardElevation="4dp"
+                    android:clickable="true"
+                    android:background="@color/primary"
+                    app:cardBackgroundColor="@color/primary"
+                    app:cardPreventCornerOverlap="true"
+                    android:id="@+id/card_voice_note"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:visibility="visible">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <RelativeLayout
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:id="@+id/play_button_container"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/circle_back"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:layout_marginRight="16dp">
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:padding="4dp"
+                                android:clickable="true"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:id="@+id/action_play_voice_note"
+                                android:src="@drawable/ic_action_play"/>
+                        </RelativeLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_toEndOf="@+id/play_button_container"
+                            android:layout_toStartOf="@+id/remove_voice_note"
+                            android:layout_centerVertical="true">
+                            <SeekBar
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="-8dp"
+                                android:layout_marginRight="-8dp"
+                                android:id="@+id/seekBar" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:textColor="@color/white_back"
+                                    android:text="00:08"
+                                    android:id="@+id/duration_voice_note"
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginRight="8dp"
+                                    android:singleLine="true"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:textColor="@color/white_back"
+                                    android:text="00:08"
+                                    android:gravity="end"
+                                    android:id="@+id/max_duration_voice_note"
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginRight="8dp"
+                                    android:singleLine="true"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:padding="8dp"
+                            android:id="@+id/remove_voice_note"
+                            android:foreground="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_action_navigation_close"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:alpha="0.5"
+                            android:clickable="true"
+                            android:tint="@android:color/black"
+                            android:layout_marginRight="8dp" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:transitionName="action_button"
                     app:cardCornerRadius="3dp"
                     app:cardElevation="4dp"

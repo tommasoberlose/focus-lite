@@ -23,7 +23,6 @@ import java.util.Calendar;
 
 public class MyAudioRecord extends AppCompatActivity
 {
-    private static final String LOG_TAG = "AudioRecordTest";
     private static File mFileName = null;
 
     private MediaRecorder mRecorder = null;
@@ -49,7 +48,7 @@ public class MyAudioRecord extends AppCompatActivity
                 stopRecording();
             }
         });
-        mFileName = new File(this.getFilesDir() + File.separator + Calendar.getInstance().getTimeInMillis() + "_audio.3gp");
+        mFileName = new File(this.getFilesDir() + File.separator + Costants.DIRECTORY_VOICE_NOTE + File.separator + Calendar.getInstance().getTimeInMillis() + "_audio.3gp");
 
         startRecording();
     }

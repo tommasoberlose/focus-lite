@@ -27,12 +27,6 @@
         android:icon="@drawable/ic_action_toggle_star_dialog"
         android:title="@string/action_priority" />
     <item
-        android:id="@+id/action_unarchive"
-        android:orderInCategory="70"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_action_unarchive_dialog"
-        android:title="@string/action_unarchive" />
-    <item
         android:id="@+id/action_show_info"
         android:orderInCategory="80"
         app:showAsAction="ifRoom"
@@ -57,8 +51,14 @@
         android:icon="@drawable/ic_action_content_archive_dialog"
         android:title="@string/action_archive" />
     <item
-        android:id="@+id/action_delete"
+        android:id="@+id/action_unarchive"
         android:orderInCategory="105"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_unarchive_dialog"
+        android:title="@string/action_unarchive" />
+    <item
+        android:id="@+id/action_delete"
+        android:orderInCategory="110"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_action_delete_dialog"
         android:title="@string/action_delete" />

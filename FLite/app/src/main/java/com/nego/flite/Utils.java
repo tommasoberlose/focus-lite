@@ -662,9 +662,9 @@ public class Utils {
         return userId;
     }
 
-    public static String savePhoto(Context context, String uri, String user_id) {
+    public static String savePhoto(Context context, String uri, String id, String directory) {
         String photo = "";
-        File destination = new File(context.getFilesDir() + File.separator + "photo_" + user_id + ".jpeg");
+        File destination = new File(context.getFilesDir() + File.separator + directory + File.separator + "photo_" + id + ".jpeg");
 
         InputStream input = null;
         FileOutputStream output = null;

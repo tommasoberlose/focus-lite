@@ -234,4 +234,6 @@
     <string name="ask_replace_voice_note">Sei sicuro di voler eliminare la nota vocale presente</string>
     <string name="ask_delete_voice_note">Sei sicuro di voler eliminare questa nota vocale</string>
     <string name="error_turn_up_volume">Alza il volume</string>
+    <string name="action_recording">Registrazione&#8230;\nClicca il Microfono per concludere</string>
+    <string name="google_app_id">1:155214422673:android:f24322fa4a10c75f</string>
 </resources>
