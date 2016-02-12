@@ -163,7 +163,7 @@
     <string name="subtitle_twelve_hour">Utilizza il formato per l\'orario da 12h invece che quello da 24h</string>
     <string name="title_notification_preference">Preferenze Notifiche</string>
     <string name="subtitle_notification_preference">Azioni opzionali, notifiche fisse e altre preferenze riguardanti le notifiche fisse</string>
-    <string name="title_delete_button_preferences">Archivia quando Rimuovi</string>
+    <string name="title_delete_button_preferences">Elimina quando Rimuovi</string>
     <string name="preferences_addnote_first">Notifica Aggiungi Nota</string>
     <string name="preferences_alarm_first">Promemoria e Allarmi</string>
     <string name="text_reminded_date">Nota ricordata il</string>
@@ -183,7 +183,7 @@
     <string name="ask_remove_address">Vuoi rimuovere l\'indirizzo inserito</string>
     <string name="subtitle_enter_address">Inserisci un indirizzo valido per avviare il navigatore più velocemente o per ricordarti i tuoi luoghi di interesse</string>
     <string name="action_navigate">Naviga</string>
-    <string name="title_delete_button_not_ongoing_preferences">Pulsante Archivia</string>
+    <string name="title_delete_button_not_ongoing_preferences">Pulsante Elimina</string>
     <string name="action_choose_device">Scegli il Dispositivo Bluetooth</string>
     <string name="error_bluetooth_off">Accendi il Bluetooth</string>
     <string name="action_choose_wifi">Scegli la Connessione Wi-fi</string>
@@ -236,4 +236,8 @@
     <string name="error_turn_up_volume">Alza il volume</string>
     <string name="action_recording">Registrazione&#8230;\nClicca il Microfono per concludere</string>
     <string name="google_app_id">1:155214422673:android:f24322fa4a10c75f</string>
+    <string name="title_archive_button_not_ongoing_preferences">Archivia quando Rimuovi</string>
+    <string name="title_archive_button_preferences">Pulsante Archivia</string>
+    <string name="title_delete_to_archive">Archivia invece di Eliminare</string>
+    <string name="subtitle_delete_to_archive">Utilizza l\'azione archivia invece dell\'azione elimina nelle notifiche</string>
 </resources>

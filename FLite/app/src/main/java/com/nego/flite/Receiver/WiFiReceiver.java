@@ -32,9 +32,11 @@ public class WiFiReceiver extends BroadcastReceiver {
             Cursor cursor = dbHelper.fetchRemindersByFilterWifi(Utils.getActiveUserId(dbHelper));
             while (cursor.moveToNext()) {
                 Reminder actual = new Reminder(cursor);
-                if (actual.getAlarm() == Costants.ALARM_TYPE_WIFI) {
-                    if (actual.getAlarm_repeat().split(Costants.LIST_ITEM_SEPARATOR)[0].equals("" + wifiM.getConnectionInfo().getNetworkId()) && actual.getDate_reminded() == 0) {
-                        NotificationF.Notification(context, actual);
+                if (actual.getDate_archived() == 0) {
+                    if (actual.getAlarm() == Costants.ALARM_TYPE_WIFI) {
+                        if (actual.getAlarm_repeat().split(Costants.LIST_ITEM_SEPARATOR)[0].equals("" + wifiM.getConnectionInfo().getNetworkId()) && actual.getDate_reminded() == 0) {
+                            NotificationF.Notification(context, actual);
+                        }
                     }
                 }
             }

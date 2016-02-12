@@ -94,6 +94,7 @@ public class Costants {
     public static final String PREFERENCE_ORDER_ALARM_FIRST = "PREFERENCE_ORDER_ALARM_FIRST";
     public static final String PREFERENCE_CLOSE_NOTE_AFTER_ACTIONS = "PREFERENCE_CLOSE_NOTE_AFTER_ACTIONS";
     public static final String PREFERENCE_SHOW_STARRED = "PREFERENCE_SHOW_STARRED";
+    public static final String PREFERENCE_BUTTON_DELETE_TO_ARCHIVE = "PREFERENCE_BUTTON_DELETE_TO_ARCHIVE";
 
     public static final String ALARM_ACTION = "android.intent.action.ALARM";
     public static final String ACTION_SNOOZE = "com.nego.flite.intent.action.ACTION_SNOOZE";

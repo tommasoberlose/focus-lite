@@ -146,10 +146,31 @@ public class MyDialog extends AppCompatActivity {
             } else if (intent.getAction().equals(Costants.ACTION_ARCHIVE) || intent.getAction().equals(Costants.ACTION_ARCHIVE_WEAR)) {
                 from_notifications = true;
                 int id = ((Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER)).getId();
-                Reminder r_delete = Utils.getReminder(this, id);
-                ReminderService.startAction(MyDialog.this, Costants.ACTION_ARCHIVE, r_delete);
-                NotificationF.CancelNotification(MyDialog.this, "" + r_delete.getId() + Costants.PLUS_NOTIFICATION);
+                Reminder r_archive = Utils.getReminder(this, id);
+                ReminderService.startAction(MyDialog.this, Costants.ACTION_ARCHIVE, r_archive);
+                NotificationF.CancelNotification(MyDialog.this, "" + (r_archive.getId() + Costants.PLUS_NOTIFICATION));
                 finish();
+            } else if (intent.getAction().equals(Costants.ACTION_DELETE) || intent.getAction().equals(Costants.ACTION_DELETE_WEAR)) {
+                from_notifications = true;
+                int id = ((Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER)).getId();
+                final Reminder r_delete = Utils.getReminder(this, id);
+                new AlertDialog.Builder(MyDialog.this)
+                        .setTitle(getResources().getString(R.string.attention))
+                        .setMessage(getResources().getString(R.string.ask_delete_reminder) + "?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                ReminderService.startAction(MyDialog.this, Costants.ACTION_DELETE, r_delete);
+                                NotificationF.CancelNotification(MyDialog.this, "" + (r_delete.getId() + Costants.PLUS_NOTIFICATION));
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                finish();
+                            }
+                        })
+                        .show();
             } else if (intent.getAction().equals(Costants.ACTION_SNOOZE) || intent.getAction().equals(Costants.ACTION_SNOOZE_WEAR)) {
                 from_notifications = true;
                 int id = ((Reminder) intent.getParcelableExtra(Costants.EXTRA_REMINDER)).getId();
@@ -159,7 +180,7 @@ public class MyDialog extends AppCompatActivity {
                         AlarmF.addAlarm(MyDialog.this, r_snooze.getId(), r_snooze.getAlarm() + 10 * 60 * 1000, "");
                     else
                         AlarmF.addAlarm(MyDialog.this, r_snooze.getId(), Calendar.getInstance().getTimeInMillis() + 10 * 60 * 1000, "");
-                    NotificationF.CancelNotification(MyDialog.this, "" + r_snooze.getId() + Costants.PLUS_NOTIFICATION);
+                    NotificationF.CancelNotification(MyDialog.this, "" + (r_snooze.getId() + Costants.PLUS_NOTIFICATION));
                     finish();
                 } else {
                     ReminderDialog r_dialog = new ReminderDialog(this, r_snooze.getAlarm(), r_snooze.getAlarm_repeat());
@@ -694,6 +715,7 @@ public class MyDialog extends AppCompatActivity {
             r_snooze.setAlarm(alarm);
             r_snooze.setAlarm_repeat(alarm_repeat);
             ReminderService.startAction(this, Costants.ACTION_UPDATE, r_snooze);
+            NotificationF.CancelNotification(MyDialog.this, "" + (r_snooze.getId() + Costants.PLUS_NOTIFICATION));
             finish();
         } else {
             this.alarm = alarm;

@@ -105,6 +105,7 @@ public class ReminderService extends IntentService {
         DbAdapter dbHelper = new DbAdapter(this);
         dbHelper.open();
         r.setDate_archived(Calendar.getInstance().getTimeInMillis());
+        r.setPriority(0);
         if (r.update_reminder(this, dbHelper)) {
             sendResponse(Costants.ACTION_ARCHIVE, r);
         }

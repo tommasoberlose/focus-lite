@@ -118,22 +118,28 @@
                                 android:fontFamily="sans-serif-medium"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"/>
-                            <TextView
+                            <android.support.v7.widget.CardView
                                 android:layout_width="wrap_content"
                                 android:layout_height="24dp"
                                 android:minWidth="24dp"
-                                android:paddingRight="8dp"
-                                android:paddingLeft="8dp"
-                                android:textColor="@android:color/black"
-                                android:alpha="0.54"
-                                android:textStyle="bold"
-                                android:text="9+"
-                                android:background="@drawable/list_item_background"
-                                android:backgroundTint="@color/back_selected_item"
-                                android:id="@+id/count_item_notes"
+                                app:cardElevation="0dp"
+                                android:background="@color/back_selected_item"
+                                app:cardBackgroundColor="@color/back_selected_item"
+                                app:cardPreventCornerOverlap="true"
                                 android:layout_marginRight="16dp"
                                 android:layout_marginLeft="16dp"
-                                android:gravity="center" />
+                                android:alpha="0.54">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:paddingRight="8dp"
+                                    android:paddingLeft="8dp"
+                                    android:textColor="@android:color/black"
+                                    android:textStyle="bold"
+                                    android:text="9+"
+                                    android:id="@+id/count_item_notes"
+                                    android:gravity="center" />
+                            </android.support.v7.widget.CardView>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -161,22 +167,28 @@
                                 android:fontFamily="sans-serif-medium"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"/>
-                            <TextView
+                            <android.support.v7.widget.CardView
                                 android:layout_width="wrap_content"
                                 android:layout_height="24dp"
                                 android:minWidth="24dp"
-                                android:paddingRight="8dp"
-                                android:paddingLeft="8dp"
-                                android:textColor="@android:color/black"
-                                android:alpha="0.54"
-                                android:textStyle="bold"
-                                android:text="9+"
-                                android:background="@drawable/list_item_background"
-                                android:backgroundTint="@color/back_selected_item"
-                                android:id="@+id/count_item_reminders"
+                                app:cardElevation="0dp"
+                                android:background="@color/back_selected_item"
+                                app:cardBackgroundColor="@color/back_selected_item"
+                                app:cardPreventCornerOverlap="true"
                                 android:layout_marginRight="16dp"
                                 android:layout_marginLeft="16dp"
-                                android:gravity="center" />
+                                android:alpha="0.54">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:paddingRight="8dp"
+                                    android:paddingLeft="8dp"
+                                    android:textColor="@android:color/black"
+                                    android:textStyle="bold"
+                                    android:text="9+"
+                                    android:id="@+id/count_item_reminders"
+                                    android:gravity="center" />
+                            </android.support.v7.widget.CardView>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -204,22 +216,28 @@
                                 android:fontFamily="sans-serif-medium"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"/>
-                            <TextView
+                            <android.support.v7.widget.CardView
                                 android:layout_width="wrap_content"
                                 android:layout_height="24dp"
                                 android:minWidth="24dp"
-                                android:paddingRight="8dp"
-                                android:paddingLeft="8dp"
-                                android:textColor="@android:color/black"
-                                android:alpha="0.54"
-                                android:textStyle="bold"
-                                android:text="9+"
-                                android:background="@drawable/list_item_background"
-                                android:backgroundTint="@color/back_selected_item"
-                                android:id="@+id/count_item_starred"
+                                app:cardElevation="0dp"
+                                android:background="@color/back_selected_item"
+                                app:cardBackgroundColor="@color/back_selected_item"
+                                app:cardPreventCornerOverlap="true"
                                 android:layout_marginRight="16dp"
                                 android:layout_marginLeft="16dp"
-                                android:gravity="center" />
+                                android:alpha="0.54">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:paddingRight="8dp"
+                                    android:paddingLeft="8dp"
+                                    android:textColor="@android:color/black"
+                                    android:textStyle="bold"
+                                    android:text="9+"
+                                    android:id="@+id/count_item_starred"
+                                    android:gravity="center" />
+                            </android.support.v7.widget.CardView>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -247,22 +265,28 @@
                                 android:fontFamily="sans-serif-medium"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"/>
-                            <TextView
+                            <android.support.v7.widget.CardView
                                 android:layout_width="wrap_content"
                                 android:layout_height="24dp"
                                 android:minWidth="24dp"
-                                android:paddingRight="8dp"
-                                android:paddingLeft="8dp"
-                                android:textColor="@android:color/black"
-                                android:alpha="0.54"
-                                android:textStyle="bold"
-                                android:text="9+"
-                                android:background="@drawable/list_item_background"
-                                android:backgroundTint="@color/back_selected_item"
-                                android:id="@+id/count_item_archived"
+                                app:cardElevation="0dp"
+                                android:background="@color/back_selected_item"
+                                app:cardBackgroundColor="@color/back_selected_item"
+                                app:cardPreventCornerOverlap="true"
                                 android:layout_marginRight="16dp"
                                 android:layout_marginLeft="16dp"
-                                android:gravity="center" />
+                                android:alpha="0.54">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:paddingRight="8dp"
+                                    android:paddingLeft="8dp"
+                                    android:textColor="@android:color/black"
+                                    android:textStyle="bold"
+                                    android:text="9+"
+                                    android:id="@+id/count_item_archived"
+                                    android:gravity="center" />
+                            </android.support.v7.widget.CardView>
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout

@@ -72,14 +72,15 @@ public class MyAudioRecord extends AppCompatActivity
 
         try {
             mRecorder.prepare();
+            mRecorder.start();
+            showEffect();
         } catch (IOException e) {
             Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show();
             setResult(RESULT_CANCELED);
             finish();
         }
 
-        mRecorder.start();
-        showEffect();
+
 
     }
 

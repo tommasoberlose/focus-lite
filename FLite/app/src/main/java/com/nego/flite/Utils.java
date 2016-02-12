@@ -125,7 +125,7 @@ public class Utils {
     public static int itemsToDo(Context context) {
         DbAdapter dbHelper = new DbAdapter(context);
         dbHelper.open();
-        int count = dbHelper.getRemindersN(getActiveUserId(dbHelper));
+        int count = dbHelper.getRemindersN(getActiveUserId(dbHelper)) - dbHelper.getRemindersNNotesArchived(getActiveUserId(dbHelper));
         dbHelper.close();
         return count;
     }
@@ -211,7 +211,10 @@ public class Utils {
         if (alarm > 0) {
             return getDateAlarm(context, alarm, alarm_repeat, date_reminded);
         } else {
-            return context.getString(R.string.text_snoozed_to) + ": " + alarm_repeat.split(Costants.LIST_ITEM_SEPARATOR)[1];
+            if (date_reminded == 0)
+                return context.getString(R.string.text_snoozed_to) + ": " + alarm_repeat.split(Costants.LIST_ITEM_SEPARATOR)[1];
+            else
+                return context.getString(R.string.text_reminded_at) + " " + alarm_repeat;
         }
     }
 

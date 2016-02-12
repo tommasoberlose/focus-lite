@@ -193,6 +193,49 @@
                     android:padding="16dp"
                     android:foreground="?attr/selectableItemBackground"
                     android:clickable="true"
+                    android:id="@+id/action_delete_to_archive">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@drawable/text_color_settings"
+                        android:textAppearance="?android:attr/textAppearanceListItem"
+                        android:text="@string/title_delete_to_archive"
+                        android:id="@+id/delete_to_archive_title"
+                        android:layout_toLeftOf="@+id/delete_to_archive_check"
+                        android:layout_toStartOf="@+id/delete_to_archive_check" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@drawable/text_color_settings_subtitle"
+                        android:id="@+id/delete_to_archive_subtitle"
+                        android:text="@string/subtitle_delete_to_archive"
+                        android:layout_below="@+id/delete_to_archive_title"
+                        android:layout_toLeftOf="@+id/delete_to_archive_check"
+                        android:layout_toStartOf="@+id/delete_to_archive_check" />
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/delete_to_archive_check"
+                        android:checked="true"
+                        app:theme="@style/CheckBox.Colored"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginStart="16dp"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/back_selected_item"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
                     android:id="@+id/action_show_starred">
                     <TextView
                         android:layout_width="match_parent"

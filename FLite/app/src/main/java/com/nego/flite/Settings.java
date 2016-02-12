@@ -391,7 +391,7 @@ public class Settings extends AppCompatActivity {
                 selected_not_pref = actual_not_pref;
                 new AlertDialog.Builder(Settings.this, R.style.mDialog)
                         .setTitle(getString(R.string.title_notification_preference))
-                        .setMultiChoiceItems(new String[]{getString(R.string.title_preferences_share), getString(R.string.title_delete_button_preferences), getString(R.string.title_delete_button_not_ongoing_preferences), getString(R.string.title_preferences_ongoing)},
+                        .setMultiChoiceItems(new String[]{getString(R.string.title_preferences_share), !SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, false) ? getString(R.string.title_delete_button_preferences) : getString(R.string.title_archive_button_preferences), !SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, false) ? getString(R.string.title_delete_button_not_ongoing_preferences) : getString(R.string.title_archive_button_not_ongoing_preferences), getString(R.string.title_preferences_ongoing)},
                                 actual_not_pref, new DialogInterface.OnMultiChoiceClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -478,6 +478,22 @@ public class Settings extends AppCompatActivity {
         } else {
             findViewById(R.id.action_custom_sound).setVisibility(View.GONE);
         }
+
+        // DELETE TO ARCHIVE
+        final AppCompatCheckBox delete_to_archive_check = (AppCompatCheckBox) findViewById(R.id.delete_to_archive_check);
+        delete_to_archive_check.setChecked(SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, false));
+        delete_to_archive_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SP.edit().putBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, isChecked).apply();
+            }
+        });
+        findViewById(R.id.action_delete_to_archive).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delete_to_archive_check.setChecked(!delete_to_archive_check.isChecked());
+            }
+        });
 
         // SHOW ADD NOTIFICATION
         final AppCompatCheckBox hide_new_check = (AppCompatCheckBox) findViewById(R.id.show_add_notification_check);

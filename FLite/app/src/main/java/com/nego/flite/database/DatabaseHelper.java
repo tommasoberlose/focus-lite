@@ -28,41 +28,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade( SQLiteDatabase database, int oldVersion, int newVersion ) {
 
         if (oldVersion == 3) {
-            database.execSQL("ALTER TABLE reminders ADD COLUMN alarm long DEFAULT 0");
-            database.execSQL("ALTER TABLE reminders ADD COLUMN alarm_repeat text DEFAULT ''");
+            try {
+                database.execSQL("ALTER TABLE reminders ADD COLUMN alarm long DEFAULT 0");
+                database.execSQL("ALTER TABLE reminders ADD COLUMN alarm_repeat text DEFAULT ''");
+            } catch (Exception ex) {ex.printStackTrace();}
             onUpgrade(database, 4, DATABASE_VERSION);
         }
         if (oldVersion == 4) {
-            database.execSQL("ALTER TABLE reminders ADD COLUMN content text DEFAULT ''");
-            database.execSQL("ALTER TABLE reminders ADD COLUMN pasw text DEFAULT ''");
+            try {
+                database.execSQL("ALTER TABLE reminders ADD COLUMN content text DEFAULT ''");
+                database.execSQL("ALTER TABLE reminders ADD COLUMN pasw text DEFAULT ''");
+            } catch (Exception ex) {ex.printStackTrace();}
             onUpgrade(database, 5, DATABASE_VERSION);
         }
         if (oldVersion == 5) {
-            database.execSQL("ALTER TABLE reminders ADD COLUMN last_changed long default 0");
+            try {
+                database.execSQL("ALTER TABLE reminders ADD COLUMN last_changed long default 0");
+            } catch (Exception ex) {ex.printStackTrace();}
             onUpgrade(database, 6, DATABASE_VERSION);
         }
         if (oldVersion == 6) {
-            database.execSQL("ALTER TABLE reminders ADD COLUMN priority int default 0");
+            try {
+                database.execSQL("ALTER TABLE reminders ADD COLUMN priority int default 0");
+            } catch (Exception ex) {ex.printStackTrace();}
             onUpgrade(database, 7, DATABASE_VERSION);
         }
         if (oldVersion == 7) {
-            database.execSQL("ALTER TABLE reminders ADD COLUMN date_reminded long default 0");
+            try {
+                database.execSQL("ALTER TABLE reminders ADD COLUMN date_reminded long default 0");
+            } catch (Exception ex) {ex.printStackTrace();}
             onUpgrade(database, 8, DATABASE_VERSION);
         }
         if (oldVersion == 8) {
-            database.execSQL("ALTER TABLE reminders ADD COLUMN address text default ''");
+            try {
+                database.execSQL("ALTER TABLE reminders ADD COLUMN address text default ''");
+            } catch (Exception ex) {ex.printStackTrace();}
             onUpgrade(database, 9, DATABASE_VERSION);
         }
         if (oldVersion == 8) {
-            database.execSQL("ALTER TABLE reminders ADD COLUMN address text default ''");
+            try {
+                database.execSQL("ALTER TABLE reminders ADD COLUMN address text default ''");
+            } catch (Exception ex) {ex.printStackTrace();}
             onUpgrade(database, 9, DATABASE_VERSION);
         }
         if (oldVersion == 9 || oldVersion == 10) {
-            database.execSQL("ALTER TABLE reminders ADD COLUMN voice_note text default ''");
-            database.execSQL("ALTER TABLE reminders ADD COLUMN date_archived long default 0");
-            database.execSQL("ALTER TABLE reminders ADD COLUMN user_id text default ''");
-            database.execSQL("ALTER TABLE reminders ADD COLUMN color text default ''");
-            database.execSQL("ALTER TABLE reminders ADD COLUMN icon text default ''");
+            try {
+                database.execSQL("ALTER TABLE reminders ADD COLUMN voice_note text default ''");
+                database.execSQL("ALTER TABLE reminders ADD COLUMN date_archived long default 0");
+                database.execSQL("ALTER TABLE reminders ADD COLUMN user_id text default ''");
+                database.execSQL("ALTER TABLE reminders ADD COLUMN color text default ''");
+                database.execSQL("ALTER TABLE reminders ADD COLUMN icon text default ''");
+            } catch (Exception ex) {ex.printStackTrace();}
             onUpgrade(database, 11, DATABASE_VERSION);
         }
         if (oldVersion == 11) {
@@ -70,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             onUpgrade(database, 12, DATABASE_VERSION);
         }
         //database.execSQL("DROP TABLE IF EXISTS user");
-        onCreate(database);
+            onCreate(database);
 
     }
 }

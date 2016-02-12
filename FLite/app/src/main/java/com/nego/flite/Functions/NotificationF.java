@@ -38,8 +38,13 @@ public class NotificationF {
         i.putExtra(Costants.EXTRA_REMINDER, r);
         PendingIntent pi= PendingIntent.getActivity(context, r.getId(), i, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Intent archive_i = new Intent(context, MyDialog.class);
+        archive_i.setAction(Costants.ACTION_ARCHIVE);
+        archive_i.putExtra(Costants.EXTRA_REMINDER, r);
+        PendingIntent pi_archive = PendingIntent.getActivity(context, r.getId(), archive_i, PendingIntent.FLAG_UPDATE_CURRENT);
+
         Intent delete_i = new Intent(context, MyDialog.class);
-        delete_i.setAction(Costants.ACTION_ARCHIVE);
+        delete_i.setAction(Costants.ACTION_DELETE);
         delete_i.putExtra(Costants.EXTRA_REMINDER, r);
         PendingIntent pi_delete = PendingIntent.getActivity(context, r.getId(), delete_i, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -85,7 +90,12 @@ public class NotificationF {
         }
 
         if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_NOT_ONGOING, false)) {
-            n.addAction(R.drawable.ic_action_check, context.getString(R.string.action_archive), pi_delete);
+
+            if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, false)) {
+                n.addAction(R.drawable.ic_action_check, context.getString(R.string.action_archive), pi_archive);
+            } else {
+                n.addAction(R.drawable.ic_action_delete, context.getString(R.string.action_delete), pi_delete);
+            }
         }
 
         if (SP.getBoolean(Costants.PREFERENCES_NOTIFICATION_SOUND, true)) {
@@ -163,15 +173,24 @@ public class NotificationF {
             share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle() + Utils.getBigContentList(context, r.getContent()));
             share_intent.setType("text/plain");
             PendingIntent share_pi = PendingIntent.getActivity(context, r.getId(), share_intent, 0);
-            n.addAction(R.drawable.abc_ic_menu_share_mtrl_alpha, context.getString(R.string.action_share), share_pi);
+            n.addAction(R.drawable.ic_action_social_share, context.getString(R.string.action_share), share_pi);
         }
 
         if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
-            Intent delete_i_wear = new Intent(context, MyDialog.class);
-            delete_i_wear.setAction(Costants.ACTION_ARCHIVE_WEAR);
-            delete_i_wear.putExtra(Costants.EXTRA_REMINDER, r);
-            PendingIntent pi_delete_wear = PendingIntent.getActivity(context, r.getId(), delete_i_wear, PendingIntent.FLAG_UPDATE_CURRENT);
-            wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_check, context.getString(R.string.action_archive), pi_delete_wear).build());
+            if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, false)) {
+                Intent archive_i_wear = new Intent(context, MyDialog.class);
+                archive_i_wear.setAction(Costants.ACTION_ARCHIVE_WEAR);
+                archive_i_wear.putExtra(Costants.EXTRA_REMINDER, r);
+                PendingIntent pi_archive_wear = PendingIntent.getActivity(context, r.getId(), archive_i_wear, PendingIntent.FLAG_UPDATE_CURRENT);
+                wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_check, context.getString(R.string.action_archive), pi_archive_wear).build());
+            } else {
+                Intent delete_i_wear = new Intent(context, MyDialog.class);
+                delete_i_wear.setAction(Costants.ACTION_DELETE_WEAR);
+                delete_i_wear.putExtra(Costants.EXTRA_REMINDER, r);
+                PendingIntent pi_delete_wear = PendingIntent.getActivity(context, r.getId(), delete_i_wear, PendingIntent.FLAG_UPDATE_CURRENT);
+                wearableExtender.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_action_delete, context.getString(R.string.action_delete), pi_delete_wear).build());
+            }
+
         }
 
         Intent snooze_i = new Intent(context, MyDialog.class);
@@ -385,10 +404,6 @@ public class NotificationF {
             } else {
                 remoteViews.setViewVisibility(R.id.toggle_icon, View.GONE);
             }
-
-            PendingIntent pi_open_app = PendingIntent.getActivity(context, -3, new Intent(context, Main.class), PendingIntent.FLAG_UPDATE_CURRENT);
-            remoteViews.setOnClickPendingIntent(R.id.open_app, pi_open_app);
-            remoteViews.setOnClickFillInIntent(R.id.open_app, new Intent(context, Main.class));
 
             n.setContent(remoteViews);
 
