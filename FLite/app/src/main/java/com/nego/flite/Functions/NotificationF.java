@@ -86,7 +86,11 @@ public class NotificationF {
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
         if ((r.getAlarm_repeat().equals("") || r.getAlarm() == Costants.ALARM_TYPE_BLUETOOTH || r.getAlarm() == Costants.ALARM_TYPE_WIFI) && SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
-            n.setDeleteIntent(pi_delete);
+            if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, false)) {
+                n.setDeleteIntent(pi_archive);
+            } else {
+                n.setDeleteIntent(pi_delete);
+            }
         }
 
         if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_NOT_ONGOING, false)) {
@@ -238,18 +242,24 @@ public class NotificationF {
 
         // ICONS
         if (r.getPriority() == 1) {
-            n.setSmallIcon(R.drawable.ic_stat_action_bookmark_star);
+            n.setSmallIcon(R.drawable.ic_stat_toggle_star);
         } else {
-            if (!r.getAlarm_repeat().equals("")) {
-                n.setSmallIcon(R.drawable.ic_stat_action_bookmark_snoozed);
+            if (r.getDate_reminded() != 0) {
+                n.setSmallIcon(R.drawable.ic_not_flite);
             } else {
-                if (r.getAlarm() != 0) {
-                    if (r.getDate_reminded() != 0)
-                        n.setSmallIcon(R.drawable.ic_not_bookmark_check);
-                    else
-                        n.setSmallIcon(R.drawable.ic_stat_action_bookmark_snoozed);
+                if (r.getAlarm() == 0) {
+                    n.setSmallIcon(R.drawable.ic_stat_generic);
                 } else {
-                    n.setSmallIcon(R.drawable.ic_not_action_bookmark);
+                    if (!r.getAlarm_repeat().equals("")) {
+                        if (r.getAlarm() == Costants.ALARM_TYPE_WIFI)
+                            n.setSmallIcon(R.drawable.ic_stat_wifi);
+                        else if (r.getAlarm() == Costants.ALARM_TYPE_BLUETOOTH)
+                            n.setSmallIcon(R.drawable.ic_stat_bluetooth);
+                        else
+                            n.setSmallIcon(R.drawable.ic_stat_av_replay);
+                    } else {
+                        n.setSmallIcon(R.drawable.ic_stat_av_snooze);
+                    }
                 }
             }
         }
@@ -376,7 +386,7 @@ public class NotificationF {
             NotificationManager notificationManager = (NotificationManager)
                     context.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationCompat.Builder n = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.ic_stat_bookmark_plus)
+                    .setSmallIcon(R.drawable.ic_stat_flite_plus)
                     .setContentIntent(pi)
                     .setOngoing(true)
                     .setPriority(-1)

@@ -214,7 +214,7 @@ public class Utils {
             if (date_reminded == 0)
                 return context.getString(R.string.text_snoozed_to) + ": " + alarm_repeat.split(Costants.LIST_ITEM_SEPARATOR)[1];
             else
-                return context.getString(R.string.text_reminded_at) + " " + alarm_repeat;
+                return context.getString(R.string.text_reminded_at) + ": " + alarm_repeat.split(Costants.LIST_ITEM_SEPARATOR)[1];
         }
     }
 
