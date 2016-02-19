@@ -36,6 +36,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -64,6 +65,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -403,10 +405,6 @@ public class MyDialog extends AppCompatActivity {
         menu.findItem(R.id.action_reminder).setVisible(r == null || r.getDate_archived() == 0);
         menu.findItem(R.id.action_reminder).setIcon(alarm == 0 ? R.drawable.ic_action_social_notifications_dialog : R.drawable.ic_action_social_notifications_on_dialog);
 
-        // LIST
-        menu.findItem(R.id.action_list).setVisible(r == null || r.getDate_archived() == 0);
-        menu.findItem(R.id.action_list).setIcon(Utils.checkList(getContent()) ? R.drawable.ic_action_ic_playlist_remove_dialog : R.drawable.ic_action_playlist_add_check_dialog);
-
         // PRIORITY
         menu.findItem(R.id.action_priority).setVisible(r == null || r.getDate_archived() == 0);
         menu.findItem(R.id.action_priority).setIcon(priority == 0 ? R.drawable.ic_action_toggle_star_outline_dialog : R.drawable.ic_action_toggle_star_dialog);
@@ -417,13 +415,6 @@ public class MyDialog extends AppCompatActivity {
         // DELETE
         menu.findItem(R.id.action_delete).setVisible(r != null);
         menu.findItem(R.id.action_delete).setShowAsAction(r != null && r.getDate_archived() != 0 ? MenuItem.SHOW_AS_ACTION_ALWAYS : MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-        // NOTE DETAILS
-        menu.findItem(R.id.action_show_info).setVisible(r != null);
-
-        // LOCK
-        menu.findItem(R.id.action_lock).setIcon(pasw.equals("") ? R.drawable.ic_action_action_lock_dialog : R.drawable.ic_action_ic_lock_open_dialog);
-        menu.findItem(R.id.action_lock).setTitle(pasw.equals("") ? R.string.action_lock : R.string.action_unlock);
 
         // SHARE
         menu.findItem(R.id.action_share).setVisible(r!= null);
@@ -442,8 +433,6 @@ public class MyDialog extends AppCompatActivity {
             menu.getItem(5).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
             menu.getItem(6).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
             menu.getItem(7).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
-            menu.getItem(8).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
-            menu.getItem(9).getIcon().setTint(ContextCompat.getColor(this, android.R.color.white));
         }
 
         return true;
@@ -470,7 +459,7 @@ public class MyDialog extends AppCompatActivity {
                 setRemindersSnackbar();
                 break;
             case R.id.action_list:
-                switchContent();
+                showPreferences();
                 break;
             case R.id.action_priority:
                 togglePriority();
@@ -491,22 +480,11 @@ public class MyDialog extends AppCompatActivity {
                     })
                     .setNegativeButton(android.R.string.cancel, null).show();
                 break;
-            case R.id.action_lock:
-                if (pasw.equals("")) {
-                    setPasw();
-                } else {
-                    pasw = "";
-                    invalidateOptionsMenu();
-                }
-                break;
             case R.id.action_share:
                 Intent share_intent = new Intent(Intent.ACTION_SEND);
                 share_intent.putExtra(Intent.EXTRA_TEXT, r.getTitle() + "\n" + Utils.getBigContentList(MyDialog.this, r.getContent()));
                 share_intent.setType("text/plain");
                 startActivity(share_intent);
-                break;
-            case R.id.action_show_info:
-                showInfo();
                 break;
             case R.id.action_archive:
                 ReminderService.startAction(this, Costants.ACTION_ARCHIVE, r);
@@ -761,231 +739,239 @@ public class MyDialog extends AppCompatActivity {
     }
 
     public void setAttachSnackbar() {
-        final View attachView = LayoutInflater.from(this).inflate(R.layout.attach_dialog, null);
-        LinearLayout action_camera = (LinearLayout) attachView.findViewById(R.id.action_camera);
-        LinearLayout action_gallery = (LinearLayout) attachView.findViewById(R.id.action_gallery);
-        LinearLayout action_contact = (LinearLayout) attachView.findViewById(R.id.action_contact);
-        LinearLayout action_address = (LinearLayout) attachView.findViewById(R.id.action_place);
-        final LinearLayout action_voice_note = (LinearLayout) attachView.findViewById(R.id.action_voice_note);
-        ImageView replace_voice_note = (ImageView) attachView.findViewById(R.id.replace_voice_note);
+        if (snackbar_attach == null || !snackbar_attach.isShown()) {
+            final View attachView = LayoutInflater.from(this).inflate(R.layout.attach_dialog, null);
+            LinearLayout action_camera = (LinearLayout) attachView.findViewById(R.id.action_camera);
+            LinearLayout action_gallery = (LinearLayout) attachView.findViewById(R.id.action_gallery);
+            LinearLayout action_contact = (LinearLayout) attachView.findViewById(R.id.action_contact);
+            LinearLayout action_address = (LinearLayout) attachView.findViewById(R.id.action_place);
+            final LinearLayout action_voice_note = (LinearLayout) attachView.findViewById(R.id.action_voice_note);
+            ImageView replace_voice_note = (ImageView) attachView.findViewById(R.id.replace_voice_note);
 
-        snackbar_attach = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
-        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_attach.getView();
-        layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
-        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setVisibility(View.INVISIBLE);
+            snackbar_attach = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
+            Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_attach.getView();
+            layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
+            TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setVisibility(View.INVISIBLE);
 
-        attachView.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snackbar_attach.dismiss();
-            }
-        });
-
-        if (!action.equals(""))
-            attachView.findViewById(R.id.replace_contact).setVisibility(View.VISIBLE);
-        else
-            attachView.findViewById(R.id.replace_contact).setVisibility(View.GONE);
-
-        action_contact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(MyDialog.this,
-                        Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                    final Intent contact_intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
-                    contact_intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-
-                    if (!action.equals("")) {
-                        new AlertDialog.Builder(MyDialog.this)
-                                .setTitle(getResources().getString(R.string.attention))
-                                .setMessage(getResources().getString(R.string.ask_replace_contact) + "?")
-                                .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-                                        snackbar_attach.dismiss();
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, null).show();
-                    } else {
-                        startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
-                        snackbar_attach.dismiss();
-                    }
-                } else {
-                    requestPermission(Manifest.permission.READ_CONTACTS);
-                }
-            }
-        });
-
-        action_camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(MyDialog.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                        try {
-                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                            String imageFileName = "JPEG_" + timeStamp;
-                            File storageDir = Environment.getExternalStoragePublicDirectory(
-                                    Environment.DIRECTORY_PICTURES);
-                            final File image = File.createTempFile(
-                                    imageFileName,
-                                    ".jpg",
-                                    storageDir
-                            );
-                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                    Uri.fromFile(image));
-
-                            startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
-                            tmpImgNameFile = Uri.fromFile(new File(image.getAbsolutePath())).toString();
-                            snackbar_attach.dismiss();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } else {
-                    requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                }
-            }
-        });
-
-        action_gallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(MyDialog.this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    Intent getIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    getIntent.setType("image/*");
-                    final Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
-
-                    startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+            attachView.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     snackbar_attach.dismiss();
-                } else {
-                    requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
                 }
-            }
-        });
+            });
 
-        action_address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editAddress();
-                snackbar_attach.dismiss();
-            }
-        });
+            if (!action.equals(""))
+                attachView.findViewById(R.id.replace_contact).setVisibility(View.VISIBLE);
+            else
+                attachView.findViewById(R.id.replace_contact).setVisibility(View.GONE);
 
+            action_contact.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ContextCompat.checkSelfPermission(MyDialog.this,
+                            Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                        final Intent contact_intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
+                        contact_intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
 
-        replace_voice_note.setVisibility(!voice_note.equals("") ? View.VISIBLE : View.GONE);
-
-        action_voice_note.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(MyDialog.this,
-                        Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-                    if (!voice_note.equals("")) {
-                        new AlertDialog.Builder(MyDialog.this)
-                                .setTitle(getResources().getString(R.string.attention))
-                                .setMessage(getResources().getString(R.string.ask_replace_voice_note) + "?")
-                                .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MyDialog.this,
-                                                    Pair.create((View) action_voice_note, "voice_note"));
-                                            startActivityForResult(new Intent(MyDialog.this, MyAudioRecord.class), Costants.CODE_REQUEST_VOICE_NOTE, options.toBundle());
-                                        } else {
-                                            startActivityForResult(new Intent(MyDialog.this, MyAudioRecord.class), Costants.CODE_REQUEST_VOICE_NOTE);
+                        if (!action.equals("")) {
+                            new AlertDialog.Builder(MyDialog.this)
+                                    .setTitle(getResources().getString(R.string.attention))
+                                    .setMessage(getResources().getString(R.string.ask_replace_contact) + "?")
+                                    .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
+                                            snackbar_attach.dismiss();
                                         }
-                                        snackbar_attach.dismiss();
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, null).show();
+                                    })
+                                    .setNegativeButton(android.R.string.no, null).show();
+                        } else {
+                            startActivityForResult(contact_intent, Costants.CODE_REQUEST_CONTACT);
+                            snackbar_attach.dismiss();
+                        }
                     } else {
-                        startActivityForResult(new Intent(MyDialog.this, MyAudioRecord.class), Costants.CODE_REQUEST_VOICE_NOTE);
-                        snackbar_attach.dismiss();
+                        requestPermission(Manifest.permission.READ_CONTACTS);
                     }
-                } else {
-                    requestPermission(Manifest.permission.RECORD_AUDIO);
                 }
-            }
-        });
+            });
 
-        layout.addView(attachView, 0);
-        snackbar_attach.show();
+            action_camera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ContextCompat.checkSelfPermission(MyDialog.this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                            try {
+                                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                                String imageFileName = "JPEG_" + timeStamp;
+                                File storageDir = Environment.getExternalStoragePublicDirectory(
+                                        Environment.DIRECTORY_PICTURES);
+                                final File image = File.createTempFile(
+                                        imageFileName,
+                                        ".jpg",
+                                        storageDir
+                                );
+                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                        Uri.fromFile(image));
+
+                                startActivityForResult(takePictureIntent, Costants.CODE_REQUEST_CAMERA);
+                                tmpImgNameFile = Uri.fromFile(new File(image.getAbsolutePath())).toString();
+                                snackbar_attach.dismiss();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } else {
+                        requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    }
+                }
+            });
+
+            action_gallery.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ContextCompat.checkSelfPermission(MyDialog.this,
+                            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        Intent getIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        getIntent.setType("image/*");
+                        final Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.choose_img));
+
+                        startActivityForResult(chooserIntent, Costants.CODE_REQUEST_IMG);
+                        snackbar_attach.dismiss();
+                    } else {
+                        requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+                    }
+                }
+            });
+
+            action_address.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editAddress();
+                    snackbar_attach.dismiss();
+                }
+            });
+
+
+            replace_voice_note.setVisibility(!voice_note.equals("") ? View.VISIBLE : View.GONE);
+
+            action_voice_note.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ContextCompat.checkSelfPermission(MyDialog.this,
+                            Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                        if (!voice_note.equals("")) {
+                            new AlertDialog.Builder(MyDialog.this)
+                                    .setTitle(getResources().getString(R.string.attention))
+                                    .setMessage(getResources().getString(R.string.ask_replace_voice_note) + "?")
+                                    .setPositiveButton(R.string.action_replace, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MyDialog.this,
+                                                        Pair.create((View) action_voice_note, "voice_note"));
+                                                startActivityForResult(new Intent(MyDialog.this, MyAudioRecord.class), Costants.CODE_REQUEST_VOICE_NOTE, options.toBundle());
+                                            } else {
+                                                startActivityForResult(new Intent(MyDialog.this, MyAudioRecord.class), Costants.CODE_REQUEST_VOICE_NOTE);
+                                            }
+                                            snackbar_attach.dismiss();
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, null).show();
+                        } else {
+                            startActivityForResult(new Intent(MyDialog.this, MyAudioRecord.class), Costants.CODE_REQUEST_VOICE_NOTE);
+                            snackbar_attach.dismiss();
+                        }
+                    } else {
+                        requestPermission(Manifest.permission.RECORD_AUDIO);
+                    }
+                }
+            });
+
+            layout.addView(attachView, 0);
+            snackbar_attach.show();
+        } else {
+            snackbar_attach.dismiss();
+        }
     }
 
     public void setRemindersSnackbar() {
-        final View remindersView = LayoutInflater.from(this).inflate(R.layout.reminder_types_dialog, null);
-        LinearLayout action_date = (LinearLayout) remindersView.findViewById(R.id.action_date);
-        LinearLayout action_wifi = (LinearLayout) remindersView.findViewById(R.id.action_wifi);
-        LinearLayout action_bluetooth = (LinearLayout) remindersView.findViewById(R.id.action_bluetooth);
-        TextView actual_reminder = (TextView) remindersView.findViewById(R.id.actual_reminder);
-        ImageView action_remove = (ImageView) remindersView.findViewById(R.id.action_remove);
-        LinearLayout container_actual_reminder = (LinearLayout) remindersView.findViewById(R.id.container_actual_reminder);
+        if (snackbar_reminders == null || !snackbar_reminders.isShown()) {
+            final View remindersView = LayoutInflater.from(this).inflate(R.layout.reminder_types_dialog, null);
+            LinearLayout action_date = (LinearLayout) remindersView.findViewById(R.id.action_date);
+            LinearLayout action_wifi = (LinearLayout) remindersView.findViewById(R.id.action_wifi);
+            LinearLayout action_bluetooth = (LinearLayout) remindersView.findViewById(R.id.action_bluetooth);
+            TextView actual_reminder = (TextView) remindersView.findViewById(R.id.actual_reminder);
+            ImageView action_remove = (ImageView) remindersView.findViewById(R.id.action_remove);
+            CardView container_actual_reminder = (CardView) remindersView.findViewById(R.id.container_actual_reminder);
 
-        if (alarm != 0) {
-            actual_reminder.setText(Utils.getAlarm(this, alarm, alarm_repeat, 0));
-            action_remove.setOnClickListener(new View.OnClickListener() {
+            if (alarm != 0) {
+                actual_reminder.setText(Utils.getAlarm(this, alarm, alarm_repeat, 0));
+                action_remove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new AlertDialog.Builder(MyDialog.this)
+                                .setTitle(getResources().getString(R.string.attention))
+                                .setMessage(getResources().getString(R.string.ask_delete_alarm) + "?")
+                                .setPositiveButton(R.string.action_remove, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        setAlarm(0, "");
+                                        snackbar_reminders.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, null).show();
+                    }
+                });
+                container_actual_reminder.setVisibility(View.VISIBLE);
+            } else {
+                container_actual_reminder.setVisibility(View.GONE);
+            }
+
+            snackbar_reminders = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
+            Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_reminders.getView();
+            layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
+            TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setVisibility(View.INVISIBLE);
+
+            remindersView.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new AlertDialog.Builder(MyDialog.this)
-                            .setTitle(getResources().getString(R.string.attention))
-                            .setMessage(getResources().getString(R.string.ask_delete_alarm) + "?")
-                            .setPositiveButton(R.string.action_remove, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    setAlarm(0, "");
-                                    snackbar_reminders.dismiss();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.cancel, null).show();
+                    snackbar_reminders.dismiss();
                 }
             });
-            container_actual_reminder.setVisibility(View.VISIBLE);
+
+            action_date.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    snackbar_reminders.dismiss();
+                    ReminderDialog r_dialog = new ReminderDialog(MyDialog.this, alarm, alarm_repeat);
+                    r_dialog.show();
+                }
+            });
+
+            action_bluetooth.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    snackbar_reminders.dismiss();
+                    bluetoothReminder();
+                }
+            });
+
+            action_wifi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    snackbar_reminders.dismiss();
+                    wifiReminder();
+                }
+            });
+
+
+            layout.addView(remindersView, 0);
+            snackbar_reminders.show();
         } else {
-            container_actual_reminder.setVisibility(View.GONE);
+            snackbar_reminders.dismiss();
         }
-
-        snackbar_reminders = Snackbar.make(findViewById(R.id.back_to_dismiss), "", Snackbar.LENGTH_INDEFINITE);
-        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar_reminders.getView();
-        layout.setBackgroundColor(ContextCompat.getColor(this, R.color.background_material_light));
-        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setVisibility(View.INVISIBLE);
-
-        remindersView.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snackbar_reminders.dismiss();
-            }
-        });
-
-        action_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snackbar_reminders.dismiss();
-                ReminderDialog r_dialog = new ReminderDialog(MyDialog.this, alarm, alarm_repeat);
-                r_dialog.show();
-            }
-        });
-
-        action_bluetooth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snackbar_reminders.dismiss();
-                bluetoothReminder();
-            }
-        });
-
-        action_wifi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snackbar_reminders.dismiss();
-                wifiReminder();
-            }
-        });
-
-
-        layout.addView(remindersView, 0);
-        snackbar_reminders.show();
     }
 
     public void setSuggestionsSnackbar() {
@@ -1071,6 +1057,61 @@ public class MyDialog extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void showPreferences() {
+        final Dialog preferences_dialog = new Dialog(this, R.style.mDialog);
+        final View infoView = LayoutInflater.from(this).inflate(R.layout.preferences_dialog, null);
+
+        infoView.findViewById(R.id.action_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preferences_dialog.dismiss();
+            }
+        });
+
+        // INFO
+        infoView.findViewById(R.id.action_info).setVisibility(r == null ? View.GONE : View.VISIBLE);
+        infoView.findViewById(R.id.action_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showInfo();
+                preferences_dialog.dismiss();
+            }
+        });
+
+        // LOCK
+        ((TextView) infoView.findViewById(R.id.title_lock)).setText(pasw.equals("") ? R.string.action_lock : R.string.action_unlock);
+        ((ImageView) infoView.findViewById(R.id.icon_lock)).setImageResource(!pasw.equals("") ? R.drawable.ic_action_lock : R.drawable.ic_action_lock_open);
+        infoView.findViewById(R.id.action_lock).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pasw.equals("")) {
+                    setPasw();
+                } else {
+                    pasw = "";
+                    invalidateOptionsMenu();
+                }
+                preferences_dialog.dismiss();
+            }
+        });
+
+        // LIST
+        boolean l = Utils.checkList(getContent());
+        ((TextView) infoView.findViewById(R.id.title_list)).setText(l ? R.string.action_list_hide : R.string.action_list_show);
+        ((ImageView) infoView.findViewById(R.id.icon_list)).setImageResource(l ? R.drawable.ic_action_ic_playlist_remove_white_48dp : R.drawable.ic_action_ic_playlist_add_check_white_24dp);
+        infoView.findViewById(R.id.action_list).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchContent();
+                preferences_dialog.dismiss();
+            }
+        });
+
+        // COLOR
+
+        preferences_dialog.setContentView(infoView);
+        preferences_dialog.show();
     }
 
     public void showInfo() {

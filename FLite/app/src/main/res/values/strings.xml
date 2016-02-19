@@ -16,7 +16,7 @@
     <string name="reminder_deleted">Note Deleted</string>
     <string name="action_share">Share</string>
     <string name="name_unset">You</string>
-    <string name="num_items_todo">You have %1$d items to do</string>
+    <string name="num_items_todo">You have %1$s items to do</string>
     <string name="action_exit_editor">Discard</string>
 
     <string name="title_notification_add">Activate Focus Notify</string>
@@ -171,7 +171,7 @@
     <string name="text_title">Title</string>
     <string name="action_view">View</string>
     <string name="text_notes">Notes</string>
-    <string name="text_choose_attach">Choose Attach</string>
+    <string name="text_choose_attach">Choose Attachment</string>
     <string name="text_location">Location</string>
     <string name="text_choose_reminder_type">Choose Reminder Type</string>
     <string name="text_date_and_time"><![CDATA[Date & Time]]></string>
@@ -240,4 +240,7 @@
     <string name="title_archive_button_preferences">Archive Button</string>
     <string name="title_delete_to_archive">Archive instead of Delete</string>
     <string name="subtitle_delete_to_archive">Use the action archive, rather than the action delete in notifications</string>
+    <string name="text_note_icon">Icon</string>
+    <string name="text_note_color">Color</string>
+    <string name="title_note_preferences">Note Preferences</string>
 </resources>

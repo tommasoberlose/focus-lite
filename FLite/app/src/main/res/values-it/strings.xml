@@ -29,7 +29,7 @@
     <string name="focus_app">Focus</string>
     <string name="name_unset">Tu</string>
     <string name="no_items">Non ci sono elementi da completare</string>
-    <string name="num_items_todo">Ci sono %1$d elementi da completare</string>
+    <string name="num_items_todo">Ci sono %1$s elementi da completare</string>
     <string name="open_in_browser">Apri nel Browser</string>
     <string name="reminder_added">Nota Aggiunta</string>
     <string name="reminder_deleted">Nota Cancellata</string>
@@ -240,4 +240,7 @@
     <string name="title_archive_button_preferences">Pulsante Archivia</string>
     <string name="title_delete_to_archive">Archivia invece di Eliminare</string>
     <string name="subtitle_delete_to_archive">Utilizza l\'azione archivia invece dell\'azione elimina nelle notifiche</string>
+    <string name="text_note_icon">Icona</string>
+    <string name="text_note_color">Colore</string>
+    <string name="title_note_preferences">Preferenze Nota</string>
 </resources>
