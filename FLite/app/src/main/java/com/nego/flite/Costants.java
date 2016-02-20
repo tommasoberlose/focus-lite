@@ -53,6 +53,8 @@ public class Costants {
     public static final String KEY_DIALOG_ADDRESS = "KEY_DIALOG_ADDRESS";
     public static final String KEY_DIALOG_PRIORITY = "KEY_DIALOG_PRIORITY";
     public static final String KEY_DIALOG_VOICE_NOTE = "KEY_DIALOG_VOICE_NOTE";
+    public static final String KEY_DIALOG_COLOR = "KEY_DIALOG_COLOR";
+    public static final String KEY_DIALOG_ICON = "KEY_DIALOG_ICON";
 
     public static final String ACTION_HIDE_ALL = "android.intent.action.ACTION_HIDE_ALL";
     public static final String ACTION_VIEW_ALL = "android.intent.action.ACTION_VIEW_ALL";
@@ -120,4 +122,21 @@ public class Costants {
     public static final String DIRECTORY_USER = "User";
     public static final String DIRECTORY_VOICE_NOTE = "VoiceNote";
     public static final String DIRECTORY_PICTURES = "Pictures";
+
+
+    public static final String COLOR_RED = "COLOR_RED";
+    public static final String COLOR_PURPLE = "COLOR_PURPLE";
+    public static final String COLOR_DEEP_PURPLE = "COLOR_DEEP_PURPLE";
+    public static final String COLOR_INDIGO = "COLOR_INDIGO";
+    public static final String COLOR_BLUE = "COLOR_BLUE";
+    public static final String COLOR_LIGHT_BLU = "COLOR_LIGHT_BLU";
+    public static final String COLOR_TEAL = "COLOR_TEAL";
+    public static final String COLOR_GREEN = "COLOR_GREEN";
+    public static final String COLOR_LIGHT_GREEN = "COLOR_LIGHT_GREEN";
+    public static final String COLOR_YELLOW = "COLOR_YELLOW";
+    public static final String COLOR_ORANGE = "COLOR_ORANGE";
+    public static final String COLOR_DEEP_ORANGE = "COLOR_DEEP_ORANGE";
+    public static final String COLOR_GREY = "COLOR_GREY";
+    public static final String COLOR_BLUE_GREY = "COLOR_BLUE_GREY";
+    public static final String COLOR_DEFAULT = "COLOR_DEFAULT";
 }

@@ -54,7 +54,7 @@ public class NotificationF {
                 .setContentTitle(r.getTitle())
                 .setSmallIcon(R.drawable.ic_not_flite)
                 .setContentIntent(pi)
-                .setColor(ContextCompat.getColor(context, R.color.primary))
+                .setColor(ContextCompat.getColor(context, Utils.getCustomColor(r.getColor())))
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
@@ -236,7 +236,7 @@ public class NotificationF {
                 .setContentTitle(r.getTitle())
                 .setContentIntent(pi)
                 .setPriority(-1)
-                .setColor(ContextCompat.getColor(context, R.color.primary))
+                .setColor(ContextCompat.getColor(context, Utils.getCustomColor(r.getColor())))
                 .setPriority(Notification.PRIORITY_MIN)
                 .setAutoCancel(false);
 

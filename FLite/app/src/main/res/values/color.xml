@@ -49,4 +49,19 @@
     <color name="background_dark_lighter_card">#5c5f6b</color>
     <color name="background_dark_light_text_header">#8d9098</color>
 
+    <color name="color_red">#F44336</color>
+    <color name="color_purple">#9C27B0</color>
+    <color name="color_deep_purple">#673AB7</color>
+    <color name="color_indigo">#3F51B5</color>
+    <color name="color_blue">#2196F3</color>
+    <color name="color_light_blue">#03A9F4</color>
+    <color name="color_teal">#009688</color>
+    <color name="color_green">#4CAF50</color>
+    <color name="color_light_green">#8BC34A</color>
+    <color name="color_yellow">#FFEB3B</color>
+    <color name="color_orange">#FF9800</color>
+    <color name="color_deep_orange">#FF5722</color>
+    <color name="color_grey">#9E9E9E</color>
+    <color name="color_blue_grey">#607D8B</color>
+
 </resources>

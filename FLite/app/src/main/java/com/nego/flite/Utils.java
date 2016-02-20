@@ -735,4 +735,74 @@ public class Utils {
             return textHour + ore + ":" + textMin + minuti + ":" + textSec + secondi;
         }
     }
+
+    public static int getCustomColor(String s) {
+        switch (s) {
+            case Costants.COLOR_RED:
+                return R.color.color_red;
+            case Costants.COLOR_PURPLE:
+                return R.color.color_purple;
+            case Costants.COLOR_DEEP_PURPLE:
+                return R.color.color_deep_purple;
+            case Costants.COLOR_INDIGO:
+                return R.color.color_indigo;
+            case Costants.COLOR_BLUE:
+                return R.color.color_blue;
+            case Costants.COLOR_LIGHT_BLU:
+                return R.color.color_light_blue;
+            case Costants.COLOR_TEAL:
+                return R.color.color_teal;
+            case Costants.COLOR_GREEN:
+                return R.color.color_green;
+            case Costants.COLOR_LIGHT_GREEN:
+                return R.color.color_light_green;
+            case Costants.COLOR_YELLOW:
+                return R.color.color_yellow;
+            case Costants.COLOR_ORANGE:
+                return R.color.color_orange;
+            case Costants.COLOR_DEEP_ORANGE:
+                return R.color.color_deep_orange;
+            case Costants.COLOR_GREY:
+                return R.color.color_grey;
+            case Costants.COLOR_BLUE_GREY:
+                return R.color.color_blue_grey;
+            default:
+                return R.color.primary;
+        }
+    }
+
+    public static int getCustomColorBackground(String s) {
+        switch (s) {
+            case Costants.COLOR_RED:
+                return R.drawable.circle_back_red;
+            case Costants.COLOR_PURPLE:
+                return R.drawable.circle_back_purple;
+            case Costants.COLOR_DEEP_PURPLE:
+                return R.drawable.circle_back_deep_purple;
+            case Costants.COLOR_INDIGO:
+                return R.drawable.circle_back_indigo;
+            case Costants.COLOR_BLUE:
+                return R.drawable.circle_back_blue;
+            case Costants.COLOR_LIGHT_BLU:
+                return R.drawable.circle_back_light_blue;
+            case Costants.COLOR_TEAL:
+                return R.drawable.circle_back_teal;
+            case Costants.COLOR_GREEN:
+                return R.drawable.circle_back_green;
+            case Costants.COLOR_LIGHT_GREEN:
+                return R.drawable.circle_back_light_green;
+            case Costants.COLOR_YELLOW:
+                return R.drawable.circle_back_yellow;
+            case Costants.COLOR_ORANGE:
+                return R.drawable.circle_back_orange;
+            case Costants.COLOR_DEEP_ORANGE:
+                return R.drawable.circle_back_deep_orange;
+            case Costants.COLOR_GREY:
+                return R.drawable.circle_back_grey;
+            case Costants.COLOR_BLUE_GREY:
+                return R.drawable.circle_back_blue_grey;
+            default:
+                return R.drawable.circle_back_light;
+        }
+    }
 }

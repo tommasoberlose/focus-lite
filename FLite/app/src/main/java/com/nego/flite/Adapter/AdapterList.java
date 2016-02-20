@@ -159,10 +159,14 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
             if (r.getPriority() == 1) {
                 holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_starred));
             } else {
-                if (r.getAlarm() != 0 && r.getDate_reminded() == 0) {
-                    holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_primary_dark));
+                if (r.getColor().equals("")) {
+                    if (r.getAlarm() != 0 && r.getDate_reminded() == 0) {
+                        holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_primary_dark));
+                    } else {
+                        holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_light));
+                    }
                 } else {
-                    holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_back_light));
+                    holder.reminder_icon.setBackground(ContextCompat.getDrawable(mContext, Utils.getCustomColorBackground(r.getColor())));
                 }
             }
         } else {

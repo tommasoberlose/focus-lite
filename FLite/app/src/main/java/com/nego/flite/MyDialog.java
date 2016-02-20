@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -110,6 +111,7 @@ public class MyDialog extends AppCompatActivity {
     private String tmpImgNameFile = "";
     private String address = "";
     private String voice_note = "";
+    private String color = "";
 
     public EditText title;
     public EditText content;
@@ -285,6 +287,8 @@ public class MyDialog extends AppCompatActivity {
                     voice_note = r.getVoice_note();
                     setVoiceNote();
 
+                    color = r.getColor();
+
                     save_button.setAlpha(1f);
 
                     edit = true;
@@ -333,8 +337,9 @@ public class MyDialog extends AppCompatActivity {
                     setContact();
                     updateAddress(savedInstanceState.getString(Costants.KEY_DIALOG_ADDRESS));
                     setPriority(savedInstanceState.getInt(Costants.KEY_DIALOG_PRIORITY));
-                    voice_note =savedInstanceState.getString(Costants.KEY_DIALOG_VOICE_NOTE);
+                    voice_note = savedInstanceState.getString(Costants.KEY_DIALOG_VOICE_NOTE);
                     setVoiceNote();
+                    color = savedInstanceState.getString(Costants.KEY_DIALOG_COLOR);
 
                     if (savedInstanceState.getString(Costants.KEY_DIALOG_ALARM) != null)
                         setAlarm(Long.parseLong(savedInstanceState.getString(Costants.KEY_DIALOG_ALARM)), savedInstanceState.getString(Costants.KEY_DIALOG_ALARM_REPEAT));
@@ -589,6 +594,7 @@ public class MyDialog extends AppCompatActivity {
             outState.putString(Costants.KEY_DIALOG_ADDRESS, address);
             outState.putInt(Costants.KEY_DIALOG_PRIORITY, priority);
             outState.putString(Costants.KEY_DIALOG_VOICE_NOTE, voice_note);
+            outState.putString(Costants.KEY_DIALOG_VOICE_NOTE, color);
         }
     }
 
@@ -619,7 +625,7 @@ public class MyDialog extends AppCompatActivity {
         if (!edit) {
             Calendar c = Calendar.getInstance();
             long dateC = c.getTimeInMillis();
-            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, 0, 0, 0, alarm, alarm_repeat, address, priority, voice_note, "", "", "");
+            r = new Reminder(titleN, contentT, action, action_info, img, pasw, dateC, 0, 0, 0, alarm, alarm_repeat, address, priority, voice_note, "", color, "");
         } else {
             r.setTitle(titleN);
             r.setContent(contentT);
@@ -632,6 +638,7 @@ public class MyDialog extends AppCompatActivity {
             r.setAlarm_repeat(alarm_repeat);
             r.setAddress(address);
             r.setPriority(priority);
+            r.setColor(color);
             r.setVoice_note(voice_note);
         }
     }
@@ -1109,9 +1116,160 @@ public class MyDialog extends AppCompatActivity {
         });
 
         // COLOR
+        infoView.findViewById(R.id.color_icon).setBackground(ContextCompat.getDrawable(this, Utils.getCustomColorBackground(color)));
+        infoView.findViewById(R.id.action_color).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setColor();
+                preferences_dialog.dismiss();
+            }
+        });
 
         preferences_dialog.setContentView(infoView);
         preferences_dialog.show();
+    }
+
+    public void setColor() {
+        final Dialog colors_dialog = new Dialog(this, R.style.mDialog);
+        final View colorView = LayoutInflater.from(this).inflate(R.layout.color_list_dialog, null);
+
+        colorView.findViewById(R.id.color_red).setSelected(color.equals(Costants.COLOR_RED));
+        colorView.findViewById(R.id.color_red).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_RED;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_default).setSelected(color.equals(Costants.COLOR_DEFAULT) || color.equals(""));
+        colorView.findViewById(R.id.color_default).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_DEFAULT;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_purple).setSelected(color.equals(Costants.COLOR_PURPLE));
+        colorView.findViewById(R.id.color_purple).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_PURPLE;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_deep_purple).setSelected(color.equals(Costants.COLOR_DEEP_PURPLE));
+        colorView.findViewById(R.id.color_deep_purple).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_DEEP_PURPLE;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_indigo).setSelected(color.equals(Costants.COLOR_INDIGO));
+        colorView.findViewById(R.id.color_indigo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_INDIGO;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_blue).setSelected(color.equals(Costants.COLOR_BLUE));
+        colorView.findViewById(R.id.color_blue).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_BLUE;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_light_blue).setSelected(color.equals(Costants.COLOR_LIGHT_BLU));
+        colorView.findViewById(R.id.color_light_blue).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_LIGHT_BLU;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_teal).setSelected(color.equals(Costants.COLOR_TEAL));
+        colorView.findViewById(R.id.color_teal).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_TEAL;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_green).setSelected(color.equals(Costants.COLOR_GREEN));
+        colorView.findViewById(R.id.color_green).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_GREEN;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_light_green).setSelected(color.equals(Costants.COLOR_GREEN));
+        colorView.findViewById(R.id.color_light_green).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_GREEN;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_yellow).setSelected(color.equals(Costants.COLOR_YELLOW));
+        colorView.findViewById(R.id.color_yellow).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_YELLOW;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_orange).setSelected(color.equals(Costants.COLOR_ORANGE));
+        colorView.findViewById(R.id.color_orange).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_ORANGE;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_deep_orange).setSelected(color.equals(Costants.COLOR_DEEP_ORANGE));
+        colorView.findViewById(R.id.color_deep_orange).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_DEEP_ORANGE;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_grey).setSelected(color.equals(Costants.COLOR_GREY));
+        colorView.findViewById(R.id.color_grey).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_GREY;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colorView.findViewById(R.id.color_blue_grey).setSelected(color.equals(Costants.COLOR_BLUE_GREY));
+        colorView.findViewById(R.id.color_blue_grey).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Costants.COLOR_BLUE_GREY;
+                colors_dialog.dismiss();
+            }
+        });
+
+        colors_dialog.setContentView(colorView);
+        colors_dialog.show();
     }
 
     public void showInfo() {
