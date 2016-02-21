@@ -94,7 +94,6 @@ public class NotificationF {
         }
 
         if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_NOT_ONGOING, false)) {
-
             if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, false)) {
                 n.addAction(R.drawable.ic_action_check, context.getString(R.string.action_archive), pi_archive);
             } else {
@@ -226,9 +225,14 @@ public class NotificationF {
         PendingIntent pi= PendingIntent.getActivity(context, r.getId(), i, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent delete_i = new Intent(context, MyDialog.class);
-        delete_i.setAction(Costants.ACTION_ARCHIVE);
+        delete_i.setAction(Costants.ACTION_DELETE);
         delete_i.putExtra(Costants.EXTRA_REMINDER, r);
         PendingIntent pi_delete = PendingIntent.getActivity(context, r.getId(), delete_i, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent archive_i = new Intent(context, MyDialog.class);
+        archive_i.setAction(Costants.ACTION_ARCHIVE);
+        archive_i.putExtra(Costants.EXTRA_REMINDER, r);
+        PendingIntent pi_archive = PendingIntent.getActivity(context, r.getId(), archive_i, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -282,18 +286,26 @@ public class NotificationF {
         }
 
         SharedPreferences SP = context.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
-        if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
-            n.setDeleteIntent(pi_delete);
-        }
 
         if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_NOT_ONGOING, false)) {
-            n.addAction(R.drawable.ic_action_check, context.getString(R.string.action_archive), pi_delete);
+            if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, true)) {
+                n.addAction(R.drawable.ic_action_check, context.getString(R.string.action_archive), pi_archive);
+            } else {
+                n.addAction(R.drawable.ic_action_delete, context.getString(R.string.action_delete), pi_delete);
+            }
         }
 
         if (SP.getBoolean(Costants.PREFERENCE_ONGOING_NOTIFICATIONS, true)) {
             n.setOngoing(true);
         } else {
             n.setOngoing(false);
+            if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE, true)) {
+                if (SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, true)) {
+                    n.setDeleteIntent(pi_archive);
+                } else {
+                    n.setDeleteIntent(pi_delete);
+                }
+            }
         }
 
         if (!r.getImg().equals("")) {

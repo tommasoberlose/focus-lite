@@ -145,70 +145,12 @@ public class Main extends AppCompatActivity {
         findViewById(R.id.action_settings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View container = findViewById(R.id.container_menu_settings);
-                if (container.getVisibility() == View.VISIBLE) {
-                    Utils.collapse(container);
-                } else {
-                    Utils.expand(container);
-                }
-                findViewById(R.id.arrow_settings).animate().rotation(findViewById(R.id.arrow_settings).getRotation() + 180).start();
-            }
-        });
-
-        findViewById(R.id.section_notification_settings).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 Intent i = new Intent(Main.this, Settings.class);
                 i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_NOTIFICATION_SETTINGS);
-                drawer.closeDrawer(GravityCompat.START);
                 startActivityForResult(i, Costants.CODE_REQUEST_SETTINGS);
-            }
-        });
-
-        findViewById(R.id.section_alarm_settings).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Main.this, Settings.class);
-                i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_ALARM_SETTINGS);
-                drawer.closeDrawer(GravityCompat.START);
-                startActivityForResult(i, Costants.CODE_REQUEST_SETTINGS);
-            }
-        });
-
-        findViewById(R.id.section_style_settings).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Main.this, Settings.class);
-                i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_STYLE_SETTINGS);
-                drawer.closeDrawer(GravityCompat.START);
-                startActivityForResult(i, Costants.CODE_REQUEST_SETTINGS);
-            }
-        });
-
-        findViewById(R.id.section_application_settings).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Main.this, Settings.class);
-                i.putExtra(Costants.SECTION_SETTINGS, Costants.SECTION_APPLICATION_SETTINGS);
-                drawer.closeDrawer(GravityCompat.START);
-                startActivityForResult(i, Costants.CODE_REQUEST_SETTINGS);
-            }
-        });
-
-        // FEEDBACK AND HELP
-
-        findViewById(R.id.action_feedback).setVisibility(View.GONE);
-        /* TODO HELP
-
-        findViewById(R.id.action_feedback).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
                 drawer.closeDrawer(GravityCompat.START);
             }
         });
-
-        */
 
         findViewById(R.id.action_about).setOnClickListener(new View.OnClickListener() {
             @Override

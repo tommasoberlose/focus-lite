@@ -145,6 +145,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:id="@+id/line_info_note"
+                android:orientation="horizontal"
                 android:background="@color/back_selected_item"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"/>

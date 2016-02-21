@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,25 +38,66 @@ public class Settings extends AppCompatActivity {
     private int selected_new_ringtone;
 
     private SharedPreferences SP;
-    private Toolbar toolbar;
 
     private LinearLayout section_notification;
     private LinearLayout section_alarm;
     private LinearLayout section_style;
     private LinearLayout section_application;
 
+    private ImageView section_notification_icon;
+    private ImageView section_alarm_icon;
+    private ImageView section_style_icon;
+    private ImageView section_application_icon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page_settings);
-        toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         section_notification = (LinearLayout) findViewById(R.id.section_notification_settings);
         section_alarm = (LinearLayout) findViewById(R.id.section_alarm_settings);
         section_style = (LinearLayout) findViewById(R.id.section_style_settings);
         section_application = (LinearLayout) findViewById(R.id.section_application_settings);
+
+        section_notification_icon = (ImageView) findViewById(R.id.section_notification_settings_icon);
+        section_alarm_icon = (ImageView) findViewById(R.id.section_alarm_settings_icon);
+        section_style_icon = (ImageView) findViewById(R.id.section_style_settings_icon);
+        section_application_icon = (ImageView) findViewById(R.id.section_application_settings_icon);
+
+        findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        section_notification_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSection(Costants.SECTION_NOTIFICATION_SETTINGS);
+            }
+        });
+
+        section_alarm_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSection(Costants.SECTION_ALARM_SETTINGS);
+            }
+        });
+
+        section_style_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSection(Costants.SECTION_STYLE_SETTINGS);
+            }
+        });
+
+        section_application_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSection(Costants.SECTION_APPLICATION_SETTINGS);
+            }
+        });
 
         if (getIntent() != null && getIntent().getStringExtra(Costants.SECTION_SETTINGS) != null)
             section = getIntent().getStringExtra(Costants.SECTION_SETTINGS);
@@ -391,7 +433,7 @@ public class Settings extends AppCompatActivity {
                 selected_not_pref = actual_not_pref;
                 new AlertDialog.Builder(Settings.this, R.style.mDialog)
                         .setTitle(getString(R.string.title_notification_preference))
-                        .setMultiChoiceItems(new String[]{getString(R.string.title_preferences_share), !SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, false) ? getString(R.string.title_delete_button_preferences) : getString(R.string.title_archive_button_preferences), !SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, false) ? getString(R.string.title_delete_button_not_ongoing_preferences) : getString(R.string.title_archive_button_not_ongoing_preferences), getString(R.string.title_preferences_ongoing)},
+                        .setMultiChoiceItems(new String[]{getString(R.string.title_preferences_share), !SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, false) ? getString(R.string.title_delete_button_not_ongoing_preferences) : getString(R.string.title_archive_button_preferences), !SP.getBoolean(Costants.PREFERENCE_BUTTON_DELETE_TO_ARCHIVE, false) ? getString(R.string.title_delete_button_preferences) : getString(R.string.title_archive_button_not_ongoing_preferences), getString(R.string.title_preferences_ongoing)},
                                 actual_not_pref, new DialogInterface.OnMultiChoiceClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -569,35 +611,15 @@ public class Settings extends AppCompatActivity {
     }
 
     public void setSection(String section) {
-        switch (section) {
-            case Costants.SECTION_ALARM_SETTINGS:
-                setTitle(R.string.title_section_alarm);
-                section_notification.setVisibility(View.GONE);
-                section_alarm.setVisibility(View.VISIBLE);
-                section_style.setVisibility(View.GONE);
-                section_application.setVisibility(View.GONE);
-                break;
-            case Costants.SECTION_STYLE_SETTINGS:
-                setTitle(R.string.title_customize_settings);
-                section_notification.setVisibility(View.GONE);
-                section_alarm.setVisibility(View.GONE);
-                section_style.setVisibility(View.VISIBLE);
-                section_application.setVisibility(View.GONE);
-                break;
-            case Costants.SECTION_APPLICATION_SETTINGS:
-                setTitle(R.string.title_app_settings);
-                section_notification.setVisibility(View.GONE);
-                section_alarm.setVisibility(View.GONE);
-                section_style.setVisibility(View.GONE);
-                section_application.setVisibility(View.VISIBLE);
-                break;
-            default:
-                setTitle(R.string.title_notification_settings);
-                section_notification.setVisibility(View.VISIBLE);
-                section_alarm.setVisibility(View.GONE);
-                section_style.setVisibility(View.GONE);
-                section_application.setVisibility(View.GONE);
-        }
+        section_notification.setVisibility(section.equals(Costants.SECTION_NOTIFICATION_SETTINGS) ? View.VISIBLE : View.GONE);
+        section_alarm.setVisibility(section.equals(Costants.SECTION_ALARM_SETTINGS) ? View.VISIBLE : View.GONE);
+        section_style.setVisibility(section.equals(Costants.SECTION_STYLE_SETTINGS) ? View.VISIBLE : View.GONE);
+        section_application.setVisibility(section.equals(Costants.SECTION_APPLICATION_SETTINGS) ? View.VISIBLE : View.GONE);
+
+        section_notification_icon.setAlpha(section.equals(Costants.SECTION_NOTIFICATION_SETTINGS) ? 1f : 0.5f);
+        section_alarm_icon.setAlpha(section.equals(Costants.SECTION_ALARM_SETTINGS) ? 1f : 0.5f);
+        section_style_icon.setAlpha(section.equals(Costants.SECTION_STYLE_SETTINGS) ? 1f : 0.5f);
+        section_application_icon.setAlpha(section.equals(Costants.SECTION_APPLICATION_SETTINGS) ? 1f : 0.5f);
     }
 
     @Override

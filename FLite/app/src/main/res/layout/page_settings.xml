@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_awesome_toolbar"
         android:layout_height="?attr/actionBarSize"
@@ -14,6 +15,84 @@
         android:background="@color/primary"
         android:gravity="center_horizontal"
         android:elevation="2dp"/>
+        -->
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        app:cardElevation="1dp"
+        android:background="@color/back_selected_item"
+        app:cardBackgroundColor="@color/back_selected_item"
+        app:cardPreventCornerOverlap="true"
+        app:cardCornerRadius="0dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:id="@+id/section_notification_settings_icon"
+                    android:src="@drawable/section_notification_icon"
+                    android:tint="@color/secondary_text"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"/>
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:id="@+id/section_alarm_settings_icon"
+                    android:src="@drawable/section_alarm_icon"
+                    android:tint="@color/secondary_text"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"/>
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:id="@+id/section_style_settings_icon"
+                    android:src="@drawable/section_style_icon"
+                    android:tint="@color/secondary_text"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"/>
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:id="@+id/section_application_settings_icon"
+                    android:src="@drawable/section_application_icon"
+                    android:tint="@color/secondary_text"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"/>
+            </LinearLayout>
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:id="@+id/action_close"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/ic_action_navigation_close"
+                android:tint="@color/secondary_text"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,7 +107,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/section_notification_settings"
                 android:orientation="vertical">
-<!--
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -38,13 +116,11 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/background_dark_lighter_card"
+                        android:textColor="@color/primary"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/title_notification_settings"
                         android:textAppearance="?android:attr/textAppearanceSmall"/>
                 </RelativeLayout>
--->
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -281,6 +357,21 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="16dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/title_section_alarm"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:foreground="?attr/selectableItemBackground"
                     android:clickable="true"
@@ -406,6 +497,21 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="16dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/title_customize_settings"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:foreground="?attr/selectableItemBackground"
                     android:clickable="true"
@@ -460,6 +566,21 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/section_application_settings"
                 android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="16dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/title_app_settings"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"

@@ -594,7 +594,7 @@ public class MyDialog extends AppCompatActivity {
             outState.putString(Costants.KEY_DIALOG_ADDRESS, address);
             outState.putInt(Costants.KEY_DIALOG_PRIORITY, priority);
             outState.putString(Costants.KEY_DIALOG_VOICE_NOTE, voice_note);
-            outState.putString(Costants.KEY_DIALOG_VOICE_NOTE, color);
+            outState.putString(Costants.KEY_DIALOG_COLOR, color);
         }
     }
 
@@ -1078,6 +1078,7 @@ public class MyDialog extends AppCompatActivity {
         });
 
         // INFO
+        infoView.findViewById(R.id.line_info_note).setVisibility(r == null ? View.GONE : View.VISIBLE);
         infoView.findViewById(R.id.action_info).setVisibility(r == null ? View.GONE : View.VISIBLE);
         infoView.findViewById(R.id.action_info).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1111,12 +1112,15 @@ public class MyDialog extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 switchContent();
-                preferences_dialog.dismiss();
+                boolean l = Utils.checkList(getContent());
+                ((TextView) infoView.findViewById(R.id.title_list)).setText(l ? R.string.action_list_hide : R.string.action_list_show);
+                ((ImageView) infoView.findViewById(R.id.icon_list)).setImageResource(l ? R.drawable.ic_action_ic_playlist_remove_white_48dp : R.drawable.ic_action_ic_playlist_add_check_white_24dp);
             }
         });
 
         // COLOR
-        infoView.findViewById(R.id.color_icon).setBackground(ContextCompat.getDrawable(this, Utils.getCustomColorBackground(color)));
+        final View colorCircle = infoView.findViewById(R.id.color_icon);
+        colorCircle.setBackground(ContextCompat.getDrawable(this, Utils.getCustomColorBackground(color)));
         infoView.findViewById(R.id.action_color).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1269,6 +1273,12 @@ public class MyDialog extends AppCompatActivity {
         });
 
         colors_dialog.setContentView(colorView);
+        colors_dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                showPreferences();
+            }
+        });
         colors_dialog.show();
     }
 

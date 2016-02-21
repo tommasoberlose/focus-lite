@@ -298,7 +298,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="48dp"
@@ -316,9 +317,8 @@
                                 android:alpha="0.54"
                                 android:src="@drawable/ic_action_settings"/>
                             <TextView
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.8"
                                 android:textColor="@android:color/black"
                                 android:alpha="0.84"
                                 android:text="@string/title_activity_settings"
@@ -326,143 +326,7 @@
                                 android:fontFamily="sans-serif-medium"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp" />
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="16dp"
-                                android:tint="@android:color/black"
-                                android:alpha="0.54"
-                                android:id="@+id/arrow_settings"
-                                android:src="@drawable/ic_action_hardware_keyboard_arrow_down"/>
                         </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/container_menu_settings"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:id="@+id/section_notification_settings"
-                            android:background="?attr/selectableItemBackground">
-                            <LinearLayout
-                                android:layout_width="8dp"
-                                android:layout_height="8dp"
-                                android:background="@drawable/circle_back_light"
-                                android:backgroundTint="@android:color/black"
-                                android:alpha="0.30"
-                                android:layout_marginStart="28dp"
-                                android:layout_marginEnd="20dp"
-                                android:visibility="invisible" />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="@android:color/black"
-                                android:alpha="0.84"
-                                android:text="@string/title_menu_notifications"
-                                android:textSize="15sp"
-                                android:fontFamily="sans-serif-medium"
-                                android:layout_marginLeft="16dp"
-                                android:layout_marginRight="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:id="@+id/section_alarm_settings"
-                            android:background="?attr/selectableItemBackground">
-                            <LinearLayout
-                                android:layout_width="8dp"
-                                android:layout_height="8dp"
-                                android:background="@drawable/circle_back_light"
-                                android:backgroundTint="@android:color/black"
-                                android:alpha="0.30"
-                                android:layout_marginStart="28dp"
-                                android:layout_marginEnd="20dp"
-                                android:visibility="invisible" />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="@android:color/black"
-                                android:alpha="0.84"
-                                android:text="@string/title_menu_alarms"
-                                android:textSize="15sp"
-                                android:fontFamily="sans-serif-medium"
-                                android:layout_marginLeft="16dp"
-                                android:layout_marginRight="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:id="@+id/section_style_settings"
-                            android:background="?attr/selectableItemBackground">
-                            <LinearLayout
-                                android:layout_width="8dp"
-                                android:layout_height="8dp"
-                                android:background="@drawable/circle_back_light"
-                                android:backgroundTint="@android:color/black"
-                                android:alpha="0.30"
-                                android:layout_marginStart="28dp"
-                                android:layout_marginEnd="20dp"
-                                android:visibility="invisible" />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="@android:color/black"
-                                android:alpha="0.84"
-                                android:text="@string/title_menu_style"
-                                android:textSize="15sp"
-                                android:fontFamily="sans-serif-medium"
-                                android:layout_marginLeft="16dp"
-                                android:layout_marginRight="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:id="@+id/section_application_settings"
-                            android:background="?attr/selectableItemBackground">
-                            <LinearLayout
-                                android:layout_width="8dp"
-                                android:layout_height="8dp"
-                                android:background="@drawable/circle_back_light"
-                                android:backgroundTint="@android:color/black"
-                                android:alpha="0.30"
-                                android:visibility="invisible"
-                                android:layout_marginStart="28dp"
-                                android:layout_marginEnd="20dp"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="15sp"
-                                android:fontFamily="sans-serif-medium"
-                                android:textColor="@android:color/black"
-                                android:alpha="0.84"
-                                android:text="@string/title_menu_app"
-                                android:layout_marginLeft="16dp"
-                                android:layout_marginRight="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/back_selected_item"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginBottom="16dp">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="48dp"
@@ -486,32 +350,6 @@
                                 android:textColor="@android:color/black"
                                 android:alpha="0.84"
                                 android:text="@string/title_tab_developer"
-                                android:layout_marginLeft="16dp"
-                                android:layout_marginRight="16dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:id="@+id/action_feedback"
-                            android:background="?attr/selectableItemBackground">
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="8dp"
-                                android:tint="@android:color/black"
-                                android:alpha="0.54"
-                                android:src="@drawable/ic_action_feedback"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="15sp"
-                                android:fontFamily="sans-serif-medium"
-                                android:textColor="@android:color/black"
-                                android:alpha="0.84"
-                                android:text="@string/help_feedback"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp" />
                         </LinearLayout>
