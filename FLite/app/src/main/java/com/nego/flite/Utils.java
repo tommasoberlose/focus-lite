@@ -531,9 +531,12 @@ public class Utils {
             String text = "";
             c = c.replace(Costants.LIST_COSTANT, "");
             String[] content_split = c.split(Costants.LIST_ITEM_SEPARATOR);
+            String separator = "";
             for (String i : content_split) {
-                if (i.split(Costants.LIST_ORDER_SEPARATOR, -1)[0].equals("1"))
-                    text += i.split(Costants.LIST_ORDER_SEPARATOR, -1)[1];
+                if (i.split(Costants.LIST_ORDER_SEPARATOR, -1)[0].equals("0")) {
+                    text += separator + i.split(Costants.LIST_ORDER_SEPARATOR, -1)[1];
+                    separator = "\n";
+                }
             }
             return text.trim();
         }

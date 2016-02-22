@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nego.flite.R;
-public class CardFragment extends Fragment {
+public class SettingsFragment extends Fragment {
 
-    public CardFragment() {
+    public SettingsFragment() {
         super();
     }
 
@@ -25,13 +25,11 @@ public class CardFragment extends Fragment {
         return view;
     }
 
-    public static CardFragment newInstance(String title, String subtitle, int img) {
+    public static SettingsFragment newInstance(String section) {
 
         Bundle args = new Bundle();
-        args.putString("TITLE", title);
-        args.putString("SUBTITLE", subtitle);
-        args.putInt("IMG", img);
-        CardFragment fragment = new CardFragment();
+        args.putString("SECTION", section);
+        SettingsFragment fragment = new SettingsFragment();
         fragment.setArguments(args);
         return fragment;
     }

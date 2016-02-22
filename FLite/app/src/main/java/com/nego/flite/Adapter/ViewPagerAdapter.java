@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.nego.flite.Pages.CardFragment;
+import com.nego.flite.Pages.SettingsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return mFragmentList.size();
     }
-    public void addFrag(String title, String subtitle, int img) {
-        mFragmentList.add(CardFragment.newInstance(title, subtitle, img));
+    public void addFrag(String section) {
+        mFragmentList.add(SettingsFragment.newInstance(section));
     }
 }

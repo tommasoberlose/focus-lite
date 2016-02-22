@@ -2,10 +2,8 @@ package com.nego.flite.Adapter;
 
         import android.support.v4.app.Fragment;
         import android.support.v4.app.FragmentManager;
-        import android.support.v4.app.FragmentPagerAdapter;
         import android.support.v4.app.FragmentStatePagerAdapter;
 
-        import com.nego.flite.Pages.CardFragment;
         import com.nego.flite.Pages.ImgFragment;
 
         import java.util.ArrayList;
