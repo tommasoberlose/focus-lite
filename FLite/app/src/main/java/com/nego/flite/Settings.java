@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.os.Bundle;
@@ -616,10 +617,10 @@ public class Settings extends AppCompatActivity {
         section_style.setVisibility(section.equals(Costants.SECTION_STYLE_SETTINGS) ? View.VISIBLE : View.GONE);
         section_application.setVisibility(section.equals(Costants.SECTION_APPLICATION_SETTINGS) ? View.VISIBLE : View.GONE);
 
-        section_notification_icon.setAlpha(section.equals(Costants.SECTION_NOTIFICATION_SETTINGS) ? 1f : 0.5f);
-        section_alarm_icon.setAlpha(section.equals(Costants.SECTION_ALARM_SETTINGS) ? 1f : 0.5f);
-        section_style_icon.setAlpha(section.equals(Costants.SECTION_STYLE_SETTINGS) ? 1f : 0.5f);
-        section_application_icon.setAlpha(section.equals(Costants.SECTION_APPLICATION_SETTINGS) ? 1f : 0.5f);
+        section_notification_icon.setColorFilter(ContextCompat.getColor(this, section.equals(Costants.SECTION_NOTIFICATION_SETTINGS) ? R.color.primary : R.color.secondary_text));
+        section_alarm_icon.setColorFilter(ContextCompat.getColor(this, section.equals(Costants.SECTION_ALARM_SETTINGS) ? R.color.primary : R.color.secondary_text));
+        section_style_icon.setColorFilter(ContextCompat.getColor(this, section.equals(Costants.SECTION_STYLE_SETTINGS) ? R.color.primary : R.color.secondary_text));
+        section_application_icon.setColorFilter(ContextCompat.getColor(this, section.equals(Costants.SECTION_APPLICATION_SETTINGS) ? R.color.primary : R.color.secondary_text));
     }
 
     @Override

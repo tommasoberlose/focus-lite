@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -84,6 +85,7 @@ public class WidgetViewsFactory implements
     @Override
     public RemoteViews getViewAt(int position) {
         if (position < mWidgetItems.size()) {
+            Reminder r = mWidgetItems.get(position);
             SharedPreferences SP = mContext.getSharedPreferences(Costants.PREFERENCES_COSTANT, Context.MODE_PRIVATE);
             RemoteViews rv;
 
@@ -95,33 +97,52 @@ public class WidgetViewsFactory implements
 
             Intent i = new Intent();
             Bundle extras = new Bundle();
-            extras.putParcelable(Costants.EXTRA_REMINDER, mWidgetItems.get(position));
+            extras.putParcelable(Costants.EXTRA_REMINDER, r);
             i.putExtras(extras);
             i.setAction(Costants.ACTION_EDIT_ITEM);
             rv.setOnClickFillInIntent(R.id.row, i);
 
-            rv.setTextViewText(R.id.title, mWidgetItems.get(position).getTitle());
+            rv.setTextViewText(R.id.title, r.getTitle());
 
-            if (mWidgetItems.get(position).getPasw().equals("")) {
-                if (mWidgetItems.get(position).getContent().equals("")) {
-                    if (mWidgetItems.get(position).getAlarm() == 0) {
-                        rv.setTextViewText(R.id.subtitle, Utils.getDate(mContext, mWidgetItems.get(position).getDate_create()));
+            if (r.getPasw().equals("")) {
+                if (r.getContent().equals("")) {
+                    if (r.getAlarm() == 0) {
+                        rv.setTextViewText(R.id.subtitle, Utils.getDate(mContext, r.getDate_create()));
                     } else {
-                        rv.setTextViewText(R.id.subtitle, Utils.getAlarm(mContext, mWidgetItems.get(position).getAlarm(), mWidgetItems.get(position).getAlarm_repeat(), mWidgetItems.get(position).getDate_reminded()));
+                        rv.setTextViewText(R.id.subtitle, Utils.getAlarm(mContext, r.getAlarm(), r.getAlarm_repeat(), r.getDate_reminded()));
                     }
                 } else {
-                    rv.setTextViewText(R.id.subtitle, Utils.getContentList(mContext, mWidgetItems.get(position).getContent()));
+                    rv.setTextViewText(R.id.subtitle, Utils.getContentList(mContext, r.getContent()));
                 }
             } else {
                 rv.setTextViewText(R.id.subtitle, mContext.getString(R.string.text_locked_note));
             }
 
-            if (mWidgetItems.get(position).getPasw().equals("")) {
+            // Icon
+            if (r.getDate_archived() == 0) {
+                if (r.getPriority() == 1) {
+                    rv.setImageViewResource(R.id.reminder_icon, R.drawable.circle_back_starred);
+                } else {
+                    if (r.getColor().equals("")) {
+                        if (r.getAlarm() != 0 && r.getDate_reminded() == 0) {
+                            rv.setImageViewResource(R.id.reminder_icon, R.drawable.circle_back_primary_dark);
+                        } else {
+                            rv.setImageViewResource(R.id.reminder_icon, R.drawable.circle_back_light);
+                        }
+                    } else {
+                        rv.setImageViewResource(R.id.reminder_icon, Utils.getCustomColorBackground(r.getColor()));
+                    }
+                }
+            } else {
+                rv.setImageViewResource(R.id.reminder_icon, R.drawable.circle_back_grey);
+            }
+
+            if (r.getPasw().equals("")) {
 
                 boolean link_browser;
-                String url = Utils.checkURL(mWidgetItems.get(position).getTitle());
+                String url = Utils.checkURL(r.getTitle());
                 if (url.equals(""))
-                    url = Utils.checkURL(Utils.getBigContentList(mContext, mWidgetItems.get(position).getContent()));
+                    url = Utils.checkURL(Utils.getBigContentList(mContext, r.getContent()));
                 if (!url.equals("")) {
                     rv.setViewVisibility(R.id.action_browser, View.VISIBLE);
                     Intent url_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, url);
@@ -133,29 +154,29 @@ public class WidgetViewsFactory implements
                 }
 
                 boolean contact;
-                if (!mWidgetItems.get(position).getAction_info().equals("")) {
+                if (!r.getAction_info().equals("")) {
                     rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
-                    switch (mWidgetItems.get(position).getAction_type()) {
+                    switch (r.getAction_type()) {
                         case Costants.ACTION_CALL:
-                            Intent call_intent = new Intent(Intent.ACTION_DIAL).putExtra(Costants.EXTRA_ACTION_TYPE, "tel:" + mWidgetItems.get(position).getAction_info());
+                            Intent call_intent = new Intent(Intent.ACTION_DIAL).putExtra(Costants.EXTRA_ACTION_TYPE, "tel:" + r.getAction_info());
                             rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
                             rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_call);
                             rv.setOnClickFillInIntent(R.id.action_contact, call_intent);
                             break;
                         case Costants.ACTION_SMS:
-                            Intent sms_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "sms:" + mWidgetItems.get(position).getAction_info());
+                            Intent sms_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "sms:" + r.getAction_info());
                             rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
                             rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_messenger);
                             rv.setOnClickFillInIntent(R.id.action_contact, sms_intent);
                             break;
                         case Costants.ACTION_MAIL:
-                            Intent mail_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "mailto:" + mWidgetItems.get(position).getAction_info());
+                            Intent mail_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "mailto:" + r.getAction_info());
                             rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
                             rv.setImageViewResource(R.id.action_contact, R.drawable.ic_action_communication_email);
                             rv.setOnClickFillInIntent(R.id.action_contact, mail_intent);
                             break;
                         case Costants.ACTION_CONTACT:
-                            Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(mWidgetItems.get(position).getAction_info()));
+                            Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(r.getAction_info()));
                             Intent contact_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, uri.toString());
                             rv.setViewVisibility(R.id.action_contact, View.VISIBLE);
                             rv.setImageViewResource(R.id.action_contact, R.drawable.ic_person);
@@ -169,10 +190,10 @@ public class WidgetViewsFactory implements
                 }
 
                 boolean attach;
-                if (!mWidgetItems.get(position).getImg().equals("")) {
+                if (!r.getImg().equals("")) {
                     rv.setViewVisibility(R.id.action_attach, View.VISIBLE);
 
-                    String[] imgs = mWidgetItems.get(position).getImg().split(Costants.LIST_IMG_SEPARATOR);
+                    String[] imgs = r.getImg().split(Costants.LIST_IMG_SEPARATOR);
                     if (imgs.length == 1) {
                         Intent img_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, imgs[0]);
                         img_intent.putExtra(Costants.EXTRA_IS_PHOTO, true);
@@ -187,9 +208,9 @@ public class WidgetViewsFactory implements
                 }
 
                 boolean address;
-                if (!mWidgetItems.get(position).getAddress().equals("")) {
+                if (!r.getAddress().equals("")) {
                     rv.setViewVisibility(R.id.action_address, View.VISIBLE);
-                    Intent address_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "google.navigation:q=" + mWidgetItems.get(position).getAddress());
+                    Intent address_intent = new Intent(Intent.ACTION_VIEW).putExtra(Costants.EXTRA_ACTION_TYPE, "google.navigation:q=" + r.getAddress());
                     rv.setOnClickFillInIntent(R.id.action_address, address_intent);
                     address = true;
                 } else {

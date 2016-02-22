@@ -11,6 +11,14 @@
         android:id="@+id/row"
         android:clickable="true"
         android:background="@android:color/white">
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:id="@+id/reminder_icon"
+            android:orientation="horizontal"
+            android:layout_centerVertical="true"
+            android:src="@drawable/circle_back_light"
+            android:layout_marginStart="16dp" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -19,7 +27,7 @@
             android:textColor="@color/primary_text"
             android:textIsSelectable="false"
             android:textAppearance="?android:attr/textAppearanceListItem"
-            android:layout_alignParentStart="true"
+            android:layout_toEndOf="@+id/reminder_icon"
             android:layout_toStartOf="@+id/container_options"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp" />
@@ -27,8 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/title"
+            android:layout_toEndOf="@+id/reminder_icon"
             android:layout_toStartOf="@+id/container_options"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp">

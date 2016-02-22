@@ -55,6 +55,7 @@
                     android:id="@+id/section_notification_settings_icon"
                     android:src="@drawable/section_notification_icon"
                     android:tint="@color/secondary_text"
+                    android:contentDescription="@string/title_notification_settings"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"/>
                 <ImageView
@@ -66,6 +67,7 @@
                     android:id="@+id/section_alarm_settings_icon"
                     android:src="@drawable/section_alarm_icon"
                     android:tint="@color/secondary_text"
+                    android:contentDescription="@string/title_section_alarm"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"/>
                 <ImageView
@@ -77,6 +79,7 @@
                     android:id="@+id/section_style_settings_icon"
                     android:src="@drawable/section_style_icon"
                     android:tint="@color/secondary_text"
+                    android:contentDescription="@string/title_customize_settings"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"/>
                 <ImageView
@@ -88,6 +91,7 @@
                     android:id="@+id/section_application_settings_icon"
                     android:src="@drawable/section_application_icon"
                     android:tint="@color/secondary_text"
+                    android:contentDescription="@string/title_app_settings"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"/>
             </LinearLayout>
