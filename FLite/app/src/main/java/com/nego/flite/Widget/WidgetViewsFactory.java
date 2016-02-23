@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -121,20 +123,25 @@ public class WidgetViewsFactory implements
             // Icon
             if (r.getDate_archived() == 0) {
                 if (r.getPriority() == 1) {
-                    rv.setImageViewResource(R.id.reminder_icon, R.drawable.circle_back_starred);
+                    rv.setInt(R.id.reminder_icon, "setBackgroundResource",
+                            R.drawable.circle_back_starred);
                 } else {
                     if (r.getColor().equals("")) {
                         if (r.getAlarm() != 0 && r.getDate_reminded() == 0) {
-                            rv.setImageViewResource(R.id.reminder_icon, R.drawable.circle_back_primary_dark);
+                            rv.setInt(R.id.reminder_icon, "setBackgroundResource",
+                                    R.drawable.circle_back_primary_dark);
                         } else {
-                            rv.setImageViewResource(R.id.reminder_icon, R.drawable.circle_back_light);
+                            rv.setInt(R.id.reminder_icon, "setBackgroundResource",
+                                    R.drawable.circle_back_light);
                         }
                     } else {
-                        rv.setImageViewResource(R.id.reminder_icon, Utils.getCustomColorBackground(r.getColor()));
+                        rv.setInt(R.id.reminder_icon, "setBackgroundResource",
+                                Utils.getCustomColorBackground(r.getColor()));
                     }
                 }
             } else {
-                rv.setImageViewResource(R.id.reminder_icon, R.drawable.circle_back_grey);
+                rv.setInt(R.id.reminder_icon, "setBackgroundResource",
+                        R.drawable.circle_back_grey);
             }
 
             if (r.getPasw().equals("")) {
@@ -230,12 +237,6 @@ public class WidgetViewsFactory implements
                 rv.setViewVisibility(R.id.action_browser, View.GONE);
                 rv.setViewVisibility(R.id.action_address, View.GONE);
                 rv.setViewVisibility(R.id.action_password, View.VISIBLE);
-            }
-
-            if (mWidgetItems.get(position).getPriority() == 1) {
-                rv.setViewVisibility(R.id.action_priority, View.VISIBLE);
-            } else {
-                rv.setViewVisibility(R.id.action_priority, View.GONE);
             }
             
             return rv;

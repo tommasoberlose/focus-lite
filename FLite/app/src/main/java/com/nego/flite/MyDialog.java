@@ -271,7 +271,7 @@ public class MyDialog extends AppCompatActivity {
                         finish();
                     }
 
-                    NotificationF.CancelNotification(MyDialog.this, "" + r.getId() + Costants.PLUS_NOTIFICATION);
+                    NotificationF.CancelNotification(MyDialog.this, "" + (r.getId() + Costants.PLUS_NOTIFICATION));
 
                     pasw = r.getPasw();
                     controlPasw();

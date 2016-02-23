@@ -9,7 +9,7 @@ android {
         applicationId "com.nego.flite"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 38
+        versionCode 40
         versionName "1.2"
     }
     buildTypes {

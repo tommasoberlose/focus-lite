@@ -346,7 +346,7 @@ public class Utils {
         if (r.getAlarm() != 0) {
             if (r.getAlarm_repeat().equals("")) {
                 if (isOldDate(r.getAlarm()))
-                    return r.getDate_reminded() == 0;
+                    return (r.getDate_reminded() == 0);
             } else {
                 // ho perso qualche ripetizione?
                 Calendar c = Calendar.getInstance();

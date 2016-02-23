@@ -56,7 +56,7 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
 
         public View top_divider;
         public View bottom_divider;
-        public CardView card_reminder;
+        public LinearLayout card_reminder;
         public TextView reminder_title;
         public TextView reminder_subtitle;
         public LinearLayout reminder_icon;
@@ -66,7 +66,7 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
         public ImageView action_browser;
         public ImageView action_address;
         public ImageView action_password;
-        public ViewHolder(View v, View top_divider, View bottom_divider, CardView card_reminder, TextView reminder_title, TextView reminder_subtitle, LinearLayout reminder_icon, CardView container_option, ImageView action_contact, ImageView action_attach, ImageView action_browser, ImageView action_address, ImageView action_password) {
+        public ViewHolder(View v, View top_divider, View bottom_divider, LinearLayout card_reminder, TextView reminder_title, TextView reminder_subtitle, LinearLayout reminder_icon, CardView container_option, ImageView action_contact, ImageView action_attach, ImageView action_browser, ImageView action_address, ImageView action_password) {
             super(v);
             mView = v;
             this.top_divider = top_divider;
@@ -103,7 +103,7 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
         vh = new ViewHolder(v,
                 v.findViewById(R.id.top_divider),
                 v.findViewById(R.id.bottom_divider),
-                (CardView) v.findViewById(R.id.card_reminder),
+                (LinearLayout) v.findViewById(R.id.card_reminder),
                 (TextView) v.findViewById(R.id.reminder_title),
                 (TextView) v.findViewById(R.id.reminder_subtitle),
                 (LinearLayout) v.findViewById(R.id.reminder_icon),

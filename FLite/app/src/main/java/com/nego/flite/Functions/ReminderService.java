@@ -64,61 +64,85 @@ public class ReminderService extends IntentService {
     }
 
     private void createReminder(Reminder r) {
-        DbAdapter dbHelper = new DbAdapter(this);
-        dbHelper.open();
-        r.setUser_id(Utils.getActiveUserId(dbHelper));
-        if (r.create_reminder(this, dbHelper)) {
-            sendResponse(Costants.ACTION_CREATE, r);
+        try {
+            DbAdapter dbHelper = new DbAdapter(this);
+            dbHelper.open();
+            r.setUser_id(Utils.getActiveUserId(dbHelper));
+            if (r.create_reminder(this, dbHelper)) {
+                sendResponse(Costants.ACTION_CREATE, r);
+            }
+            dbHelper.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        dbHelper.close();
     }
 
     private void updateReminder(Reminder r) {
-        DbAdapter dbHelper = new DbAdapter(this);
-        dbHelper.open();
-        if (r.update_reminder(this, dbHelper)) {
-            sendResponse(Costants.ACTION_UPDATE, r);
+        try {
+            DbAdapter dbHelper = new DbAdapter(this);
+            dbHelper.open();
+            if (r.update_reminder(this, dbHelper)) {
+                sendResponse(Costants.ACTION_UPDATE, r);
+            }
+            dbHelper.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        dbHelper.close();
     }
 
     private void updateReminderDate(Reminder r) {
-        DbAdapter dbHelper = new DbAdapter(this);
-        dbHelper.open();
-        if (r.update_reminder_date(this, dbHelper)) {
-            sendResponse(Costants.ACTION_UPDATE_DATE, r);
+        try {
+            DbAdapter dbHelper = new DbAdapter(this);
+            dbHelper.open();
+            if (r.update_reminder_date(this, dbHelper)) {
+                sendResponse(Costants.ACTION_UPDATE_DATE, r);
+            }
+            dbHelper.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        dbHelper.close();
     }
 
     private void deleteReminder(Reminder r) {
-        DbAdapter dbHelper = new DbAdapter(this);
-        dbHelper.open();
-        if (r.delete_reminder(this, dbHelper)) {
-            sendResponse(Costants.ACTION_DELETE, r);
+        try {
+            DbAdapter dbHelper = new DbAdapter(this);
+            dbHelper.open();
+            if (r.delete_reminder(this, dbHelper)) {
+                sendResponse(Costants.ACTION_DELETE, r);
+            }
+            dbHelper.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        dbHelper.close();
     }
 
     private void archiveReminder(Reminder r) {
-        DbAdapter dbHelper = new DbAdapter(this);
-        dbHelper.open();
-        r.setDate_archived(Calendar.getInstance().getTimeInMillis());
-        r.setPriority(0);
-        if (r.update_reminder(this, dbHelper)) {
-            sendResponse(Costants.ACTION_ARCHIVE, r);
+        try {
+            DbAdapter dbHelper = new DbAdapter(this);
+            dbHelper.open();
+            r.setDate_archived(Calendar.getInstance().getTimeInMillis());
+            r.setPriority(0);
+            if (r.update_reminder(this, dbHelper)) {
+                sendResponse(Costants.ACTION_ARCHIVE, r);
+            }
+            dbHelper.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        dbHelper.close();
     }
 
     private void unarchiveReminder(Reminder r) {
-        DbAdapter dbHelper = new DbAdapter(this);
-        dbHelper.open();
-        r.setDate_archived(0);
-        if (r.update_reminder(this, dbHelper)) {
-            sendResponse(Costants.ACTION_UNARCHIVE, r);
+        try {
+            DbAdapter dbHelper = new DbAdapter(this);
+            dbHelper.open();
+            r.setDate_archived(0);
+            if (r.update_reminder(this, dbHelper)) {
+                sendResponse(Costants.ACTION_UNARCHIVE, r);
+            }
+            dbHelper.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        dbHelper.close();
     }
 
 
